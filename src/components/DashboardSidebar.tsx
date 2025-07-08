@@ -36,14 +36,17 @@ const DashboardSidebar = () => {
       >
         {/* Logo */}
         <div className="mb-6 flex justify-center">
-          <img 
-            src="/lovable-uploads/7e5bb1d3-2b2f-4bae-bb4a-ec509545e99d.png" 
-            alt="VOIDR" 
-            className={cn(
-              "transition-all duration-300",
-              isExpanded ? "h-10 w-auto" : "h-8 w-auto"
-            )}
-          />
+          <picture>
+            <source srcSet="/lovable-uploads/7e5bb1d3-2b2f-4bae-bb4a-ec509545e99d.webp" type="image/webp" />
+            <img 
+              src="/lovable-uploads/7e5bb1d3-2b2f-4bae-bb4a-ec509545e99d.png" 
+              alt="VOIDR" 
+              className={cn(
+                "transition-all duration-300",
+                isExpanded ? "h-10 w-auto" : "h-8 w-auto"
+              )}
+            />
+          </picture>
         </div>
 
         {/* Welcome Section */}

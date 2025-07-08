@@ -1,4 +1,3 @@
-
 "use client"
 
 import React, { useEffect, useState, useRef } from "react"
@@ -63,11 +62,14 @@ export function NavBar({ items, className }: NavBarProps) {
         {/* Logo */}
         <div className="flex items-center">
           <Link to="/">
-            <img 
-              src="/lovable-uploads/7e5bb1d3-2b2f-4bae-bb4a-ec509545e99d.png" 
-              alt="VOIDR" 
-              className="h-8 w-auto cursor-pointer"
-            />
+            <picture>
+              <source srcSet="/lovable-uploads/7e5bb1d3-2b2f-4bae-bb4a-ec509545e99d.webp" type="image/webp" />
+              <img 
+                src="/lovable-uploads/7e5bb1d3-2b2f-4bae-bb4a-ec509545e99d.png" 
+                alt="VOIDR" 
+                className="h-8 w-auto cursor-pointer"
+              />
+            </picture>
           </Link>
         </div>
 

@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 const PainSolutionSection = () => {
@@ -28,11 +27,14 @@ const PainSolutionSection = () => {
           {/* Right Column - Image */}
           <div className="flex justify-center">
             <div className="w-full max-w-md h-96 bg-gradient-to-br from-[#e6f6fa] to-[#f3fceb] rounded-xl shadow-lg overflow-hidden">
-              <img 
-                src="/lovable-uploads/3b054787-db8d-4625-9091-6e38c8ddb840.png" 
-                alt="Medical Student with Anatomy Tablet" 
-                className="w-full h-full object-cover"
-              />
+              <picture>
+                <source srcSet="/lovable-uploads/3b054787-db8d-4625-9091-6e38c8ddb840.webp" type="image/webp" />
+                <img 
+                  src="/lovable-uploads/3b054787-db8d-4625-9091-6e38c8ddb840.png" 
+                  alt="Medical Student with Anatomy Tablet" 
+                  className="w-full h-full object-cover"
+                />
+              </picture>
             </div>
           </div>
         </div>

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { LiquidButton } from '@/components/ui/liquid-glass-button';
@@ -238,11 +237,14 @@ const Auth = () => {
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Header */}
                 <div className="text-center mb-8">
-                  <img 
-                    src="/lovable-uploads/7e5bb1d3-2b2f-4bae-bb4a-ec509545e99d.png" 
-                    alt="VOIDR" 
-                    className="h-12 w-auto mx-auto mb-6"
-                  />
+                  <picture>
+                    <source srcSet="/lovable-uploads/7e5bb1d3-2b2f-4bae-bb4a-ec509545e99d.webp" type="image/webp" />
+                    <img 
+                      src="/lovable-uploads/7e5bb1d3-2b2f-4bae-bb4a-ec509545e99d.png" 
+                      alt="VOIDR" 
+                      className="h-12 w-auto mx-auto mb-6"
+                    />
+                  </picture>
                   <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
                     {isSignUp ? 'Join VOIDR' : 'Welcome Back'}
                   </h1>

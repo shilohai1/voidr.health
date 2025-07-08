@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Instagram, Twitter, Heart } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -10,11 +9,14 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Logo and Description */}
           <div className="col-span-1 md:col-span-2">
-            <img 
-              src="/lovable-uploads/7e5bb1d3-2b2f-4bae-bb4a-ec509545e99d.png" 
-              alt="VOIDR" 
-              className="h-10 w-auto mb-4"
-            />
+            <picture>
+              <source srcSet="/lovable-uploads/7e5bb1d3-2b2f-4bae-bb4a-ec509545e99d.webp" type="image/webp" />
+              <img 
+                src="/lovable-uploads/7e5bb1d3-2b2f-4bae-bb4a-ec509545e99d.png" 
+                alt="VOIDR" 
+                className="h-10 w-auto mb-4"
+              />
+            </picture>
             <p className="text-gray-400 mb-6 max-w-md">
               AI-powered tools designed specifically for busy Medical students, Residents, and Doctors. 
               Simplifying medical education one video at a time.

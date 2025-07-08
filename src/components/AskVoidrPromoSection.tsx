@@ -108,12 +108,15 @@ const AskVoidrPromoSection = () => {
                   </p>
                 </div>
                 <div className="rounded-lg overflow-hidden shadow-lg">
-                  <img 
-                    src="/lovable-uploads/43cb0459-ca84-469c-8a4a-7d286ca99f91.png"
-                    alt="AskVoidr Analysis Results Example"
-                    className="w-full h-auto max-w-none"
-                    style={{ imageRendering: 'crisp-edges' }}
-                  />
+                  <picture>
+                    <source srcSet="/lovable-uploads/43cb0459-ca84-469c-8a4a-7d286ca99f91.webp" type="image/webp" />
+                    <img 
+                      src="/lovable-uploads/43cb0459-ca84-469c-8a4a-7d286ca99f91.png"
+                      alt="AskVoidr Analysis Results Example"
+                      className="w-full h-auto max-w-none"
+                      style={{ imageRendering: 'crisp-edges' }}
+                    />
+                  </picture>
                 </div>
               </div>
             </div>
