@@ -1,0 +1,78 @@
+
+import React from 'react';
+import { motion } from 'framer-motion';
+import { TestimonialsColumn } from '@/components/ui/testimonials-columns';
+
+const TestimonialsSection = () => {
+  const testimonials = [
+    {
+      text: "ClinicBot honestly saved me hours and hours last week. The automated documentation is a game-changer. The other cool feature is the part where they can shorten documents to just mere prescriptions",
+      name: "Dr. Aisha",
+      role: "Intern"
+    },
+    {
+      text: "I finally *understand* pathology thanks to PathoSketch. The visual learning is incredible. Free plan was useful but now I needed to take the premium plan cause I'm completely dependant on it now",
+      name: "Zaid",
+      role: "2nd year Med student"
+    },
+    {
+      text: "I'm an Indian medical student and come from a curriculum where it is solely based on books and rote learning. Atleast Voidr helped me find a different approach to learning new concepts",
+      name: "Divya Naik",
+      role: "1st year Med student"
+    },
+    {
+      text: "I'm usually a visual learner. Medical school would've been a nightmare without Voidr",
+      name: "Asher",
+      role: "2nd year Med student"
+    },
+    {
+      text: "StudyWithAI helped me review the entire systems in clinical pathophysiology in minutes. Perfect for USMLE step 1 prep!",
+      name: "Riya",
+      role: "USMLE prep student"
+    },
+    {
+      text: "I was initially very skeptical about Clinicbot cause who even uses AI during ward rounds? But I just wanted to give it a shot and tried summarizing a patient case file into just one sheet of paper using ClinicBot. Tbh, it just saved me like 2 hours of work per day?",
+      name: "Dr. Leya",
+      role: "Intern"
+    }
+  ];
+
+  const firstColumn = testimonials.slice(0, 2);
+  const secondColumn = testimonials.slice(2, 4);
+  const thirdColumn = testimonials.slice(4, 6);
+
+  return (
+    <section className="bg-white py-20 relative">
+      <div className="container mx-auto px-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+          viewport={{ once: true }}
+          className="flex flex-col items-center justify-center max-w-[540px] mx-auto"
+        >
+          <div className="flex justify-center">
+            <div className="border py-2 px-4 rounded-lg bg-primary/10 text-primary font-semibold">
+              Testimonials
+            </div>
+          </div>
+
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mt-6 text-center">
+            What Our Users Are Saying
+          </h2>
+          <p className="text-center mt-4 text-gray-600 text-lg">
+            Real feedback from med students, residents, and doctors.
+          </p>
+        </motion.div>
+
+        <div className="flex justify-center gap-6 mt-16 [mask-image:linear-gradient(to_bottom,transparent,black_25%,black_75%,transparent)] max-h-[740px] overflow-hidden">
+          <TestimonialsColumn testimonials={firstColumn} duration={15} />
+          <TestimonialsColumn testimonials={secondColumn} className="hidden md:block" duration={19} />
+          <TestimonialsColumn testimonials={thirdColumn} className="hidden lg:block" duration={17} />
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default TestimonialsSection;
