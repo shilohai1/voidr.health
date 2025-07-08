@@ -196,7 +196,7 @@ const SymptomChecker = () => {
               <Label htmlFor="location">Location of symptoms</Label>
               <Input
                 id="location"
-                placeholder="e.g., chest, head, stomach, leg..."
+                placeholder="e.g., chest, head, stomach, lower abdomen..."
                 value={symptomData.symptomLocation}
                 onChange={(e) => setSymptomData({ ...symptomData, symptomLocation: e.target.value })}
                 className="w-full"
@@ -211,7 +211,7 @@ const SymptomChecker = () => {
             <div className="text-center mb-6">
               <FileText className="w-12 h-12 mx-auto mb-4 text-primary" />
               <h2 className="text-2xl font-bold text-gray-900 mb-2">Additional Details</h2>
-              <p className="text-gray-600">Describe your symptoms in more detail (optional)</p>
+              <p className="text-gray-600">Describe your symptoms in more detail </p>
             </div>
             <div className="space-y-4">
               <Label htmlFor="details">Symptom description</Label>
