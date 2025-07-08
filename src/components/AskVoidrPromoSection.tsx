@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { LiquidCard } from '@/components/ui/liquid-glass-card';
@@ -6,7 +5,13 @@ import { LiquidButton } from '@/components/ui/liquid-glass-button';
 
 const AskVoidrPromoSection = () => {
   return (
-    <section className="py-20 px-4" style={{ backgroundColor: '#72ccc6' }}>
+    <section
+      className="py-20 px-4"
+      style={{
+        background: 'linear-gradient(135deg, #52bdc7 0%, #72ccc6 100%)',
+        borderRadius: '2rem'
+      }}
+    >
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">
@@ -71,11 +76,9 @@ const AskVoidrPromoSection = () => {
                   </div>
                 </div>
 
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-                  <p className="text-blue-800 font-medium text-sm">
-                    <strong>Pro Tip:</strong> The more accurate detail you enter, the more accurate results you may get
-                  </p>
-                </div>
+                <p className="text-black font-medium text-sm mb-6">
+                  (<strong>Pro Tip:</strong> The more accurate detail you enter, the more accurate results you may get)
+                </p>
 
                 <p className="text-lg font-semibold text-black mb-4">
                   And VOILA! AskVoidr will give you the probable causes to your symptoms.

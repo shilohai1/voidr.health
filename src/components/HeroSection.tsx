@@ -5,7 +5,10 @@ import { LavaLamp } from '@/components/ui/fluid-blob';
 
 const HeroSection = () => {
   return (
-    <section className="pt-32 pb-20 px-4 relative overflow-hidden">
+    <section
+      className="px-4 relative overflow-hidden flex flex-col justify-center"
+      style={{ minHeight: '100vh' }}
+    >
       {/* Background Elements */}
       <div className="absolute inset-0 opacity-30">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-blue-400/20 to-purple-400/20 rounded-full blur-3xl animate-pulse"></div>
