@@ -100,7 +100,6 @@ const StudyWithAI = () => {
             }
           } catch (pollError) {
             console.error('Polling error:', pollError);
-            // Continue polling on error, don't stop immediately
           }
         }, 5000); // Poll every 5 seconds
         
@@ -118,7 +117,7 @@ const StudyWithAI = () => {
     }
   };
 
-  const handleDownload = async (quality) => {
+  const handleDownload = async () => {
     if (!generatedVideo?.video_url) {
       toast({
         title: "Download Error",
@@ -129,14 +128,13 @@ const StudyWithAI = () => {
     }
 
     try {
-      // Create a temporary anchor element to trigger download
       const response = await fetch(generatedVideo.video_url);
       const blob = await response.blob();
       
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `study-video-${category}-${difficulty}-${quality}.mp4`;
+      link.download = `study-video-${category}-${difficulty}.mp4`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -144,7 +142,7 @@ const StudyWithAI = () => {
       
       toast({
         title: "Download Started",
-        description: `Your video is downloading in ${quality} quality.`,
+        description: "Your video is downloading.",
       });
     } catch (error) {
       console.error('Download error:', error);
@@ -333,14 +331,6 @@ const StudyWithAI = () => {
                   </div>
                 )}
 
-                {/* Video Details */}
-                {generatedVideo.caption_text && (
-                  <div className="bg-blue-50 p-4 rounded-lg">
-                    <h3 className="font-semibold text-gray-900 mb-2">Video Captions:</h3>
-                    <p className="text-gray-700 text-sm">{generatedVideo.caption_text}</p>
-                  </div>
-                )}
-
                 {/* Audio Preview */}
                 {generatedVideo.voice_url && (
                   <div className="bg-green-50 p-4 rounded-lg">
@@ -352,10 +342,10 @@ const StudyWithAI = () => {
                   </div>
                 )}
 
-                {/* Download Options */}
-                <div className="flex flex-col sm:flex-row justify-center space-y-2 sm:space-y-0 sm:space-x-4">
+                {/* Download Button */}
+                <div className="flex justify-center">
                   <LiquidButton 
-                    onClick={() => handleDownload('HD')}
+                    onClick={handleDownload}
                     className="flex items-center justify-center space-x-2 bg-gradient-to-r from-green-600 to-blue-600 text-white"
                   >
                     <Download className="w-4 h-4" />

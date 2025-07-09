@@ -213,20 +213,20 @@ serve(async (req) => {
           console.log('Generating video with RunwayML...')
           
           // Create visual prompt for video generation
-          const visualPrompt = `Medical educational content: ${category || 'medical'} topic. Professional medical illustration style, clean educational graphics, ${difficulty === 'Clinical' ? 'advanced medical diagrams' : 'simple medical visuals'}, modern healthcare design, instructional video format.`
+          const visualPrompt = `Create a professional medical educational video about ${category || 'medical topic'}. Style: clean, modern medical illustration with simple diagrams and text overlays. Content should be ${difficulty === 'Clinical' ? 'advanced medical visualization' : 'beginner-friendly medical graphics'}. Duration: 10 seconds. Professional medical education style.`
           
           try {
-            // Create video generation task
-            const runwayResponse = await fetch('https://api.runwayml.com/v1/image_to_video', {
+            // Create video generation task using text-to-video
+            const runwayResponse = await fetch('https://api.runwayml.com/v1/text_to_video', {
               method: 'POST',
               headers: {
                 'Authorization': `Bearer ${runwayApiKey}`,
                 'Content-Type': 'application/json',
               },
               body: JSON.stringify({
-                promptText: visualPrompt,
+                text_prompt: visualPrompt,
                 model: 'gen3a_turbo',
-                aspectRatio: '16:9',
+                aspect_ratio: '16:9',
                 duration: 10,
                 watermark: false
               })
