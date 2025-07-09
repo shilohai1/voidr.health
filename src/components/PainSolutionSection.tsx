@@ -12,7 +12,7 @@ const PainSolutionSection = () => {
             <div>
               <h3 className="text-xl sm:text-2xl font-bold text-red-600 mb-3 sm:mb-4">The Problem</h3>
               <p className="text-base sm:text-lg text-gray-700 leading-relaxed">
-                Medical school is honestly getting out of hand these days. Way too overwhelming tasks and assignments as you progress through the semesters, let alone the weekly quizzes...
+                Let’s be real. Medical school isn’t just hard anymore… it’s relentless. You wake up already behind. There are lectures you barely remember attending, quizzes every week, case reports piling up, and ward rounds that expect you to know everything. The pressure isn’t just academic — it’s mental, emotional, and constant. And somewhere in between, you're supposed to actually learn and retain all this? It’s not that you're not smart — you just need a system that actually works with your life.
               </p>
             </div>
 
@@ -20,7 +20,15 @@ const PainSolutionSection = () => {
             <div>
               <h3 className="text-xl sm:text-2xl font-bold text-green-600 mb-3 sm:mb-4">The Solution</h3>
               <p className="text-base sm:text-lg text-gray-700 leading-relaxed">
-                We created Voidr.health exactly for this! You can now enter your questions and topics into Voidr and it will generate you a short video depending on how you want it and explain everything in detail. Voidr also helps summarise documents that is useful during your regular ward rounds.
+                That’s exactly why we created Voidr.health — to make learning medicine less brutal, and a lot more human.
+
+Just type in the topic you're stuck on — anything from thyroid panels to clinical pathways — and Voidr instantly creates a short, clear, AI-powered video tailored just for you. No more YouTube rabbit holes or outdated PDFs. Just what you need, explained your way.
+
+And during clinicals or ward rounds? Upload or paste a document, and Voidr will summarize it in seconds — like a personal tutor who knows you're short on time and overloaded with responsibility.
+
+But that’s not all. We just introduced AskVoidr — your AI co-pilot for real-time medical reasoning. Got a vague patient presentation and don’t know where to start? Just describe the symptoms, and AskVoidr will guide you through differential diagnoses, potential red flags, and what to rule in or out. It’s like having a calm, experienced resident whispering the next best step in your ear.
+
+No judgment. No overwhelm. Just clarity — fast.
               </p>
             </div>
           </div>
