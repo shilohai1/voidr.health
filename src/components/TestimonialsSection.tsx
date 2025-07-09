@@ -42,32 +42,32 @@ const TestimonialsSection = () => {
   const thirdColumn = testimonials.slice(4, 6);
 
   return (
-    <section className="bg-white py-20 relative">
-      <div className="container mx-auto px-4">
+    <section className="bg-white py-12 sm:py-16 md:py-20 relative px-4 sm:px-6 md:px-8">
+      <div className="container mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
           viewport={{ once: true }}
-          className="flex flex-col items-center justify-center max-w-[540px] mx-auto"
+          className="flex flex-col items-center justify-center max-w-2xl mx-auto"
         >
           <div className="flex justify-center">
-            <div className="border py-2 px-4 rounded-lg bg-primary/10 text-primary font-semibold">
+            <div className="border py-2 px-4 rounded-lg bg-primary/10 text-primary font-semibold text-sm sm:text-base">
               Testimonials
             </div>
           </div>
 
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mt-6 text-center">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mt-4 sm:mt-6 text-center">
             What Our Users Are Saying
           </h2>
-          <p className="text-center mt-4 text-gray-600 text-lg">
+          <p className="text-center mt-3 sm:mt-4 text-gray-600 text-base sm:text-lg">
             Real feedback from med students, residents, and doctors.
           </p>
         </motion.div>
 
-        <div className="flex justify-center gap-6 mt-16 [mask-image:linear-gradient(to_bottom,transparent,black_25%,black_75%,transparent)] max-h-[740px] overflow-hidden">
+        <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 mt-12 sm:mt-16 [mask-image:linear-gradient(to_bottom,transparent,black_25%,black_75%,transparent)] max-h-[600px] sm:max-h-[740px] overflow-hidden">
           <TestimonialsColumn testimonials={firstColumn} duration={15} />
-          <TestimonialsColumn testimonials={secondColumn} className="hidden md:block" duration={19} />
+          <TestimonialsColumn testimonials={secondColumn} className="hidden sm:block" duration={19} />
           <TestimonialsColumn testimonials={thirdColumn} className="hidden lg:block" duration={17} />
         </div>
       </div>
