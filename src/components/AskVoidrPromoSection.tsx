@@ -7,7 +7,7 @@ import { LiquidButton } from '@/components/ui/liquid-glass-button';
 const AskVoidrPromoSection = () => {
   return (
     <section 
-      className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8" 
+      className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8 rounded-t-[3rem] sm:rounded-t-[4rem] md:rounded-t-[5rem] relative z-10" 
       style={{ backgroundColor: '#72ccc6' }}
     >
       <div className="max-w-7xl mx-auto">
@@ -32,7 +32,7 @@ const AskVoidrPromoSection = () => {
               <h4 className="text-xl sm:text-2xl font-bold text-black mb-2">
                 How does AskVoidr work?
               </h4>
-              <p className="text-base sm:text-lg font-semibold text-black mb-4">
+              <p className="text-base sm:text-lg font-semibold text-black mb-3">
                 AskVoidr works in just 5 simple steps:
               </p>
               
