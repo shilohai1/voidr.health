@@ -43,44 +43,52 @@ const ExportHistory = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-white via-white to-[#236dcf]">
       <DashboardSidebar />
-      <div className="lg:ml-16 p-4 sm:p-6 md:p-8 pt-16 lg:pt-8 transition-all duration-300">
-        <div className="max-w-6xl mx-auto">
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-black mb-2">Export History</h1>
-            <p className="text-black">Track all your exported files and downloads</p>
-          </div>
-          {loading && <div className="text-black">Loading...</div>}
-          {error && <div className="text-red-400">{error}</div>}
-          <div className="overflow-x-auto">
-            <table className="min-w-full bg-white rounded-lg overflow-hidden">
-              <thead>
-                <tr>
-                  <th className="px-4 py-2 text-left text-black">Title</th>
-                  <th className="px-4 py-2 text-left text-black">Type</th>
-                  <th className="px-4 py-2 text-left text-black">Service</th>
-                  <th className="px-4 py-2 text-left text-black">Exported At</th>
-                  <th className="px-4 py-2 text-left text-black">Format</th>
-                  <th className="px-4 py-2 text-left text-black">Size</th>
-                  <th className="px-4 py-2 text-left text-black">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {exports.map((item) => (
-                  <tr key={item.id} className="border-b last:border-none">
-                    <td className="px-4 py-2 text-black">{item.title}</td>
-                    <td className="px-4 py-2 capitalize text-black">{item.type}</td>
-                    <td className="px-4 py-2 text-black">{item.service}</td>
-                    <td className="px-4 py-2 text-black">{item.exportedAt ? new Date(item.exportedAt).toLocaleString() : '-'}</td>
-                    <td className="px-4 py-2 text-black">{item.format}</td>
-                    <td className="px-4 py-2 text-black">{item.size || '-'}</td>
-                    <td className="px-2 py-2">
-                      <span className={`px-2 py-1 text-xs rounded-full ${item.status === 'completed' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>{item.status}</span>
-                    </td>
+      <div className="lg:ml-16 transition-all duration-300">
+        <div className="p-4 sm:p-6 md:p-8 pt-20 lg:pt-8">
+          <div className="max-w-6xl mx-auto">
+            <div className="mb-8">
+              <h1 className="text-2xl sm:text-3xl font-bold text-black mb-2">Export History</h1>
+              <p className="text-sm sm:text-base text-black">Track all your exported files and downloads</p>
+            </div>
+            {loading && <div className="text-black">Loading...</div>}
+            {error && <div className="text-red-400">{error}</div>}
+            <div className="overflow-x-auto bg-white rounded-lg shadow-sm">
+              <table className="min-w-full">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Service</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Exported At</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Format</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Size</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-            {exports.length === 0 && !loading && <div className="text-gray-400 p-4">No export history found.</div>}
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {exports.map((item) => (
+                    <tr key={item.id} className="hover:bg-gray-50">
+                      <td className="px-4 py-4 text-sm text-black">{item.title}</td>
+                      <td className="px-4 py-4 text-sm capitalize text-black">{item.type}</td>
+                      <td className="px-4 py-4 text-sm text-black">{item.service}</td>
+                      <td className="px-4 py-4 text-sm text-black">{item.exportedAt ? new Date(item.exportedAt).toLocaleString() : '-'}</td>
+                      <td className="px-4 py-4 text-sm text-black">{item.format}</td>
+                      <td className="px-4 py-4 text-sm text-black">{item.size || '-'}</td>
+                      <td className="px-4 py-4">
+                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${item.status === 'completed' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                          {item.status}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              {exports.length === 0 && !loading && (
+                <div className="text-center py-12">
+                  <div className="text-gray-400">No export history found.</div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
