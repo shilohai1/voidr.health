@@ -7,6 +7,8 @@ interface VideoGenerationRequest {
   user_script: string;
   voice_option: string;
   video_style: string;
+  category: string;
+  difficulty: string;
 }
 
 interface VideoStatus {
@@ -36,19 +38,30 @@ export const useVideoGeneration = () => {
     setError(null);
 
     try {
+      console.log('Starting video generation with request:', request);
+      
       const { data, error } = await supabase.functions.invoke('generate-video', {
-        body: request,
+        body: {
+          user_script: request.user_script,
+          voice_option: request.voice_option,
+          video_style: request.video_style,
+          category: request.category,
+          difficulty: request.difficulty
+        },
         headers: {
           Authorization: `Bearer ${session.access_token}`,
         },
       });
 
       if (error) {
+        console.error('Supabase function error:', error);
         throw error;
       }
 
+      console.log('Video generation started successfully:', data);
       return data;
     } catch (err) {
+      console.error('Video generation error:', err);
       const errorMessage = err instanceof Error ? err.message : 'Failed to generate video';
       setError(errorMessage);
       throw new Error(errorMessage);
@@ -63,6 +76,8 @@ export const useVideoGeneration = () => {
     }
 
     try {
+      console.log('Checking video status for ID:', videoId);
+      
       const { data, error } = await supabase.functions.invoke('get-video-status', {
         body: { video_id: videoId },
         headers: {
@@ -71,11 +86,14 @@ export const useVideoGeneration = () => {
       });
 
       if (error) {
+        console.error('Get video status error:', error);
         throw error;
       }
 
+      console.log('Video status retrieved:', data);
       return data;
     } catch (err) {
+      console.error('Get video status error:', err);
       const errorMessage = err instanceof Error ? err.message : 'Failed to get video status';
       throw new Error(errorMessage);
     }

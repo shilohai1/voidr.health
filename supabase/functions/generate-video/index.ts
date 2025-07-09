@@ -11,6 +11,8 @@ interface VideoRequest {
   user_script: string;
   voice_option: string;
   video_style: string;
+  category?: string;
+  difficulty?: string;
 }
 
 serve(async (req) => {
@@ -48,7 +50,7 @@ serve(async (req) => {
 
     console.log('User authenticated:', user.id)
 
-    const { user_script, voice_option, video_style }: VideoRequest = await req.json()
+    const { user_script, voice_option, video_style, category, difficulty }: VideoRequest = await req.json()
 
     if (!user_script || !voice_option || !video_style) {
       return new Response(
@@ -87,13 +89,26 @@ serve(async (req) => {
       try {
         console.log('Starting video generation for video ID:', videoRecord.id)
 
-        // Step 1: Refine script with OpenAI
+        // Step 1: Generate detailed script with OpenAI
         let refinedScript = user_script;
         
         const openaiApiKey = Deno.env.get('OPENAI_API_KEY');
         if (openaiApiKey) {
-          console.log('Refining script with OpenAI...')
+          console.log('Generating detailed script with OpenAI...')
           try {
+            const scriptPrompt = `You are an expert medical educator. Create a detailed, engaging script for a short educational video about: ${user_script}. 
+            Category: ${category || 'General Medicine'}
+            Difficulty: ${difficulty || 'Basic'}
+            
+            The script should be:
+            - Educational and accurate
+            - Engaging for ${difficulty === 'Clinical' ? 'medical students and professionals' : 'beginners'}
+            - 60-90 seconds when spoken
+            - Include visual descriptions for video generation
+            - Clear and concise
+            
+            Format the response as a narrative script that can be read aloud and used for video generation.`
+
             const openaiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
               method: 'POST',
               headers: {
@@ -105,11 +120,11 @@ serve(async (req) => {
                 messages: [
                   {
                     role: 'system',
-                    content: 'You are an expert educational content creator. Create a detailed visual description for a medical education video based on the user script. Focus on visual elements, scenes, and educational imagery that would make the content engaging. Keep it under 500 characters for video generation.'
+                    content: 'You are an expert medical educator who creates engaging educational content.'
                   },
                   {
                     role: 'user',
-                    content: `Create a visual prompt for this medical script: ${user_script}`
+                    content: scriptPrompt
                   }
                 ],
                 max_tokens: 1000,
@@ -120,7 +135,7 @@ serve(async (req) => {
             if (openaiResponse.ok) {
               const openaiData = await openaiResponse.json()
               refinedScript = openaiData.choices[0]?.message?.content || user_script
-              console.log('Script refined successfully:', refinedScript)
+              console.log('Detailed script generated successfully')
             } else {
               console.error('OpenAI API error:', await openaiResponse.text())
             }
@@ -138,7 +153,7 @@ serve(async (req) => {
         if (elevenLabsApiKey) {
           console.log('Generating voiceover with ElevenLabs...')
           try {
-            const voiceId = '21m00Tcm4TlvDq8ikWAM'; // Default voice
+            const voiceId = '21m00Tcm4TlvDq8ikWAM'; // Professional voice
             const elevenLabsResponse = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
               method: 'POST',
               headers: {
@@ -147,11 +162,13 @@ serve(async (req) => {
                 'xi-api-key': elevenLabsApiKey,
               },
               body: JSON.stringify({
-                text: user_script,
+                text: refinedScript,
                 model_id: 'eleven_multilingual_v2',
                 voice_settings: {
-                  stability: 0.5,
-                  similarity_boost: 0.5
+                  stability: 0.6,
+                  similarity_boost: 0.8,
+                  style: 0.2,
+                  use_speaker_boost: true
                 }
               })
             })
@@ -164,7 +181,8 @@ serve(async (req) => {
               const { error: audioUploadError } = await supabaseClient.storage
                 .from('audio')
                 .upload(audioFileName, audioBuffer, {
-                  contentType: 'audio/mpeg'
+                  contentType: 'audio/mpeg',
+                  upsert: true
                 })
 
               if (!audioUploadError) {
@@ -186,17 +204,20 @@ serve(async (req) => {
           console.log('ElevenLabs API key not found, skipping audio generation')
         }
 
-        // Step 3: Generate video with RunwayML
+        // Step 3: Create visual prompt for video generation
+        const visualPrompt = `Medical educational video: ${refinedScript.substring(0, 400)}. Professional medical animation style, clean medical illustrations, ${category} focused visuals, educational diagrams, modern medical graphics.`
+
+        // Step 4: Generate video with RunwayML
         let videoUrl = null;
         let thumbnailUrl = null;
         const runwayApiKey = Deno.env.get('RUNWAYML_API_KEY');
         
         if (runwayApiKey) {
           console.log('Generating video with RunwayML...')
-          console.log('Using refined script for video generation:', refinedScript)
+          console.log('Using visual prompt:', visualPrompt)
           
           try {
-            // Create video generation task with proper headers and payload
+            // Create video generation task
             const runwayResponse = await fetch('https://api.runwayml.com/v1/image_to_video', {
               method: 'POST',
               headers: {
@@ -205,10 +226,10 @@ serve(async (req) => {
                 'X-Runway-Version': '2024-11-06'
               },
               body: JSON.stringify({
-                promptText: refinedScript.substring(0, 500), // Ensure prompt is within limits
+                promptText: visualPrompt,
                 model: 'gen3a_turbo',
                 aspectRatio: '16:9',
-                duration: 5,
+                duration: 10,
                 watermark: false
               })
             })
@@ -222,9 +243,9 @@ serve(async (req) => {
               const taskId = runwayData.id
               console.log('RunwayML task created successfully:', taskId)
 
-              // Poll for completion with better error handling
+              // Poll for completion
               let attempts = 0;
-              const maxAttempts = 60; // 5 minutes max wait
+              const maxAttempts = 120; // 10 minutes max wait
               
               while (attempts < maxAttempts) {
                 await new Promise(resolve => setTimeout(resolve, 5000)) // Wait 5 seconds
@@ -239,11 +260,11 @@ serve(async (req) => {
 
                   if (statusResponse.ok) {
                     const statusData = await statusResponse.json()
-                    console.log('RunwayML status check:', statusData.status, 'Progress:', statusData.progress)
+                    console.log('RunwayML status:', statusData.status, 'Progress:', statusData.progress)
                     
                     if (statusData.status === 'SUCCEEDED') {
                       videoUrl = statusData.output?.[0]
-                      thumbnailUrl = statusData.output?.[0] // Using same URL for thumbnail
+                      thumbnailUrl = statusData.output?.[0] // Use video URL as thumbnail for now
                       console.log('Video generated successfully:', videoUrl)
                       break
                     } else if (statusData.status === 'FAILED') {
@@ -273,28 +294,24 @@ serve(async (req) => {
           console.log('RunwayML API key not found')
         }
 
-        // Fallback to sample video if no video was generated
-        if (!videoUrl) {
-          videoUrl = `https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4`
-          thumbnailUrl = `https://i.ytimg.com/vi/aqz-KE-bpKQ/maxresdefault.jpg`
-          console.log('Using fallback video content')
+        // Update video record with results
+        const updateData = {
+          refined_script: refinedScript,
+          voice_url: audioUrl,
+          video_url: videoUrl,
+          thumbnail_url: thumbnailUrl,
+          caption_text: refinedScript, // Use refined script as captions
+          status: videoUrl ? 'completed' : 'failed',
+          updated_at: new Date().toISOString()
         }
 
-        // Update video record with results
         const { error: updateError } = await supabaseClient
           .from('videos')
-          .update({
-            refined_script: refinedScript,
-            voice_url: audioUrl,
-            video_url: videoUrl,
-            thumbnail_url: thumbnailUrl,
-            caption_text: user_script, // Use original script for captions
-            status: 'completed',
-            updated_at: new Date().toISOString()
-          })
+          .update(updateData)
           .eq('id', videoRecord.id)
 
         if (updateError) {
+          console.error('Update error:', updateError)
           throw new Error(`Update error: ${updateError.message}`)
         }
 
@@ -313,7 +330,7 @@ serve(async (req) => {
         // Update status to failed
         await supabaseClient
           .from('videos')
-          .update({ status: 'failed' })
+          .update({ status: 'failed', updated_at: new Date().toISOString() })
           .eq('id', videoRecord.id)
       }
     }

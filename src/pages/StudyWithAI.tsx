@@ -13,7 +13,8 @@ import {
   Dna, 
   Users,
   Download,
-  Play
+  Play,
+  Loader2
 } from 'lucide-react';
 
 const StudyWithAI = () => {
@@ -23,6 +24,7 @@ const StudyWithAI = () => {
   const [showCategories, setShowCategories] = useState(false);
   const [generatedVideo, setGeneratedVideo] = useState(null);
   const [videoStatus, setVideoStatus] = useState('');
+  const [pollingInterval, setPollingInterval] = useState(null);
   
   const { generateVideo, getVideoStatus, loading } = useVideoGeneration();
   const { toast } = useToast();
@@ -47,45 +49,64 @@ const StudyWithAI = () => {
     }
 
     try {
-      const enhancedPrompt = `${prompt} (Category: ${category}, Difficulty: ${difficulty})`;
+      setVideoStatus('generating');
+      setGeneratedVideo(null);
+      
+      // Clear any existing polling interval
+      if (pollingInterval) {
+        clearInterval(pollingInterval);
+      }
+
+      const enhancedPrompt = `Create a medical educational video about: ${prompt}. Category: ${category}. Difficulty: ${difficulty}. Make it engaging and educational for medical students.`;
       
       const result = await generateVideo({
         user_script: enhancedPrompt,
         voice_option: 'professional',
-        video_style: difficulty.toLowerCase()
+        video_style: difficulty.toLowerCase(),
+        category,
+        difficulty
       });
 
-      setVideoStatus('generating');
       toast({
         title: "Video Generation Started",
         description: "Your video is being generated. This may take a few minutes.",
       });
 
-      // Poll for video status
-      const pollStatus = async (videoId) => {
-        const statusResult = await getVideoStatus(videoId);
-        
-        if (statusResult.status === 'completed') {
-          setGeneratedVideo(statusResult);
-          setVideoStatus('completed');
-          toast({
-            title: "Video Ready!",
-            description: "Your educational video has been generated successfully.",
-          });
-        } else if (statusResult.status === 'failed') {
-          setVideoStatus('failed');
-          toast({
-            title: "Generation Failed",
-            description: "There was an error generating your video. Please try again.",
-            variant: "destructive"
-          });
-        } else {
-          setTimeout(() => pollStatus(videoId), 5000);
-        }
-      };
-
+      // Start polling for video status
       if (result.video_id) {
-        pollStatus(result.video_id);
+        const interval = setInterval(async () => {
+          try {
+            const statusResult = await getVideoStatus(result.video_id);
+            console.log('Polling status:', statusResult);
+            
+            if (statusResult.status === 'completed') {
+              setGeneratedVideo(statusResult);
+              setVideoStatus('completed');
+              clearInterval(interval);
+              setPollingInterval(null);
+              
+              toast({
+                title: "Video Ready!",
+                description: "Your educational video has been generated successfully.",
+              });
+            } else if (statusResult.status === 'failed') {
+              setVideoStatus('failed');
+              clearInterval(interval);
+              setPollingInterval(null);
+              
+              toast({
+                title: "Generation Failed",
+                description: "There was an error generating your video. Please try again.",
+                variant: "destructive"
+              });
+            }
+          } catch (pollError) {
+            console.error('Polling error:', pollError);
+            // Continue polling on error, don't stop immediately
+          }
+        }, 5000); // Poll every 5 seconds
+        
+        setPollingInterval(interval);
       }
 
     } catch (error) {
@@ -99,37 +120,68 @@ const StudyWithAI = () => {
     }
   };
 
-  const handleDownload = (quality) => {
-    if (generatedVideo?.video_url) {
+  const handleDownload = async (quality) => {
+    if (!generatedVideo?.video_url) {
+      toast({
+        title: "Download Error",
+        description: "No video available for download.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      // Create a temporary anchor element to trigger download
+      const response = await fetch(generatedVideo.video_url);
+      const blob = await response.blob();
+      
+      const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
-      link.href = generatedVideo.video_url;
-      link.download = `study-video-${quality}.mp4`;
+      link.href = url;
+      link.download = `study-video-${category}-${difficulty}-${quality}.mp4`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
       
       toast({
         title: "Download Started",
         description: `Your video is downloading in ${quality} quality.`,
       });
+    } catch (error) {
+      console.error('Download error:', error);
+      toast({
+        title: "Download Error",
+        description: "Failed to download the video. Please try again.",
+        variant: "destructive"
+      });
     }
   };
+
+  // Cleanup polling interval on unmount
+  React.useEffect(() => {
+    return () => {
+      if (pollingInterval) {
+        clearInterval(pollingInterval);
+      }
+    };
+  }, [pollingInterval]);
 
   return (
     <div className="min-h-screen bg-white">
       <DashboardSidebar />
       
-      <div className="ml-16 p-8 transition-all duration-300">
+      <div className="ml-16 p-4 md:p-8 transition-all duration-300">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
-          <div className="mb-12 text-center">
-            <h1 className="text-4xl font-bold text-black mb-4">Welcome to StudyWithAI</h1>
-            <p className="text-xl text-gray-600">
+          <div className="mb-8 md:mb-12 text-center">
+            <h1 className="text-3xl md:text-4xl font-bold text-black mb-4">Welcome to StudyWithAI</h1>
+            <p className="text-lg md:text-xl text-gray-600">
               Create short educational medical videos instantly based on your prompts
             </p>
           </div>
 
-          <LiquidCard className="p-8 mb-8">
+          <LiquidCard className="p-6 md:p-8 mb-8">
             <div className="space-y-6">
               {/* Prompt Input */}
               <div>
@@ -141,6 +193,7 @@ const StudyWithAI = () => {
                   onChange={(e) => setPrompt(e.target.value)}
                   placeholder="e.g., Explain the cardiac cycle and its phases..."
                   className="w-full h-32 p-4 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200"
+                  disabled={loading || videoStatus === 'generating'}
                 />
               </div>
 
@@ -153,12 +206,13 @@ const StudyWithAI = () => {
                   <button
                     onMouseEnter={() => setShowCategories(true)}
                     onMouseLeave={() => setShowCategories(false)}
-                    className="w-full p-4 border border-gray-300 rounded-lg text-left bg-white hover:bg-gray-50 focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200"
+                    className="w-full p-4 border border-gray-300 rounded-lg text-left bg-white hover:bg-gray-50 focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 disabled:opacity-50"
+                    disabled={loading || videoStatus === 'generating'}
                   >
                     {category || 'Select a category...'}
                   </button>
                   
-                  {showCategories && (
+                  {showCategories && !loading && videoStatus !== 'generating' && (
                     <div 
                       className="absolute z-20 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg transition-all duration-300 ease-out"
                       onMouseEnter={() => setShowCategories(true)}
@@ -195,7 +249,8 @@ const StudyWithAI = () => {
                     <button
                       key={level}
                       onClick={() => setDifficulty(level)}
-                      className={`px-6 py-3 rounded-lg font-medium transition-all duration-200 ${
+                      disabled={loading || videoStatus === 'generating'}
+                      className={`px-6 py-3 rounded-lg font-medium transition-all duration-200 disabled:opacity-50 ${
                         difficulty === level
                           ? 'bg-primary text-white'
                           : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
@@ -210,24 +265,35 @@ const StudyWithAI = () => {
               {/* Generate Button */}
               <LiquidButton
                 onClick={handleGenerateVideo}
-                disabled={!prompt || !category || !difficulty || loading}
+                disabled={!prompt || !category || !difficulty || loading || videoStatus === 'generating'}
                 className="w-full"
               >
-                {loading ? 'Generating...' : 'Generate Video'}
+                {loading || videoStatus === 'generating' ? (
+                  <div className="flex items-center justify-center space-x-2">
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span>Generating...</span>
+                  </div>
+                ) : (
+                  'Generate Video'
+                )}
               </LiquidButton>
 
               {/* Status Display */}
-              {videoStatus && (
+              {videoStatus === 'generating' && (
+                <div className="text-center py-6">
+                  <div className="flex items-center justify-center space-x-2 mb-4">
+                    <Loader2 className="w-6 h-6 animate-spin text-primary" />
+                    <span className="text-gray-600">Processing your video...</span>
+                  </div>
+                  <div className="text-sm text-gray-500">
+                    This may take 2-5 minutes. Please don't close this page.
+                  </div>
+                </div>
+              )}
+              
+              {videoStatus === 'failed' && (
                 <div className="text-center py-4">
-                  {videoStatus === 'generating' && (
-                    <div className="flex items-center justify-center space-x-2">
-                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
-                      <span className="text-gray-600">Processing your video...</span>
-                    </div>
-                  )}
-                  {videoStatus === 'failed' && (
-                    <p className="text-red-600">Video generation failed. Please try again.</p>
-                  )}
+                  <p className="text-red-600">Video generation failed. Please try again.</p>
                 </div>
               )}
             </div>
@@ -235,7 +301,7 @@ const StudyWithAI = () => {
 
           {/* Video Result */}
           {generatedVideo && videoStatus === 'completed' && (
-            <LiquidCard className="p-8">
+            <LiquidCard className="p-6 md:p-8">
               <div className="space-y-6">
                 <div className="text-center">
                   <h2 className="text-2xl font-bold text-gray-900 mb-4">Your Video is Ready!</h2>
@@ -248,6 +314,7 @@ const StudyWithAI = () => {
                       controls 
                       className="w-full h-full object-cover"
                       poster={generatedVideo.thumbnail_url}
+                      preload="metadata"
                     >
                       <source src={generatedVideo.video_url} type="video/mp4" />
                       Your browser does not support the video tag.
@@ -260,29 +327,48 @@ const StudyWithAI = () => {
                   )}
                 </div>
 
+                {/* Generated Script Display */}
+                {generatedVideo.refined_script && (
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <h3 className="font-semibold text-gray-900 mb-2">Generated Script:</h3>
+                    <p className="text-gray-700 text-sm whitespace-pre-wrap">{generatedVideo.refined_script}</p>
+                  </div>
+                )}
+
                 {/* Video Details */}
                 {generatedVideo.caption_text && (
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <h3 className="font-semibold text-gray-900 mb-2">Video Script:</h3>
+                  <div className="bg-blue-50 p-4 rounded-lg">
+                    <h3 className="font-semibold text-gray-900 mb-2">Video Captions:</h3>
                     <p className="text-gray-700 text-sm">{generatedVideo.caption_text}</p>
                   </div>
                 )}
 
+                {/* Audio Preview */}
+                {generatedVideo.voice_url && (
+                  <div className="bg-green-50 p-4 rounded-lg">
+                    <h3 className="font-semibold text-gray-900 mb-2">Generated Voiceover:</h3>
+                    <audio controls className="w-full">
+                      <source src={generatedVideo.voice_url} type="audio/mpeg" />
+                      Your browser does not support the audio element.
+                    </audio>
+                  </div>
+                )}
+
                 {/* Download Options */}
-                <div className="flex justify-center space-x-4">
+                <div className="flex flex-col sm:flex-row justify-center space-y-2 sm:space-y-0 sm:space-x-4">
                   <LiquidButton 
                     onClick={() => handleDownload('720p')}
-                    className="flex items-center space-x-2"
+                    className="flex items-center justify-center space-x-2"
                   >
                     <Download className="w-4 h-4" />
-                    <span>720p (Free)</span>
+                    <span>Download 720p</span>
                   </LiquidButton>
                   <LiquidButton 
                     onClick={() => handleDownload('1080p')}
-                    className="flex items-center space-x-2"
+                    className="flex items-center justify-center space-x-2"
                   >
                     <Download className="w-4 h-4" />
-                    <span>1080p (Premium)</span>
+                    <span>Download 1080p</span>
                   </LiquidButton>
                 </div>
               </div>
