@@ -9,7 +9,7 @@ const ProductPreviewSection = () => {
     StudyWithAI: {
       title: 'StudyWithAI',
       subtitle: 'Generate AI-powered explainer videos from lecture slides.',
-      features: ['AI explainer videos', 'Medical concepts simplified'],
+      features: ['Input topic, get video', 'Explains confusing med concepts', 'Trained on real med data', 'Personalized visual learning tool', 'Built for rapid clarity', 'Med school, but faster'],
       mockup: (
         <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-4 sm:p-6 rounded-lg">
           <div className="flex items-center space-x-2 mb-3 sm:mb-4">
@@ -31,7 +31,7 @@ const ProductPreviewSection = () => {
     ClinicBot: {
       title: 'ClinicBot',
       subtitle: 'Streamline clinical documentation with AI assistance.',
-      features: ['Automated note taking', 'Clinical decision support'],
+      features: ['Summarizes long scripts instantly', 'Bullet-point clinical notes output', 'Handles 2000+ word files', 'Upload PDFs, get summaries', 'Med-specific AI summarizer', 'Smarter than generic chatbots'],
       mockup: (
         <div className="bg-gradient-to-br from-green-50 to-green-100 p-4 sm:p-6 rounded-lg">
           <div className="bg-white p-3 sm:p-4 rounded shadow-sm">
