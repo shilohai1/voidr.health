@@ -58,19 +58,19 @@ const Pricing = () => {
     <div className="min-h-screen bg-gradient-to-b from-white via-white to-[#236dcf]">
       <DashboardSidebar />
       <div className="lg:ml-16 transition-all duration-300">
-        <div className="p-4 sm:p-6 md:p-8 pt-20 lg:pt-8">
+        <div className="container mx-auto px-4 py-8 lg:py-12">
           <div className="max-w-6xl mx-auto">
-            <div className="mb-8 sm:mb-12 text-center">
-              <h1 className="text-2xl sm:text-3xl font-bold text-black mb-4">Pricing Plans</h1>
-              <p className="text-sm sm:text-base text-black">Choose the perfect plan for your medical journey</p>
+            <div className="mb-12 text-center">
+              <h1 className="text-3xl font-bold text-black mb-4">Pricing Plans</h1>
+              <p className="text-base text-black">Choose the perfect plan for your medical journey</p>
             </div>
             
             {/* StudyWithAI Pricing */}
             <div className="mb-12">
-              <h2 className="text-xl sm:text-2xl font-bold text-black mb-6 text-center">StudyWithAI</h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+              <h2 className="text-2xl font-bold text-black mb-6 text-center">StudyWithAI</h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {studyWithAIPlans.map((plan) => (
-                  <LiquidCard key={plan.name} className={`p-4 sm:p-6 relative bg-white ${plan.isPopular ? 'border-2 border-blue-500' : ''}`}> 
+                  <LiquidCard key={plan.name} className={`p-6 relative bg-white ${plan.isPopular ? 'border-2 border-blue-500' : ''}`}> 
                     {plan.isPopular && (
                       <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-blue-500 text-white px-4 py-1 rounded-full text-sm font-semibold flex items-center gap-1">
                         <Star className="w-3 h-3 fill-current" />
@@ -78,9 +78,9 @@ const Pricing = () => {
                       </div>
                     )}
                     <div className="text-center mb-6">
-                      <h3 className="text-lg sm:text-xl font-bold text-black mb-2">{plan.name}</h3>
+                      <h3 className="text-xl font-bold text-black mb-2">{plan.name}</h3>
                       <div className="flex items-baseline justify-center gap-1">
-                        <span className="text-2xl sm:text-3xl font-bold text-black">${plan.price}</span>
+                        <span className="text-3xl font-bold text-black">${plan.price}</span>
                         <span className="text-sm text-black">/{plan.period}</span>
                       </div>
                     </div>
@@ -102,10 +102,10 @@ const Pricing = () => {
             
             {/* ClinicBot Pricing */}
             <div>
-              <h2 className="text-xl sm:text-2xl font-bold text-black mb-6 text-center">ClinicBot</h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+              <h2 className="text-2xl font-bold text-black mb-6 text-center">ClinicBot</h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {clinicBotPlans.map((plan) => (
-                  <LiquidCard key={plan.name} className={`p-4 sm:p-6 relative bg-white ${plan.isPopular ? 'border-2 border-green-500' : ''}`}> 
+                  <LiquidCard key={plan.name} className={`p-6 relative bg-white ${plan.isPopular ? 'border-2 border-green-500' : ''}`}> 
                     {plan.isPopular && (
                       <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-green-500 text-white px-4 py-1 rounded-full text-sm font-semibold flex items-center gap-1">
                         <Star className="w-3 h-3 fill-current" />
@@ -113,9 +113,9 @@ const Pricing = () => {
                       </div>
                     )}
                     <div className="text-center mb-6">
-                      <h3 className="text-lg sm:text-xl font-bold text-black mb-2">{plan.name}</h3>
+                      <h3 className="text-xl font-bold text-black mb-2">{plan.name}</h3>
                       <div className="flex items-baseline justify-center gap-1">
-                        <span className="text-2xl sm:text-3xl font-bold text-black">${plan.price}</span>
+                        <span className="text-3xl font-bold text-black">${plan.price}</span>
                         <span className="text-sm text-black">/{plan.period}</span>
                       </div>
                     </div>

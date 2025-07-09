@@ -1,14 +1,11 @@
 
 import React from 'react';
 import DashboardSidebar from '@/components/DashboardSidebar';
-import { LiquidCard } from '@/components/ui/liquid-glass-card';
-import { Download, Video, FileText, Calendar, Clock } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { useUserContent } from '@/hooks/useUserContent';
 
 const ExportHistory = () => {
   const { content, loading, error } = useUserContent();
-  // Combine all exported items (assuming both videos and summaries can be exported)
+  
   const exports = [
     ...(content?.videos || []).filter(v => v.exported_at).map((video) => ({
       id: video.id,
@@ -32,26 +29,20 @@ const ExportHistory = () => {
     })),
   ];
 
-  const formatDateTime = (dateTimeString: string) => {
-    const date = new Date(dateTimeString);
-    return {
-      date: date.toLocaleDateString(),
-      time: date.toLocaleTimeString()
-    };
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-white via-white to-[#236dcf]">
       <DashboardSidebar />
       <div className="lg:ml-16 transition-all duration-300">
-        <div className="p-4 sm:p-6 md:p-8 pt-20 lg:pt-8">
+        <div className="container mx-auto px-4 py-8 lg:py-12">
           <div className="max-w-6xl mx-auto">
             <div className="mb-8">
-              <h1 className="text-2xl sm:text-3xl font-bold text-black mb-2">Export History</h1>
-              <p className="text-sm sm:text-base text-black">Track all your exported files and downloads</p>
+              <h1 className="text-3xl font-bold text-black mb-2">Export History</h1>
+              <p className="text-base text-black">Track all your exported files and downloads</p>
             </div>
+            
             {loading && <div className="text-black">Loading...</div>}
             {error && <div className="text-red-400">{error}</div>}
+            
             <div className="overflow-x-auto bg-white rounded-lg shadow-sm">
               <table className="min-w-full">
                 <thead className="bg-gray-50">
