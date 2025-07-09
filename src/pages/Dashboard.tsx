@@ -8,7 +8,7 @@ import { Video, FileText } from 'lucide-react';
 
 const Dashboard = () => {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gradient-to-b from-white via-white to-[#236dcf]">
       <DashboardSidebar />
       
       <div className="lg:ml-16 p-4 sm:p-6 md:p-8 pt-16 lg:pt-8 transition-all duration-300">

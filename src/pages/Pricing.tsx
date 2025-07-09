@@ -1,3 +1,4 @@
+
 import React from 'react';
 import DashboardSidebar from '@/components/DashboardSidebar';
 import { LiquidCard } from '@/components/ui/liquid-glass-card';
@@ -54,11 +55,9 @@ const Pricing = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-white relative overflow-hidden">
-      {/* Animated background elements - removed for white bg */}
-      {/* <div className="absolute inset-0 opacity-30"> ... </div> */}
+    <div className="min-h-screen bg-gradient-to-b from-white via-white to-[#236dcf]">
       <DashboardSidebar />
-      <div className="ml-16 p-8 transition-all duration-300 relative z-10">
+      <div className="lg:ml-16 p-4 sm:p-6 md:p-8 pt-16 lg:pt-8 transition-all duration-300">
         <div className="max-w-6xl mx-auto">
           <div className="mb-12 text-center">
             <h1 className="text-3xl font-bold text-black mb-4">Pricing Plans</h1>

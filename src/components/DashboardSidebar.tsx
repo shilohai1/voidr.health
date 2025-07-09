@@ -45,7 +45,7 @@ const DashboardSidebar = () => {
       {/* Sidebar */}
       <div 
         className={cn(
-          "fixed left-0 top-0 h-full z-40 transition-all duration-300 ease-in-out",
+          "fixed left-0 top-0 h-full z-40 transition-all duration-300 ease-in-out flex flex-col",
           // Mobile styles
           "lg:relative",
           isMobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
@@ -55,7 +55,7 @@ const DashboardSidebar = () => {
         onMouseEnter={() => setIsExpanded(true)}
         onMouseLeave={() => setIsExpanded(false)}
       >
-        <div className="h-full bg-white border-r border-gray-200 p-4 relative shadow-sm">
+        <div className="h-full bg-white border-r border-gray-200 p-4 flex flex-col shadow-sm">
           {/* Logo */}
           <div className="mb-6 flex justify-center">
             <picture>
@@ -89,8 +89,8 @@ const DashboardSidebar = () => {
             </div>
           </div>
 
-          {/* Menu Items */}
-          <nav className="space-y-2 mb-8">
+          {/* Menu Items - Flex grow to push logout to bottom */}
+          <nav className="flex-1 space-y-2">
             {menuItems.map((item) => {
               const Icon = item.icon;
               const isActive = location.pathname === item.path;
@@ -120,8 +120,8 @@ const DashboardSidebar = () => {
             })}
           </nav>
 
-          {/* Logout Button */}
-          <div className="absolute bottom-6 left-4 right-4">
+          {/* Logout Button - Always at bottom */}
+          <div className="mt-auto pt-4">
             <button
               onClick={handleLogout}
               className={cn(
