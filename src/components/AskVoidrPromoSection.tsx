@@ -33,7 +33,7 @@ const AskVoidrPromoSection = () => {
                 How does AskVoidr work?
               </h4>
               <p className="text-base sm:text-lg font-semibold text-black mb-3">
-                AskVoidr works in just 5 simple steps:
+                AskVoidr works in 5 easy-peasy steps:
               </p>
               
               <div className="space-y-3 text-black">
@@ -56,16 +56,16 @@ const AskVoidrPromoSection = () => {
 
               <div className="mt-4 p-3 sm:p-4 bg-yellow-50 rounded-lg border border-yellow-200">
                 <p className="text-xs sm:text-sm text-black font-medium">
-                  <span className="font-bold">Pro Tip</span> - The more accurate detail you enter, the more accurate results you may get
+                  <span className="font-bold">Pro Tip</span> - The more accurate details you enter, the more accurate results you get
                 </p>
               </div>
 
               <div className="mt-4 sm:mt-6 text-black">
                 <p className="text-base sm:text-lg font-semibold mb-2">
-                  And VOILA! AskVoidr will give you the probable causes to your symptoms.
+                  And VOILA! AskVoidr will give you the most likely causes for your symptoms.
                 </p>
                 <p className="text-xs sm:text-sm italic">
-                  Remember: AskVoidr is only created for informational purposes and to give you an idea for your symptoms. Be sure to consult a medical professional for accurate diagnosis
+                  Remember: AskVoidr is only created for educational and informational purposes only and to give you an idea for your symptoms. Be sure to consult a medical professional for precise and accurate diagnosis
                 </p>
               </div>
             </div>
