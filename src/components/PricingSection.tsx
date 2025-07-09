@@ -83,10 +83,10 @@ const PricingSection = () => {
      <section id="pricing" className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8 bg-gradient-to-br from-[#0f1726] to-[#0f1726]">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-8 sm:mb-12">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white-900 mb-4">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">
             Choose Your Plan
           </h2>
-          <p className="text-lg sm:text-xl text-white-600 max-w-3xl mx-auto">
+          <p className="text-lg sm:text-xl text-white max-w-3xl mx-auto">
             Start free, upgrade when you're ready. Flexible pricing for every stage of your medical journey.
           </p>
         </div>
