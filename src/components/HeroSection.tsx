@@ -33,16 +33,16 @@ const HeroSection = () => {
         </div>
       </div>
       
-      {/* iPhone 15 Mockup - Positioned at bottom */}
-      <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/3 z-10">
+      {/* iPhone 15 Mockup - Much smaller and positioned at bottom edge */}
+      <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-2/3 z-5">
         <div className="relative">
-          {/* iPhone 15 Frame */}
-          <div className="relative w-[280px] sm:w-[320px] md:w-[360px] h-[570px] sm:h-[650px] md:h-[730px] bg-black rounded-[3rem] sm:rounded-[3.5rem] p-2 shadow-2xl">
+          {/* iPhone 15 Frame - Significantly reduced size */}
+          <div className="relative w-[200px] sm:w-[240px] md:w-[280px] h-[400px] sm:h-[480px] md:h-[560px] bg-black rounded-[2.5rem] sm:rounded-[3rem] p-1.5 shadow-2xl">
             {/* Dynamic Island */}
-            <div className="absolute top-6 left-1/2 transform -translate-x-1/2 w-24 sm:w-28 h-6 sm:h-7 bg-black rounded-full z-20"></div>
+            <div className="absolute top-4 left-1/2 transform -translate-x-1/2 w-20 sm:w-24 h-5 sm:h-6 bg-black rounded-full z-20"></div>
             
             {/* Screen */}
-            <div className="w-full h-full bg-white rounded-[2.5rem] sm:rounded-[3rem] overflow-hidden relative">
+            <div className="w-full h-full bg-white rounded-[2rem] sm:rounded-[2.5rem] overflow-hidden relative">
               {/* Screen Content - New uploaded image */}
               <img 
                 src="/lovable-uploads/22d406f3-4e0f-4d9b-8233-3e4fb57898cd.png" 
@@ -56,11 +56,11 @@ const HeroSection = () => {
             </div>
             
             {/* Home indicator */}
-            <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 w-32 sm:w-36 h-1 bg-white rounded-full opacity-60"></div>
+            <div className="absolute bottom-1.5 left-1/2 transform -translate-x-1/2 w-28 sm:w-32 h-1 bg-white rounded-full opacity-60"></div>
           </div>
           
           {/* Subtle glow effect */}
-          <div className="absolute inset-0 bg-gradient-to-br from-[#7de8dd]/10 to-[#FF6A3D]/5 rounded-[3rem] sm:rounded-[3.5rem] blur-xl -z-10 scale-110"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-[#7de8dd]/10 to-[#FF6A3D]/5 rounded-[2.5rem] sm:rounded-[3rem] blur-xl -z-10 scale-110"></div>
         </div>
       </div>
     </section>
