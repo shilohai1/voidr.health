@@ -56,11 +56,9 @@ const StudyWithAI = () => {
       if (pollingInterval) {
         clearInterval(pollingInterval);
       }
-
-      const enhancedPrompt = `Create a medical educational video about: ${prompt}. Category: ${category}. Difficulty: ${difficulty}. Make it engaging and educational for medical students.`;
       
       const result = await generateVideo({
-        user_script: enhancedPrompt,
+        user_script: prompt,
         voice_option: 'professional',
         video_style: difficulty.toLowerCase(),
         category,
@@ -168,20 +166,20 @@ const StudyWithAI = () => {
   }, [pollingInterval]);
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       <DashboardSidebar />
       
       <div className="ml-16 p-4 md:p-8 transition-all duration-300">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
           <div className="mb-8 md:mb-12 text-center">
-            <h1 className="text-3xl md:text-4xl font-bold text-black mb-4">Welcome to StudyWithAI</h1>
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">StudyWithAI</h1>
             <p className="text-lg md:text-xl text-gray-600">
-              Create short educational medical videos instantly based on your prompts
+              Create educational medical videos with AI-powered script generation and voiceover
             </p>
           </div>
 
-          <LiquidCard className="p-6 md:p-8 mb-8">
+          <LiquidCard className="p-6 md:p-8 mb-8 bg-white/80 backdrop-blur-sm">
             <div className="space-y-6">
               {/* Prompt Input */}
               <div>
@@ -192,7 +190,7 @@ const StudyWithAI = () => {
                   value={prompt}
                   onChange={(e) => setPrompt(e.target.value)}
                   placeholder="e.g., Explain the cardiac cycle and its phases..."
-                  className="w-full h-32 p-4 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200"
+                  className="w-full h-32 p-4 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
                   disabled={loading || videoStatus === 'generating'}
                 />
               </div>
@@ -206,7 +204,7 @@ const StudyWithAI = () => {
                   <button
                     onMouseEnter={() => setShowCategories(true)}
                     onMouseLeave={() => setShowCategories(false)}
-                    className="w-full p-4 border border-gray-300 rounded-lg text-left bg-white hover:bg-gray-50 focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 disabled:opacity-50"
+                    className="w-full p-4 border border-gray-300 rounded-lg text-left bg-white hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 disabled:opacity-50"
                     disabled={loading || videoStatus === 'generating'}
                   >
                     {category || 'Select a category...'}
@@ -229,8 +227,8 @@ const StudyWithAI = () => {
                             }}
                             className="w-full p-4 text-left hover:bg-gray-50 flex items-center space-x-3 first:rounded-t-lg last:rounded-b-lg transition-all duration-200"
                           >
-                            <Icon className="w-5 h-5 text-primary" />
-                            <span className="text-black">{cat.name}</span>
+                            <Icon className="w-5 h-5 text-blue-600" />
+                            <span className="text-gray-900">{cat.name}</span>
                           </button>
                         );
                       })}
@@ -252,7 +250,7 @@ const StudyWithAI = () => {
                       disabled={loading || videoStatus === 'generating'}
                       className={`px-6 py-3 rounded-lg font-medium transition-all duration-200 disabled:opacity-50 ${
                         difficulty === level
-                          ? 'bg-primary text-white'
+                          ? 'bg-blue-600 text-white'
                           : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                       }`}
                     >
@@ -266,12 +264,12 @@ const StudyWithAI = () => {
               <LiquidButton
                 onClick={handleGenerateVideo}
                 disabled={!prompt || !category || !difficulty || loading || videoStatus === 'generating'}
-                className="w-full"
+                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white"
               >
                 {loading || videoStatus === 'generating' ? (
                   <div className="flex items-center justify-center space-x-2">
                     <Loader2 className="w-4 h-4 animate-spin" />
-                    <span>Generating...</span>
+                    <span>Generating Video...</span>
                   </div>
                 ) : (
                   'Generate Video'
@@ -280,20 +278,20 @@ const StudyWithAI = () => {
 
               {/* Status Display */}
               {videoStatus === 'generating' && (
-                <div className="text-center py-6">
+                <div className="text-center py-6 bg-blue-50 rounded-lg">
                   <div className="flex items-center justify-center space-x-2 mb-4">
-                    <Loader2 className="w-6 h-6 animate-spin text-primary" />
-                    <span className="text-gray-600">Processing your video...</span>
+                    <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
+                    <span className="text-gray-700 font-medium">Creating your video...</span>
                   </div>
-                  <div className="text-sm text-gray-500">
-                    This may take 2-5 minutes. Please don't close this page.
+                  <div className="text-sm text-gray-600">
+                    This process involves AI script generation, voiceover creation, and video production. Please wait...
                   </div>
                 </div>
               )}
               
               {videoStatus === 'failed' && (
-                <div className="text-center py-4">
-                  <p className="text-red-600">Video generation failed. Please try again.</p>
+                <div className="text-center py-4 bg-red-50 rounded-lg">
+                  <p className="text-red-600 font-medium">Video generation failed. Please try again.</p>
                 </div>
               )}
             </div>
@@ -301,7 +299,7 @@ const StudyWithAI = () => {
 
           {/* Video Result */}
           {generatedVideo && videoStatus === 'completed' && (
-            <LiquidCard className="p-6 md:p-8">
+            <LiquidCard className="p-6 md:p-8 bg-white/80 backdrop-blur-sm">
               <div className="space-y-6">
                 <div className="text-center">
                   <h2 className="text-2xl font-bold text-gray-900 mb-4">Your Video is Ready!</h2>
@@ -330,7 +328,7 @@ const StudyWithAI = () => {
                 {/* Generated Script Display */}
                 {generatedVideo.refined_script && (
                   <div className="bg-gray-50 p-4 rounded-lg">
-                    <h3 className="font-semibold text-gray-900 mb-2">Generated Script:</h3>
+                    <h3 className="font-semibold text-gray-900 mb-2">AI-Generated Script:</h3>
                     <p className="text-gray-700 text-sm whitespace-pre-wrap">{generatedVideo.refined_script}</p>
                   </div>
                 )}
@@ -346,7 +344,7 @@ const StudyWithAI = () => {
                 {/* Audio Preview */}
                 {generatedVideo.voice_url && (
                   <div className="bg-green-50 p-4 rounded-lg">
-                    <h3 className="font-semibold text-gray-900 mb-2">Generated Voiceover:</h3>
+                    <h3 className="font-semibold text-gray-900 mb-2">AI-Generated Voiceover:</h3>
                     <audio controls className="w-full">
                       <source src={generatedVideo.voice_url} type="audio/mpeg" />
                       Your browser does not support the audio element.
@@ -357,18 +355,11 @@ const StudyWithAI = () => {
                 {/* Download Options */}
                 <div className="flex flex-col sm:flex-row justify-center space-y-2 sm:space-y-0 sm:space-x-4">
                   <LiquidButton 
-                    onClick={() => handleDownload('720p')}
-                    className="flex items-center justify-center space-x-2"
+                    onClick={() => handleDownload('HD')}
+                    className="flex items-center justify-center space-x-2 bg-gradient-to-r from-green-600 to-blue-600 text-white"
                   >
                     <Download className="w-4 h-4" />
-                    <span>Download 720p</span>
-                  </LiquidButton>
-                  <LiquidButton 
-                    onClick={() => handleDownload('1080p')}
-                    className="flex items-center justify-center space-x-2"
-                  >
-                    <Download className="w-4 h-4" />
-                    <span>Download 1080p</span>
+                    <span>Download Video</span>
                   </LiquidButton>
                 </div>
               </div>

@@ -104,10 +104,10 @@ serve(async (req) => {
             - Educational and accurate
             - Engaging for ${difficulty === 'Clinical' ? 'medical students and professionals' : 'beginners'}
             - 60-90 seconds when spoken
-            - Include visual descriptions for video generation
             - Clear and concise
+            - Structured with clear sections
             
-            Format the response as a narrative script that can be read aloud and used for video generation.`
+            Format the response as a narrative script that can be read aloud. Do not include stage directions or visual descriptions, just the spoken content.`
 
             const openaiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
               method: 'POST',
@@ -204,17 +204,16 @@ serve(async (req) => {
           console.log('ElevenLabs API key not found, skipping audio generation')
         }
 
-        // Step 3: Create visual prompt for video generation
-        const visualPrompt = `Medical educational video: ${refinedScript.substring(0, 400)}. Professional medical animation style, clean medical illustrations, ${category} focused visuals, educational diagrams, modern medical graphics.`
-
-        // Step 4: Generate video with RunwayML
+        // Step 3: Generate video with RunwayML
         let videoUrl = null;
         let thumbnailUrl = null;
         const runwayApiKey = Deno.env.get('RUNWAYML_API_KEY');
         
         if (runwayApiKey) {
           console.log('Generating video with RunwayML...')
-          console.log('Using visual prompt:', visualPrompt)
+          
+          // Create visual prompt for video generation
+          const visualPrompt = `Medical educational content: ${category || 'medical'} topic. Professional medical illustration style, clean educational graphics, ${difficulty === 'Clinical' ? 'advanced medical diagrams' : 'simple medical visuals'}, modern healthcare design, instructional video format.`
           
           try {
             // Create video generation task
@@ -223,7 +222,6 @@ serve(async (req) => {
               headers: {
                 'Authorization': `Bearer ${runwayApiKey}`,
                 'Content-Type': 'application/json',
-                'X-Runway-Version': '2024-11-06'
               },
               body: JSON.stringify({
                 promptText: visualPrompt,
@@ -235,17 +233,15 @@ serve(async (req) => {
             })
 
             console.log('RunwayML response status:', runwayResponse.status)
-            const responseText = await runwayResponse.text()
-            console.log('RunwayML response:', responseText)
-
+            
             if (runwayResponse.ok) {
-              const runwayData = JSON.parse(responseText)
+              const runwayData = await runwayResponse.json()
               const taskId = runwayData.id
               console.log('RunwayML task created successfully:', taskId)
 
               // Poll for completion
               let attempts = 0;
-              const maxAttempts = 120; // 10 minutes max wait
+              const maxAttempts = 60; // 5 minutes max wait
               
               while (attempts < maxAttempts) {
                 await new Promise(resolve => setTimeout(resolve, 5000)) // Wait 5 seconds
@@ -254,7 +250,6 @@ serve(async (req) => {
                   const statusResponse = await fetch(`https://api.runwayml.com/v1/tasks/${taskId}`, {
                     headers: {
                       'Authorization': `Bearer ${runwayApiKey}`,
-                      'X-Runway-Version': '2024-11-06'
                     }
                   })
 
@@ -285,7 +280,8 @@ serve(async (req) => {
                 console.log('Video generation timed out after maximum attempts')
               }
             } else {
-              console.error('RunwayML API error:', runwayResponse.status, responseText)
+              const errorText = await runwayResponse.text()
+              console.error('RunwayML API error:', runwayResponse.status, errorText)
             }
           } catch (error) {
             console.error('Error generating video with RunwayML:', error)
