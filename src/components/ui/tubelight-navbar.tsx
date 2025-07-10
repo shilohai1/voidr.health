@@ -112,7 +112,7 @@ export function NavBar({ items, className }: NavBarProps) {
                 </button>
 
                 {/* Smooth Liquid Glass Dropdown */}
-               {item.hasDropdown && openDropdown === item.name && (
+                {item.hasDropdown && openDropdown === item.name && (
                   <motion.div
                     initial={{ opacity: 0, y: -10, scale: 0.95 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -135,7 +135,7 @@ export function NavBar({ items, className }: NavBarProps) {
                             initial={{ opacity: 0, x: -10 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: index * 0.05 }}
-                         >
+                          >
                             <button
                               onClick={() => {
                                 setOpenDropdown(null);
@@ -158,6 +158,9 @@ export function NavBar({ items, className }: NavBarProps) {
                   </motion.div>
                 )}
               </div>
+            )
+          })}
+        </div>
 
         {/* Login Button - Direct Link */}
         <div className="flex items-center">
