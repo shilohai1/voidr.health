@@ -44,11 +44,15 @@ const Index = () => {
       <NavBar items={navItems} />
       <HeroSection />
       <PainSolutionSection />
-      <div id="services">
+      <div id="clinicbot">
         <ProductPreviewSection />
       </div>
-      <CaseWisePromoSection />
-      <AskVoidrPromoSection />
+      <div id="casewise">
+        <CaseWisePromoSection />
+      </div>
+      <div id="askvoidr">
+        <AskVoidrPromoSection />
+      </div>
       <TestimonialsSection />
       <div id="pricing">
         <PricingSection />
