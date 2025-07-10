@@ -136,21 +136,41 @@ export function NavBar({ items, className }: NavBarProps) {
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: index * 0.05 }}
                           >
-                            <button
-                              onClick={() => {
-                                setOpenDropdown(null);
-                                if (dropdownItem.url.startsWith('#')) {
+                            {dropdownItem.url.startsWith('http') ? (
+                              <a
+                                href={dropdownItem.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={() => setOpenDropdown(null)}
+                                className="block w-full text-left px-4 py-3 text-sm hover:bg-primary/10 transition-all duration-200 relative group text-black"
+                              >
+                                <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                                <span className="relative">{dropdownItem.name}</span>
+                              </a>
+                            ) : dropdownItem.url.startsWith('#') ? (
+                              <button
+                                onClick={() => {
+                                  setOpenDropdown(null);
                                   const element = document.querySelector(dropdownItem.url);
                                   if (element) {
                                     element.scrollIntoView({ behavior: 'smooth' });
                                   }
-                                }
-                              }}
-                              className="block w-full text-left px-4 py-3 text-sm hover:bg-primary/10 transition-all duration-200 relative group text-black"
-                            >
-                              <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
-                              <span className="relative">{dropdownItem.name}</span>
-                            </button>
+                                }}
+                                className="block w-full text-left px-4 py-3 text-sm hover:bg-primary/10 transition-all duration-200 relative group text-black"
+                              >
+                                <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                                <span className="relative">{dropdownItem.name}</span>
+                              </button>
+                            ) : (
+                              <Link
+                                to={dropdownItem.url}
+                                onClick={() => setOpenDropdown(null)}
+                                className="block w-full text-left px-4 py-3 text-sm hover:bg-primary/10 transition-all duration-200 relative group text-black"
+                              >
+                                <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                                <span className="relative">{dropdownItem.name}</span>
+                              </Link>
+                            )}
                           </motion.div>
                         ))}
                       </div>
