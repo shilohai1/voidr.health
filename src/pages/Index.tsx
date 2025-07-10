@@ -19,10 +19,9 @@ const Index = () => {
       url: '#services',
       hasDropdown: true,
       dropdownItems: [
-        { name: 'StudyWithAI', url: '#studywithai' },
-        { name: 'ClinicBot', url: '#clinicbot' },
-        { name: 'Case Wise', url: '/case-wise' },
-        { name: 'AskVoidr', url: '/symptom-checker' }
+        { name: 'AskVoidr', url: '#askvoidr' },
+        { name: 'Case Wise', url: '#casewise' },
+        { name: 'ClinicBot', url: '#clinicbot' }
       ]
     },
     { name: 'Pricing', url: '#pricing' },
