@@ -8,40 +8,45 @@ import { Check, Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const PricingSection = () => {
-  const [selectedProduct, setSelectedProduct] = useState('StudyWithAI');
+  const [selectedProduct, setSelectedProduct] = useState('ClinicBot');
 
   const products = {
     StudyWithAI: {
       name: 'StudyWithAI',
+      isComingSoon: true,
       plans: [
         {
           name: 'Free',
           price: 0,
           period: 'month',
           features: ['2 AI videos', '720p quality', 'Watermark included'],
-          buttonText: 'Get Started',
+          buttonText: 'Coming Soon',
           isPopular: false,
+          disabled: true,
         },
         {
           name: 'Student Pro',
           price: 9,
           period: 'month',
           features: ['30 AI videos', '1080p quality', 'No watermark'],
-          buttonText: 'Choose Plan',
+          buttonText: 'Coming Soon',
           isPopular: true,
+          disabled: true,
         },
         {
           name: 'Study Beast',
           price: 19,
           period: 'month',
           features: ['Unlimited videos', 'Custom script uploads', 'Priority queue'],
-          buttonText: 'Choose Plan',
+          buttonText: 'Coming Soon',
           isPopular: false,
+          disabled: true,
         },
       ],
     },
     ClinicBot: {
       name: 'ClinicBot',
+      isComingSoon: false,
       plans: [
         {
           name: 'Free',
@@ -50,6 +55,7 @@ const PricingSection = () => {
           features: ['2 notes/month', 'Watermark included', 'No PDF export'],
           buttonText: 'Get Started',
           isPopular: false,
+          disabled: false,
         },
         {
           name: 'Clinical Starter',
@@ -58,6 +64,7 @@ const PricingSection = () => {
           features: ['30 notes/month', 'Editable output', 'Basic templates'],
           buttonText: 'Choose Plan',
           isPopular: false,
+          disabled: false,
         },
         {
           name: 'Resident Pro',
@@ -66,6 +73,7 @@ const PricingSection = () => {
           features: ['Unlimited notes', 'PDF export', 'Custom fields'],
           buttonText: 'Choose Plan',
           isPopular: true,
+          disabled: false,
         },
         {
           name: 'Emergency Mode',
@@ -74,6 +82,7 @@ const PricingSection = () => {
           features: ['24-hour-on-call AI', 'Priority support', 'Custom integrations'],
           buttonText: 'Choose Plan',
           isPopular: false,
+          disabled: false,
         },
       ],
     },
@@ -98,19 +107,27 @@ const PricingSection = () => {
               key={product}
               onClick={() => setSelectedProduct(product)}
               className={cn(
-                "px-4 sm:px-6 py-3 rounded-full font-semibold transition-all w-full sm:w-auto min-h-[44px]",
+                "px-4 sm:px-6 py-3 rounded-full font-semibold transition-all w-full sm:w-auto min-h-[44px] relative",
                 selectedProduct === product
                   ? "bg-primary text-primary-foreground shadow-lg"
                   : "bg-white text-gray-700 hover:bg-gray-50 border border-gray-200"
               )}
             >
               {product}
+              {products[product as keyof typeof products].isComingSoon && (
+                <span className="ml-2 text-xs bg-orange-500 text-white px-2 py-1 rounded-full">
+                  Soon
+                </span>
+              )}
             </button>
           ))}
         </div>
 
         {/* Pricing Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 max-w-6xl mx-auto">
+        <div className={cn(
+          "grid gap-4 sm:gap-6 max-w-6xl mx-auto",
+          selectedProduct === 'ClinicBot' ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4" : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+        )}>
           {products[selectedProduct as keyof typeof products].plans.map((plan, index) => (
             <motion.div
               key={plan.name}
@@ -120,13 +137,20 @@ const PricingSection = () => {
               viewport={{ once: true }}
               className={cn(
                 "relative rounded-2xl border p-4 sm:p-6 bg-white/80 backdrop-blur-sm",
-                plan.isPopular ? "border-primary border-2 shadow-xl" : "border-gray-200 shadow-lg"
+                plan.isPopular ? "border-primary border-2 shadow-xl" : "border-gray-200 shadow-lg",
+                plan.disabled && "opacity-75"
               )}
             >
               {plan.isPopular && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-3 sm:px-4 py-1 rounded-full text-xs sm:text-sm font-semibold flex items-center gap-1">
                   <Star className="w-3 h-3 fill-current" />
                   Popular
+                </div>
+              )}
+
+              {products[selectedProduct as keyof typeof products].isComingSoon && (
+                <div className="absolute -top-3 right-4 bg-orange-500 text-white px-3 py-1 rounded-full text-xs font-semibold">
+                  Coming Soon
                 </div>
               )}
 
@@ -150,10 +174,12 @@ const PricingSection = () => {
               <Button 
                 className={cn(
                   "w-full min-h-[44px]",
-                  plan.isPopular 
+                  plan.isPopular && !plan.disabled
                     ? "bg-primary hover:bg-primary/90" 
-                    : "bg-gray-900 hover:bg-gray-800"
+                    : "bg-gray-900 hover:bg-gray-800",
+                  plan.disabled && "opacity-50 cursor-not-allowed"
                 )}
+                disabled={plan.disabled}
               >
                 {plan.buttonText}
               </Button>

@@ -22,9 +22,12 @@ const Dashboard = () => {
 
               {/* Service Cards */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 max-w-4xl mx-auto">
-                {/* StudyWithAI Card */}
-                <LiquidCard className="w-full p-6">
-                  <div className="space-y-6">
+                {/* StudyWithAI Card - Coming Soon */}
+                <LiquidCard className="w-full p-6 relative">
+                  <div className="absolute top-4 right-4 bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                    Coming Soon
+                  </div>
+                  <div className="space-y-6 opacity-75">
                     <div className="flex items-center space-x-4">
                       <div className="p-3 bg-blue-100 rounded-lg">
                         <Video className="w-8 h-8 text-blue-600" />
@@ -55,11 +58,12 @@ const Dashboard = () => {
                       </li>
                     </ul>
 
-                    <Link to="/study-with-ai" className="block">
-                      <LiquidButton className="w-full min-h-[44px]">
-                        View StudyWithAI
-                      </LiquidButton>
-                    </Link>
+                    <LiquidButton 
+                      className="w-full min-h-[44px] opacity-50 cursor-not-allowed"
+                      disabled
+                    >
+                      Coming Soon
+                    </LiquidButton>
                   </div>
                 </LiquidCard>
 

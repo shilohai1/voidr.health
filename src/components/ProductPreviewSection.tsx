@@ -3,21 +3,25 @@ import React, { useState } from 'react';
 import { LiquidCard } from '@/components/ui/liquid-glass-card';
 
 const ProductPreviewSection = () => {
-  const [activeTab, setActiveTab] = useState('StudyWithAI');
+  const [activeTab, setActiveTab] = useState('ClinicBot');
 
   const products = {
     StudyWithAI: {
       title: 'StudyWithAI',
       subtitle: 'Turn any medical topic into a short, personalized video that actually makes sense.',
       features: ['Input topic, get video', 'Explains confusing med concepts', 'Trained on real med data', 'Personalized visual learning tool', 'Built for rapid clarity', 'Download in 720p or 1080p', 'Med school, but faster'],
+      isComingSoon: true,
       mockup: (
-        <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-4 sm:p-6 rounded-lg">
-          <div className="flex items-center space-x-2 mb-3 sm:mb-4">
+        <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-4 sm:p-6 rounded-lg relative">
+          <div className="absolute top-2 right-2 bg-orange-500 text-white px-2 py-1 rounded text-xs font-semibold">
+            Coming Soon
+          </div>
+          <div className="flex items-center space-x-2 mb-3 sm:mb-4 opacity-75">
             <div className="w-3 h-3 bg-red-500 rounded-full"></div>
             <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
             <div className="w-3 h-3 bg-green-500 rounded-full"></div>
           </div>
-          <div className="bg-white p-3 sm:p-4 rounded shadow-sm">
+          <div className="bg-white p-3 sm:p-4 rounded shadow-sm opacity-75">
             <div className="h-24 sm:h-32 bg-blue-200 rounded mb-3 flex items-center justify-center">
               <svg className="w-6 h-6 sm:w-8 sm:h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h8" />
@@ -32,6 +36,7 @@ const ProductPreviewSection = () => {
       title: 'ClinicBot',
       subtitle: 'Instantly convert long medical texts into clear, concise clinical notes.',
       features: ['Summarizes long scripts instantly', 'Bullet-point clinical notes output', 'Handles 2000+ word files', 'Upload PDFs, get summaries', 'Med-specific AI summarizer', 'Smarter than generic chatbots'],
+      isComingSoon: false,
       mockup: (
         <div className="bg-gradient-to-br from-green-50 to-green-100 p-4 sm:p-6 rounded-lg">
           <div className="bg-white p-3 sm:p-4 rounded shadow-sm">
@@ -69,13 +74,18 @@ const ProductPreviewSection = () => {
             <button
               key={productKey}
               onClick={() => setActiveTab(productKey)}
-              className={`px-4 sm:px-6 py-3 rounded-full font-semibold transition-all w-full sm:w-auto min-h-[44px] ${
+              className={`px-4 sm:px-6 py-3 rounded-full font-semibold transition-all w-full sm:w-auto min-h-[44px] relative ${
                 activeTab === productKey
                   ? 'bg-primary text-white shadow-lg'
                   : 'bg-white text-gray-700 hover:bg-gray-50 border'
               }`}
             >
               {productKey}
+              {products[productKey as keyof typeof products].isComingSoon && (
+                <span className="ml-2 text-xs bg-orange-500 text-white px-2 py-1 rounded-full">
+                  Soon
+                </span>
+              )}
             </button>
           ))}
         </div>
@@ -86,9 +96,16 @@ const ProductPreviewSection = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 items-center">
               {/* Product Info */}
               <div className="order-2 md:order-1">
-                <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">
-                  {products[activeTab as keyof typeof products].title}
-                </h3>
+                <div className="flex items-center gap-3 mb-3 sm:mb-4">
+                  <h3 className="text-2xl sm:text-3xl font-bold text-gray-900">
+                    {products[activeTab as keyof typeof products].title}
+                  </h3>
+                  {products[activeTab as keyof typeof products].isComingSoon && (
+                    <span className="bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                      Coming Soon
+                    </span>
+                  )}
+                </div>
                 <p className="text-base sm:text-lg text-gray-600 mb-4 sm:mb-6">
                   {products[activeTab as keyof typeof products].subtitle}
                 </p>

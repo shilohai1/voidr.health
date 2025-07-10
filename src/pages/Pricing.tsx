@@ -13,6 +13,7 @@ const Pricing = () => {
       period: 'month',
       features: ['2 AI videos', '720p quality', 'Watermark included'],
       isPopular: false,
+      disabled: true,
     },
     {
       name: 'Student Pro',
@@ -20,6 +21,7 @@ const Pricing = () => {
       period: 'month',
       features: ['30 AI videos', '1080p quality', 'No watermark'],
       isPopular: true,
+      disabled: true,
     },
     {
       name: 'Study Beast',
@@ -27,6 +29,7 @@ const Pricing = () => {
       period: 'month',
       features: ['Unlimited videos', 'Custom script uploads', 'Priority queue'],
       isPopular: false,
+      disabled: true,
     },
   ];
 
@@ -37,6 +40,7 @@ const Pricing = () => {
       period: 'month',
       features: ['2 notes/month', 'Watermark included', 'No PDF export'],
       isPopular: false,
+      disabled: false,
     },
     {
       name: 'Clinical Starter',
@@ -44,6 +48,7 @@ const Pricing = () => {
       period: 'month',
       features: ['30 notes/month', 'Editable output', 'Basic templates'],
       isPopular: false,
+      disabled: false,
     },
     {
       name: 'Resident Pro',
@@ -51,6 +56,7 @@ const Pricing = () => {
       period: 'month',
       features: ['Unlimited notes', 'PDF export', 'Custom fields'],
       isPopular: true,
+      disabled: false,
     },
   ];
 
@@ -66,12 +72,20 @@ const Pricing = () => {
                 <p className="text-sm lg:text-base text-black">Choose the perfect plan for your medical journey</p>
               </div>
               
-              {/* StudyWithAI Pricing */}
+              {/* StudyWithAI Pricing - Coming Soon */}
               <div className="mb-8 lg:mb-12">
-                <h2 className="text-xl lg:text-2xl font-bold text-black mb-6 text-center">StudyWithAI</h2>
+                <div className="flex items-center justify-center gap-3 mb-6">
+                  <h2 className="text-xl lg:text-2xl font-bold text-black text-center">StudyWithAI</h2>
+                  <span className="bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                    Coming Soon
+                  </span>
+                </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6">
                   {studyWithAIPlans.map((plan) => (
-                    <LiquidCard key={plan.name} className={`p-4 lg:p-6 relative bg-white ${plan.isPopular ? 'border-2 border-blue-500' : ''}`}> 
+                    <LiquidCard key={plan.name} className={`p-4 lg:p-6 relative bg-white opacity-75 ${plan.isPopular ? 'border-2 border-blue-500' : ''}`}> 
+                      <div className="absolute top-2 right-2 bg-orange-500 text-white px-2 py-1 rounded text-xs font-semibold">
+                        Coming Soon
+                      </div>
                       {plan.isPopular && (
                         <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-blue-500 text-white px-4 py-1 rounded-full text-sm font-semibold flex items-center gap-1">
                           <Star className="w-3 h-3 fill-current" />
@@ -93,8 +107,12 @@ const Pricing = () => {
                           </li>
                         ))}
                       </ul>
-                      <Button className="w-full" variant={plan.isPopular ? "default" : "outline"}>
-                        {plan.price === 0 ? 'Get Started' : 'Choose Plan'}
+                      <Button 
+                        className="w-full opacity-50 cursor-not-allowed" 
+                        variant="outline"
+                        disabled
+                      >
+                        Coming Soon
                       </Button>
                     </LiquidCard>
                   ))}
