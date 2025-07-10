@@ -4,6 +4,7 @@ import { NavBar } from '@/components/ui/tubelight-navbar';
 import HeroSection from '@/components/HeroSection';
 import PainSolutionSection from '@/components/PainSolutionSection';
 import ProductPreviewSection from '@/components/ProductPreviewSection';
+import CaseWisePromoSection from '@/components/CaseWisePromoSection';
 import AskVoidrPromoSection from '@/components/AskVoidrPromoSection';
 import TestimonialsSection from '@/components/TestimonialsSection';
 import PricingSection from '@/components/PricingSection';
@@ -47,6 +48,7 @@ const Index = () => {
       <div id="services">
         <ProductPreviewSection />
       </div>
+      <CaseWisePromoSection />
       <AskVoidrPromoSection />
       <TestimonialsSection />
       <div id="pricing">
