@@ -34,23 +34,23 @@ serve(async (req) => {
       
       const prompt = `Generate a realistic medical case scenario for a ${difficulty} difficulty level in ${specialty} medicine. 
       
-      Format as JSON with:
+      Please respond with ONLY a valid JSON object in this exact format:
       {
         "patient_name": "realistic name",
-        "age": number,
-        "gender": "male/female", 
+        "age": 45,
+        "gender": "male",
         "presenting_complaint": "chief complaint in 1-2 sentences",
         "vitals": {
-          "temperature": "value with unit",
-          "blood_pressure": "systolic/diastolic",
-          "heart_rate": "bpm",
-          "respiratory_rate": "per min",
-          "oxygen_saturation": "percentage"
+          "temperature": "98.6°F",
+          "blood_pressure": "120/80",
+          "heart_rate": "72 bpm",
+          "respiratory_rate": "16/min",
+          "oxygen_saturation": "98%"
         },
         "context": "brief background/history",
         "medical_history": "relevant past medical history",
         "correct_diagnosis": "primary diagnosis",
-        "urgency_level": "routine/urgent/critical"
+        "urgency_level": "routine"
       }
       
       Make it realistic and educational for medical students preparing for USMLE/OSCE/PLAB.`;
@@ -64,15 +64,50 @@ serve(async (req) => {
         body: JSON.stringify({
           model: 'gpt-4o-mini',
           messages: [
-            { role: 'system', content: 'You are a medical education expert creating realistic patient scenarios.' },
+            { role: 'system', content: 'You are a medical education expert creating realistic patient scenarios. Always respond with valid JSON only.' },
             { role: 'user', content: prompt }
           ],
           temperature: 0.8,
         }),
       });
 
+      if (!response.ok) {
+        throw new Error(`OpenAI API error: ${response.status}`);
+      }
+
       const data = await response.json();
-      const caseScenario = JSON.parse(data.choices[0].message.content);
+      const content = data.choices[0].message.content;
+      
+      console.log('OpenAI response content:', content);
+      
+      let caseScenario;
+      try {
+        // Clean the content to ensure it's valid JSON
+        const cleanContent = content.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+        caseScenario = JSON.parse(cleanContent);
+      } catch (parseError) {
+        console.error('JSON parsing error:', parseError);
+        console.error('Content that failed to parse:', content);
+        
+        // Fallback case if JSON parsing fails
+        caseScenario = {
+          patient_name: "John Smith",
+          age: 42,
+          gender: "male",
+          presenting_complaint: "Patient presents with acute chest pain that started 2 hours ago while at rest.",
+          vitals: {
+            temperature: "98.6°F",
+            blood_pressure: "140/90",
+            heart_rate: "95 bpm",
+            respiratory_rate: "18/min",
+            oxygen_saturation: "97%"
+          },
+          context: "Patient was watching TV when sudden onset of crushing chest pain occurred.",
+          medical_history: "Hypertension, smoking history of 20 pack-years, family history of coronary artery disease.",
+          correct_diagnosis: "Acute Myocardial Infarction",
+          urgency_level: "critical"
+        };
+      }
 
       // Store in database
       const { data: newCase, error } = await supabase
@@ -85,7 +120,10 @@ serve(async (req) => {
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Database error:', error);
+        throw error;
+      }
 
       return new Response(JSON.stringify({ case: newCase }), {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -129,6 +167,10 @@ serve(async (req) => {
           ],
         }),
       });
+
+      if (!response.ok) {
+        throw new Error(`OpenAI API error: ${response.status}`);
+      }
 
       const data = await response.json();
       const feedback = data.choices[0].message.content;

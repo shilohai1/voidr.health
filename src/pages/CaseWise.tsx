@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -6,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
+import { Textarea } from '@/components/ui/textarea';
 import { 
   Clock, 
   Heart, 
@@ -17,10 +17,13 @@ import {
   Award,
   ChevronRight,
   Play,
-  RotateCcw
+  RotateCcw,
+  AlertCircle,
+  CheckCircle
 } from 'lucide-react';
 import { LiquidCard } from '@/components/ui/liquid-glass-card';
 import { LiquidButton } from '@/components/ui/liquid-glass-button';
+import { toast } from 'sonner';
 
 interface CaseScenario {
   id: string;
@@ -66,6 +69,8 @@ const CaseWise = () => {
   const [startTime, setStartTime] = useState<number>(0);
   const [loading, setLoading] = useState(false);
   const [feedback, setFeedback] = useState<string>('');
+  const [customDiagnosis, setCustomDiagnosis] = useState<string>('');
+  const [showCustomInput, setShowCustomInput] = useState(false);
 
   const availableQuestions = [
     "Can you tell me more about when this started?",
@@ -130,9 +135,14 @@ const CaseWise = () => {
         setUserStats(data);
       } else {
         // Initialize stats for new user
-        await supabase.functions.invoke('initialize_case_wise_stats', {
-          body: { user_uuid: user!.id }
+        const { error: rpcError } = await supabase.rpc('initialize_case_wise_stats', {
+          user_uuid: user!.id
         });
+        
+        if (rpcError) {
+          console.error('Error initializing stats:', rpcError);
+        }
+        
         setUserStats({
           total_cases: 0,
           completed_cases: 0,
@@ -144,12 +154,15 @@ const CaseWise = () => {
       }
     } catch (error) {
       console.error('Error fetching user stats:', error);
+      toast.error('Failed to load user statistics');
     }
   };
 
   const generateNewCase = async () => {
     setLoading(true);
     try {
+      console.log('Generating new case...');
+      
       const { data, error } = await supabase.functions.invoke('generate-case', {
         body: { 
           action: 'generate-case',
@@ -157,7 +170,16 @@ const CaseWise = () => {
         }
       });
 
-      if (error) throw error;
+      console.log('Response from generate-case:', data, error);
+
+      if (error) {
+        console.error('Supabase function error:', error);
+        throw error;
+      }
+
+      if (!data || !data.case) {
+        throw new Error('No case data received');
+      }
 
       setCurrentCase(data.case);
       setCurrentAttempt({
@@ -172,8 +194,10 @@ const CaseWise = () => {
       });
       setStartTime(Date.now());
       setPhase('case');
+      toast.success('New case generated successfully!');
     } catch (error) {
       console.error('Error generating case:', error);
+      toast.error('Failed to generate case. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -185,6 +209,7 @@ const CaseWise = () => {
         ...currentAttempt,
         questions_asked: [...currentAttempt.questions_asked, question]
       });
+      toast.success('Question asked!');
     }
   };
 
@@ -194,6 +219,7 @@ const CaseWise = () => {
         ...currentAttempt,
         investigations_ordered: [...currentAttempt.investigations_ordered, investigation]
       });
+      toast.success('Investigation ordered!');
     }
   };
 
@@ -201,7 +227,8 @@ const CaseWise = () => {
     if (!currentAttempt || !currentCase) return;
 
     const timeSpent = Math.floor((Date.now() - startTime) / 1000);
-    const isCorrect = diagnosis.toLowerCase().includes(currentCase.correct_diagnosis.toLowerCase());
+    const isCorrect = diagnosis.toLowerCase().includes(currentCase.correct_diagnosis.toLowerCase()) ||
+                     currentCase.correct_diagnosis.toLowerCase().includes(diagnosis.toLowerCase());
     const score = calculateScore(isCorrect, timeSpent, currentAttempt.investigations_ordered.length);
 
     const finalAttempt = {
@@ -212,34 +239,41 @@ const CaseWise = () => {
       completed: true
     };
 
-    // Save attempt to database
-    await supabase
-      .from('case_attempts')
-      .insert({
-        user_id: user!.id,
-        ...finalAttempt
+    try {
+      // Save attempt to database
+      await supabase
+        .from('case_attempts')
+        .insert({
+          user_id: user!.id,
+          ...finalAttempt
+        });
+
+      // Update user stats
+      await supabase.rpc('update_case_wise_stats', {
+        user_uuid: user!.id,
+        new_score: score,
+        time_spent: timeSpent,
+        completed: true
       });
 
-    // Update user stats
-    await supabase.rpc('update_case_wise_stats', {
-      user_uuid: user!.id,
-      new_score: score,
-      time_spent: timeSpent,
-      completed: true
-    });
+      // Get AI feedback
+      const { data } = await supabase.functions.invoke('generate-case', {
+        body: {
+          action: 'provide-feedback',
+          caseData: { attempt: finalAttempt, scenario: currentCase }
+        }
+      });
 
-    // Get AI feedback
-    const { data } = await supabase.functions.invoke('generate-case', {
-      body: {
-        action: 'provide-feedback',
-        caseData: { attempt: finalAttempt, scenario: currentCase }
-      }
-    });
-
-    setFeedback(data.feedback);
-    setCurrentAttempt(finalAttempt);
-    setPhase('feedback');
-    fetchUserStats();
+      setFeedback(data?.feedback || 'Great work on completing this case!');
+      setCurrentAttempt(finalAttempt);
+      setPhase('feedback');
+      fetchUserStats();
+      
+      toast.success(isCorrect ? 'Correct diagnosis!' : 'Case completed!');
+    } catch (error) {
+      console.error('Error submitting diagnosis:', error);
+      toast.error('Failed to submit diagnosis');
+    }
   };
 
   const calculateScore = (correct: boolean, timeSpent: number, investigationsCount: number) => {
@@ -488,6 +522,9 @@ const CaseWise = () => {
                     onClick={() => askQuestion(question)}
                     disabled={currentAttempt.questions_asked.includes(question)}
                   >
+                    {currentAttempt.questions_asked.includes(question) && (
+                      <CheckCircle className="w-4 h-4 mr-2 text-green-500" />
+                    )}
                     {question}
                   </Button>
                 ))}
@@ -529,6 +566,9 @@ const CaseWise = () => {
                     onClick={() => orderInvestigation(investigation)}
                     disabled={currentAttempt.investigations_ordered.includes(investigation)}
                   >
+                    {currentAttempt.investigations_ordered.includes(investigation) && (
+                      <CheckCircle className="w-4 h-4 mr-2 text-green-500" />
+                    )}
                     {investigation}
                   </Button>
                 ))}
@@ -573,7 +613,34 @@ const CaseWise = () => {
                 ))}
               </div>
 
-              <div className="flex justify-center">
+              <div className="border-t pt-4">
+                <Button
+                  variant="outline"
+                  onClick={() => setShowCustomInput(!showCustomInput)}
+                  className="mb-4"
+                >
+                  {showCustomInput ? 'Hide' : 'Enter'} Custom Diagnosis
+                </Button>
+                
+                {showCustomInput && (
+                  <div className="space-y-4">
+                    <Textarea
+                      placeholder="Enter your diagnosis..."
+                      value={customDiagnosis}
+                      onChange={(e) => setCustomDiagnosis(e.target.value)}
+                      className="w-full"
+                    />
+                    <LiquidButton
+                      onClick={() => submitDiagnosis(customDiagnosis)}
+                      disabled={!customDiagnosis.trim()}
+                    >
+                      Submit Diagnosis
+                    </LiquidButton>
+                  </div>
+                )}
+              </div>
+
+              <div className="flex justify-center mt-6">
                 <Button onClick={() => setPhase('investigations')}>
                   Back to Tests
                 </Button>
