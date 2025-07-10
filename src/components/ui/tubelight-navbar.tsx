@@ -135,14 +135,22 @@ export function NavBar({ items, className }: NavBarProps) {
                             initial={{ opacity: 0, x: -10 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: index * 0.05 }}
-                          >
-                            <Link
-                              to={dropdownItem.url}
-                              className="block px-4 py-3 text-sm hover:bg-primary/10 transition-all duration-200 relative group text-black"
+                         >
+                            <button
+                              onClick={() => {
+                                setOpenDropdown(null);
+                                if (dropdownItem.url.startsWith('#')) {
+                                  const element = document.querySelector(dropdownItem.url);
+                                  if (element) {
+                                    element.scrollIntoView({ behavior: 'smooth' });
+                                  }
+                                }
+                              }}
+                              className="block w-full text-left px-4 py-3 text-sm hover:bg-primary/10 transition-all duration-200 relative group text-black"
                             >
                               <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
                               <span className="relative">{dropdownItem.name}</span>
-                            </Link>
+                            </button>
                           </motion.div>
                         ))}
                       </div>
@@ -150,9 +158,6 @@ export function NavBar({ items, className }: NavBarProps) {
                   </motion.div>
                 )}
               </div>
-            )
-          })}
-        </div>
 
         {/* Login Button - Direct Link */}
         <div className="flex items-center">
