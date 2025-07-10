@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -12,17 +11,18 @@ import {
   Activity, 
   Thermometer, 
   User,
-  Stethoscope,
   Brain,
   Award,
   ChevronRight,
   Play,
   RotateCcw,
-  CheckCircle
+  CheckCircle,
+  Loader
 } from 'lucide-react';
 import { LiquidCard } from '@/components/ui/liquid-glass-card';
 import { LiquidButton } from '@/components/ui/liquid-glass-button';
 import { toast } from 'sonner';
+import { Link } from 'react-router-dom';
 
 interface CaseScenario {
   id: string;
@@ -72,6 +72,8 @@ const CaseWise = () => {
   const [showCustomInput, setShowCustomInput] = useState(false);
   const [patientResponses, setPatientResponses] = useState<{[key: string]: string}>({});
   const [testFeedback, setTestFeedback] = useState<{[key: string]: string}>({});
+  const [diagnosisSubmitted, setDiagnosisSubmitted] = useState(false);
+  const [evaluatingDiagnosis, setEvaluatingDiagnosis] = useState(false);
 
   const availableQuestions = [
     "Can you tell me more about when this pain started?",
@@ -209,6 +211,8 @@ const CaseWise = () => {
       setPhase('case');
       setPatientResponses({});
       setTestFeedback({});
+      setDiagnosisSubmitted(false);
+      setEvaluatingDiagnosis(false);
       toast.success('New case generated successfully!');
     } catch (error) {
       console.error('Error generating case:', error);
@@ -289,7 +293,10 @@ const CaseWise = () => {
   };
 
   const submitDiagnosis = async (diagnosis: string) => {
-    if (!currentAttempt || !currentCase) return;
+    if (!currentAttempt || !currentCase || diagnosisSubmitted) return;
+
+    setDiagnosisSubmitted(true);
+    setEvaluatingDiagnosis(true);
 
     const timeSpent = Math.floor((Date.now() - startTime) / 1000);
     const isCorrect = diagnosis.toLowerCase().includes(currentCase.correct_diagnosis.toLowerCase()) ||
@@ -335,6 +342,9 @@ const CaseWise = () => {
     } catch (error) {
       console.error('Error submitting diagnosis:', error);
       toast.error('Failed to submit diagnosis');
+      setDiagnosisSubmitted(false);
+    } finally {
+      setEvaluatingDiagnosis(false);
     }
   };
 
@@ -363,7 +373,16 @@ const CaseWise = () => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[#236dcf] to-teal-500 flex items-center justify-center">
         <LiquidCard className="max-w-md w-full mx-4 p-8 text-center">
-          <Stethoscope className="w-16 h-16 text-blue-600 mx-auto mb-4" />
+          <div className="flex justify-center mb-4">
+            <picture>
+              <source srcSet="/lovable-uploads/7e5bb1d3-2b2f-4bae-bb4a-ec509545e99d.webp" type="image/webp" />
+              <img 
+                src="/lovable-uploads/7e5bb1d3-2b2f-4bae-bb4a-ec509545e99d.png" 
+                alt="VOIDR" 
+                className="h-16 w-auto"
+              />
+            </picture>
+          </div>
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Case Wise</h1>
           <p className="text-gray-600 mb-6">Please log in to access the medical simulator</p>
           <LiquidButton onClick={() => window.location.href = '/auth'}>
@@ -380,9 +399,16 @@ const CaseWise = () => {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center space-x-4">
-            <div className="p-3 bg-white/20 backdrop-blur-sm rounded-xl">
-              <Stethoscope className="w-8 h-8 text-white" />
-            </div>
+            <Link to="/dashboard" className="p-3 bg-white/20 backdrop-blur-sm rounded-xl hover:bg-white/30 transition-colors">
+              <picture>
+                <source srcSet="/lovable-uploads/7e5bb1d3-2b2f-4bae-bb4a-ec509545e99d.webp" type="image/webp" />
+                <img 
+                  src="/lovable-uploads/7e5bb1d3-2b2f-4bae-bb4a-ec509545e99d.png" 
+                  alt="VOIDR" 
+                  className="h-8 w-auto"
+                />
+              </picture>
+            </Link>
             <div>
               <h1 className="text-3xl font-bold text-white">Case Wise</h1>
               <p className="text-white/80">Interactive Medical Simulator</p>
@@ -520,24 +546,22 @@ const CaseWise = () => {
               </div>
 
               <div className="flex space-x-4">
-                <LiquidButton onClick={() => setPhase('history')} className="bg-white/20 hover:bg-white/30">
+                <LiquidButton onClick={() => setPhase('history')} className="bg-white/20 hover:bg-white/30 text-white border-white/30">
                   Ask Questions
                   <ChevronRight className="w-4 h-4 ml-2" />
                 </LiquidButton>
-                <Button 
-                  variant="outline" 
+                <LiquidButton 
                   onClick={() => setPhase('investigations')}
-                  className="border-white/30 text-white hover:bg-white/10"
+                  className="bg-white/20 hover:bg-white/30 text-white border-white/30"
                 >
                   Order Tests
-                </Button>
-                <Button 
-                  variant="outline" 
+                </LiquidButton>
+                <LiquidButton 
                   onClick={() => setPhase('diagnosis')}
-                  className="border-white/30 text-white hover:bg-white/10"
+                  className="bg-white/20 hover:bg-white/30 text-white border-white/30"
                 >
                   Make Diagnosis
-                </Button>
+                </LiquidButton>
               </div>
             </LiquidCard>
           </div>
@@ -550,10 +574,10 @@ const CaseWise = () => {
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 {availableQuestions.map((question, index) => (
-                  <Button
+                  <LiquidButton
                     key={index}
                     variant="outline"
-                    className="text-left h-auto p-4 border-white/30 text-white hover:bg-white/10"
+                    className="text-left h-auto p-4 border-white/30 text-white hover:bg-white/10 bg-white/5"
                     onClick={() => askQuestion(question)}
                     disabled={currentAttempt.questions_asked.includes(question)}
                   >
@@ -561,7 +585,7 @@ const CaseWise = () => {
                       <CheckCircle className="w-4 h-4 mr-2 text-green-400" />
                     )}
                     {question}
-                  </Button>
+                  </LiquidButton>
                 ))}
               </div>
 
@@ -581,10 +605,10 @@ const CaseWise = () => {
               )}
 
               <div className="flex space-x-4">
-                <Button onClick={() => setPhase('case')} className="bg-white/20 hover:bg-white/30">
+                <LiquidButton onClick={() => setPhase('case')} className="bg-white/20 hover:bg-white/30 text-white">
                   Back to Case
-                </Button>
-                <LiquidButton onClick={() => setPhase('investigations')} className="bg-white/20 hover:bg-white/30">
+                </LiquidButton>
+                <LiquidButton onClick={() => setPhase('investigations')} className="bg-white/20 hover:bg-white/30 text-white">
                   Order Tests
                   <ChevronRight className="w-4 h-4 ml-2" />
                 </LiquidButton>
@@ -600,10 +624,10 @@ const CaseWise = () => {
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 {availableInvestigations.map((investigation, index) => (
-                  <Button
+                  <LiquidButton
                     key={index}
                     variant="outline"
-                    className="text-left h-auto p-4 border-white/30 text-white hover:bg-white/10"
+                    className="text-left h-auto p-4 border-white/30 text-white hover:bg-white/10 bg-white/5"
                     onClick={() => orderInvestigation(investigation)}
                     disabled={currentAttempt.investigations_ordered.includes(investigation)}
                   >
@@ -611,7 +635,7 @@ const CaseWise = () => {
                       <CheckCircle className="w-4 h-4 mr-2 text-green-400" />
                     )}
                     {investigation}
-                  </Button>
+                  </LiquidButton>
                 ))}
               </div>
 
@@ -641,10 +665,10 @@ const CaseWise = () => {
               )}
 
               <div className="flex space-x-4">
-                <Button onClick={() => setPhase('history')} className="bg-white/20 hover:bg-white/30">
+                <LiquidButton onClick={() => setPhase('history')} className="bg-white/20 hover:bg-white/30 text-white">
                   Back to History
-                </Button>
-                <LiquidButton onClick={() => setPhase('diagnosis')} className="bg-white/20 hover:bg-white/30">
+                </LiquidButton>
+                <LiquidButton onClick={() => setPhase('diagnosis')} className="bg-white/20 hover:bg-white/30 text-white">
                   Make Diagnosis
                   <ChevronRight className="w-4 h-4 ml-2" />
                 </LiquidButton>
@@ -663,7 +687,8 @@ const CaseWise = () => {
                   <LiquidButton
                     key={index}
                     onClick={() => submitDiagnosis(diagnosis)}
-                    className="h-auto p-4 text-left bg-white/20 hover:bg-white/30"
+                    disabled={diagnosisSubmitted}
+                    className="h-auto p-4 text-left bg-white/20 hover:bg-white/30 text-white disabled:opacity-50"
                   >
                     {diagnosis}
                   </LiquidButton>
@@ -671,13 +696,14 @@ const CaseWise = () => {
               </div>
 
               <div className="border-t border-white/20 pt-4">
-                <Button
+                <LiquidButton
                   variant="outline"
                   onClick={() => setShowCustomInput(!showCustomInput)}
                   className="mb-4 border-white/30 text-white hover:bg-white/10"
+                  disabled={diagnosisSubmitted}
                 >
                   {showCustomInput ? 'Hide' : 'Enter'} Custom Diagnosis
-                </Button>
+                </LiquidButton>
                 
                 {showCustomInput && (
                   <div className="space-y-4">
@@ -686,22 +712,36 @@ const CaseWise = () => {
                       value={customDiagnosis}
                       onChange={(e) => setCustomDiagnosis(e.target.value)}
                       className="w-full bg-white/20 border-white/30 text-white placeholder-white/60"
+                      disabled={diagnosisSubmitted}
                     />
                     <LiquidButton
                       onClick={() => submitDiagnosis(customDiagnosis)}
-                      disabled={!customDiagnosis.trim()}
-                      className="bg-white/20 hover:bg-white/30"
+                      disabled={!customDiagnosis.trim() || diagnosisSubmitted}
+                      className="bg-white/20 hover:bg-white/30 text-white disabled:opacity-50"
                     >
                       Submit Diagnosis
                     </LiquidButton>
                   </div>
                 )}
               </div>
+              
+              {evaluatingDiagnosis && (
+                <div className="mt-6 text-center">
+                  <div className="flex items-center justify-center space-x-2 text-white">
+                    <Loader className="w-5 h-5 animate-spin" />
+                    <span>Case Wise is evaluating your Diagnosis...</span>
+                  </div>
+                </div>
+              )}
 
               <div className="flex justify-center mt-6">
-                <Button onClick={() => setPhase('investigations')} className="bg-white/20 hover:bg-white/30">
+                <LiquidButton 
+                  onClick={() => setPhase('investigations')} 
+                  className="bg-white/20 hover:bg-white/30 text-white"
+                  disabled={diagnosisSubmitted}
+                >
                   Back to Tests
-                </Button>
+                </LiquidButton>
               </div>
             </LiquidCard>
           </div>
@@ -731,17 +771,16 @@ const CaseWise = () => {
               </div>
 
               <div className="flex justify-center space-x-4">
-                <LiquidButton onClick={() => setPhase('menu')} className="bg-white/20 hover:bg-white/30">
+                <LiquidButton onClick={() => setPhase('menu')} className="bg-white/20 hover:bg-white/30 text-white">
                   <RotateCcw className="w-4 h-4 mr-2" />
                   New Case
                 </LiquidButton>
-                <Button 
-                  variant="outline" 
+                <LiquidButton 
                   onClick={() => window.location.href = '/dashboard'}
-                  className="border-white/30 text-white hover:bg-white/10"
+                  className="bg-white/20 hover:bg-white/30 text-white"
                 >
                   Back to Dashboard
-                </Button>
+                </LiquidButton>
               </div>
             </LiquidCard>
           </div>
