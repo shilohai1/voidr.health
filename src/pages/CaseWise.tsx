@@ -1,10 +1,10 @@
+
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
 import { Textarea } from '@/components/ui/textarea';
 import { 
   Clock, 
@@ -18,7 +18,6 @@ import {
   ChevronRight,
   Play,
   RotateCcw,
-  AlertCircle,
   CheckCircle
 } from 'lucide-react';
 import { LiquidCard } from '@/components/ui/liquid-glass-card';
@@ -61,7 +60,7 @@ interface UserStats {
 }
 
 const CaseWise = () => {
-  const { user, profile } = useAuth();
+  const { user } = useAuth();
   const [currentCase, setCurrentCase] = useState<CaseScenario | null>(null);
   const [currentAttempt, setCurrentAttempt] = useState<CaseAttempt | null>(null);
   const [userStats, setUserStats] = useState<UserStats | null>(null);
@@ -71,46 +70,61 @@ const CaseWise = () => {
   const [feedback, setFeedback] = useState<string>('');
   const [customDiagnosis, setCustomDiagnosis] = useState<string>('');
   const [showCustomInput, setShowCustomInput] = useState(false);
+  const [patientResponses, setPatientResponses] = useState<{[key: string]: string}>({});
+  const [testFeedback, setTestFeedback] = useState<{[key: string]: string}>({});
 
   const availableQuestions = [
-    "Can you tell me more about when this started?",
-    "Do you have any past medical history?",
-    "Are you taking any medications?",
-    "Do you have any allergies?",
-    "Does anything make it better or worse?",
-    "Have you experienced this before?",
-    "Any family history of similar problems?",
-    "Any recent travel or sick contacts?",
-    "Rate your pain from 1-10",
-    "Any associated symptoms?"
+    "Can you tell me more about when this pain started?",
+    "Do you have any past medical history of note?",
+    "Are you currently taking any medications?",
+    "Do you have any known drug allergies?",
+    "Does anything make the pain better or worse?",
+    "Have you experienced anything like this before?",
+    "Is there any family history of similar problems?",
+    "Any recent travel or exposure to sick contacts?",
+    "On a scale of 1-10, how would you rate your pain?",
+    "Any associated symptoms like nausea, vomiting, or fever?",
+    "Have you noticed any changes in your bowel habits?",
+    "Any shortness of breath or chest pain?",
+    "Any recent weight loss or night sweats?",
+    "Do you smoke or drink alcohol regularly?"
   ];
 
   const availableInvestigations = [
-    "Full Blood Count (CBC)",
-    "Basic Metabolic Panel",
-    "Liver Function Tests",
-    "Cardiac Enzymes",
-    "ECG",
-    "Chest X-ray",
+    "FBC (Full Blood Count)",
+    "U&Es (Urea & Electrolytes)",
+    "LFTs (Liver Function Tests)",
+    "Cardiac enzymes (Troponin I/T)",
+    "12-lead ECG",
+    "CXR (Chest X-ray)",
     "CT Head",
-    "CT Chest/Abdomen/Pelvis",
-    "Ultrasound",
-    "Urinalysis",
-    "Blood Cultures",
-    "Arterial Blood Gas"
+    "CT CAP (Chest/Abdomen/Pelvis)",
+    "Abdominal USS",
+    "Urinalysis & M,C&S",
+    "Blood cultures",
+    "ABG (Arterial Blood Gas)",
+    "D-dimer",
+    "Inflammatory markers (CRP, ESR)",
+    "Coagulation screen (PT/INR, APTT)",
+    "Echocardiogram"
   ];
 
   const commonDiagnoses = [
-    "Myocardial Infarction",
-    "Pneumonia",
-    "Appendicitis",
-    "Stroke",
-    "Sepsis", 
-    "Gastroenteritis",
-    "UTI",
-    "Asthma Exacerbation",
-    "Anxiety/Panic Attack",
-    "Migraine"
+    "STEMI (ST-Elevation MI)",
+    "NSTEMI (Non-ST Elevation MI)",
+    "Acute appendicitis",
+    "Community-acquired pneumonia",
+    "Acute stroke (CVA)",
+    "Sepsis/SIRS",
+    "Acute gastroenteritis",
+    "UTI (Urinary tract infection)",
+    "Acute asthma exacerbation",
+    "Panic disorder/anxiety",
+    "Acute migraine",
+    "Acute cholecystitis",
+    "DVT (Deep vein thrombosis)",
+    "PE (Pulmonary embolism)",
+    "Acute renal colic"
   ];
 
   useEffect(() => {
@@ -134,7 +148,6 @@ const CaseWise = () => {
       if (data) {
         setUserStats(data);
       } else {
-        // Initialize stats for new user
         const { error: rpcError } = await supabase.rpc('initialize_case_wise_stats', {
           user_uuid: user!.id
         });
@@ -194,6 +207,8 @@ const CaseWise = () => {
       });
       setStartTime(Date.now());
       setPhase('case');
+      setPatientResponses({});
+      setTestFeedback({});
       toast.success('New case generated successfully!');
     } catch (error) {
       console.error('Error generating case:', error);
@@ -203,23 +218,73 @@ const CaseWise = () => {
     }
   };
 
-  const askQuestion = (question: string) => {
-    if (currentAttempt) {
+  const askQuestion = async (question: string) => {
+    if (currentAttempt && currentCase) {
       setCurrentAttempt({
         ...currentAttempt,
         questions_asked: [...currentAttempt.questions_asked, question]
       });
+
+      // Get AI patient response
+      try {
+        const { data } = await supabase.functions.invoke('generate-case', {
+          body: {
+            action: 'patient-response',
+            caseData: { question, scenario: currentCase }
+          }
+        });
+
+        if (data?.response) {
+          setPatientResponses(prev => ({
+            ...prev,
+            [question]: data.response
+          }));
+
+          // Generate voiceover
+          if (data.audioContent) {
+            const audio = new Audio(`data:audio/mp3;base64,${data.audioContent}`);
+            audio.play().catch(console.error);
+          }
+        }
+      } catch (error) {
+        console.error('Error getting patient response:', error);
+        setPatientResponses(prev => ({
+          ...prev,
+          [question]: "I'm not sure about that..."
+        }));
+      }
+
       toast.success('Question asked!');
     }
   };
 
-  const orderInvestigation = (investigation: string) => {
-    if (currentAttempt) {
+  const orderInvestigation = async (investigation: string) => {
+    if (currentAttempt && currentCase) {
       setCurrentAttempt({
         ...currentAttempt,
         investigations_ordered: [...currentAttempt.investigations_ordered, investigation]
       });
-      toast.success('Investigation ordered!');
+
+      // Get AI feedback on test choice
+      try {
+        const { data } = await supabase.functions.invoke('generate-case', {
+          body: {
+            action: 'test-feedback',
+            caseData: { investigation, scenario: currentCase }
+          }
+        });
+
+        if (data?.feedback) {
+          setTestFeedback(prev => ({
+            ...prev,
+            [investigation]: data.feedback
+          }));
+          toast.success(data.feedback);
+        }
+      } catch (error) {
+        console.error('Error getting test feedback:', error);
+        toast.success('Investigation ordered!');
+      }
     }
   };
 
@@ -240,7 +305,6 @@ const CaseWise = () => {
     };
 
     try {
-      // Save attempt to database
       await supabase
         .from('case_attempts')
         .insert({
@@ -248,7 +312,6 @@ const CaseWise = () => {
           ...finalAttempt
         });
 
-      // Update user stats
       await supabase.rpc('update_case_wise_stats', {
         user_uuid: user!.id,
         new_score: score,
@@ -256,7 +319,6 @@ const CaseWise = () => {
         completed: true
       });
 
-      // Get AI feedback
       const { data } = await supabase.functions.invoke('generate-case', {
         body: {
           action: 'provide-feedback',
@@ -264,7 +326,7 @@ const CaseWise = () => {
         }
       });
 
-      setFeedback(data?.feedback || 'Great work on completing this case!');
+      setFeedback(data?.feedback || 'Well done on completing this case!');
       setCurrentAttempt(finalAttempt);
       setPhase('feedback');
       fetchUserStats();
@@ -279,12 +341,10 @@ const CaseWise = () => {
   const calculateScore = (correct: boolean, timeSpent: number, investigationsCount: number) => {
     let score = correct ? 80 : 20;
     
-    // Time bonus (faster = more points)
-    if (timeSpent < 300) score += 15; // Under 5 minutes
-    else if (timeSpent < 600) score += 10; // Under 10 minutes
-    else if (timeSpent < 900) score += 5; // Under 15 minutes
+    if (timeSpent < 300) score += 15;
+    else if (timeSpent < 600) score += 10;
+    else if (timeSpent < 900) score += 5;
 
-    // Investigation efficiency (fewer unnecessary tests = more points)
     if (investigationsCount <= 3) score += 10;
     else if (investigationsCount <= 5) score += 5;
 
@@ -299,18 +359,9 @@ const CaseWise = () => {
     }
   };
 
-  const canAccessFeature = () => {
-    if (!profile) return false;
-    
-    const casesThisMonth = userStats?.cases_this_month || 0;
-    
-    if (profile.is_premium) return true; // Premium users have access
-    return casesThisMonth < 7; // Free users get 7 cases per month
-  };
-
   if (!user) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-[#236dcf] to-teal-500 flex items-center justify-center">
         <LiquidCard className="max-w-md w-full mx-4 p-8 text-center">
           <Stethoscope className="w-16 h-16 text-blue-600 mx-auto mb-4" />
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Case Wise</h1>
@@ -323,53 +374,35 @@ const CaseWise = () => {
     );
   }
 
-  if (!canAccessFeature()) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 flex items-center justify-center">
-        <LiquidCard className="max-w-md w-full mx-4 p-8 text-center">
-          <Award className="w-16 h-16 text-orange-500 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Upgrade to Continue</h2>
-          <p className="text-gray-600 mb-6">
-            You've used all {userStats?.cases_this_month || 0}/7 free cases this month. 
-            Upgrade to Premium for unlimited access!
-          </p>
-          <LiquidButton onClick={() => window.location.href = '/pricing'}>
-            View Pricing
-          </LiquidButton>
-        </LiquidCard>
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
+    <div className="min-h-screen bg-gradient-to-br from-[#236dcf] to-teal-500">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center space-x-4">
-            <div className="p-3 bg-blue-100 rounded-xl">
-              <Stethoscope className="w-8 h-8 text-blue-600" />
+            <div className="p-3 bg-white/20 backdrop-blur-sm rounded-xl">
+              <Stethoscope className="w-8 h-8 text-white" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Case Wise</h1>
-              <p className="text-gray-600">Interactive Medical Simulator</p>
+              <h1 className="text-3xl font-bold text-white">Case Wise</h1>
+              <p className="text-white/80">Interactive Medical Simulator</p>
             </div>
           </div>
           
           {userStats && (
-            <LiquidCard className="p-4">
+            <LiquidCard className="p-4 bg-white/10 backdrop-blur-sm border-white/20">
               <div className="flex items-center space-x-6 text-sm">
                 <div className="text-center">
-                  <div className="font-bold text-blue-600">{userStats.current_streak}</div>
-                  <div className="text-gray-500">Streak</div>
+                  <div className="font-bold text-white">{userStats.current_streak}</div>
+                  <div className="text-white/70">Streak</div>
                 </div>
                 <div className="text-center">
-                  <div className="font-bold text-green-600">{Math.round(userStats.average_score)}%</div>
-                  <div className="text-gray-500">Avg Score</div>
+                  <div className="font-bold text-white">{Math.round(userStats.average_score)}%</div>
+                  <div className="text-white/70">Avg Score</div>
                 </div>
                 <div className="text-center">
-                  <div className="font-bold text-purple-600">{userStats.completed_cases}</div>
-                  <div className="text-gray-500">Completed</div>
+                  <div className="font-bold text-white">{userStats.completed_cases}</div>
+                  <div className="text-white/70">Completed</div>
                 </div>
               </div>
             </LiquidCard>
@@ -379,12 +412,12 @@ const CaseWise = () => {
         {/* Main Content */}
         {phase === 'menu' && (
           <div className="max-w-4xl mx-auto">
-            <LiquidCard className="p-8 text-center mb-8">
-              <Brain className="w-20 h-20 text-blue-600 mx-auto mb-6" />
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+            <LiquidCard className="p-8 text-center mb-8 bg-white/10 backdrop-blur-sm border-white/20">
+              <Brain className="w-20 h-20 text-white mx-auto mb-6" />
+              <h2 className="text-2xl font-bold text-white mb-4">
                 Think Like a Doctor
               </h2>
-              <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
+              <p className="text-white/80 mb-8 max-w-2xl mx-auto">
                 Practice clinical reasoning with AI-generated patient scenarios. 
                 From history-taking to diagnosis and management - sharpen your medical skills 
                 before stepping into the hospital.
@@ -393,7 +426,7 @@ const CaseWise = () => {
               <LiquidButton 
                 onClick={generateNewCase}
                 disabled={loading}
-                className="text-lg px-8 py-4"
+                className="text-lg px-8 py-4 bg-white/20 hover:bg-white/30"
               >
                 {loading ? (
                   <>
@@ -411,22 +444,22 @@ const CaseWise = () => {
 
             {/* Quick Stats */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <LiquidCard className="p-6 text-center">
-                <Activity className="w-8 h-8 text-blue-600 mx-auto mb-3" />
-                <h3 className="font-semibold text-gray-900 mb-1">Real Scenarios</h3>
-                <p className="text-sm text-gray-600">AI-generated cases based on real medical conditions</p>
+              <LiquidCard className="p-6 text-center bg-white/10 backdrop-blur-sm border-white/20">
+                <Activity className="w-8 h-8 text-white mx-auto mb-3" />
+                <h3 className="font-semibold text-white mb-1">Real Scenarios</h3>
+                <p className="text-sm text-white/70">AI-generated cases based on real medical conditions</p>
               </LiquidCard>
               
-              <LiquidCard className="p-6 text-center">
-                <Award className="w-8 h-8 text-green-600 mx-auto mb-3" />
-                <h3 className="font-semibold text-gray-900 mb-1">Instant Feedback</h3>
-                <p className="text-sm text-gray-600">Get detailed feedback on your clinical reasoning</p>
+              <LiquidCard className="p-6 text-center bg-white/10 backdrop-blur-sm border-white/20">
+                <Award className="w-8 h-8 text-white mx-auto mb-3" />
+                <h3 className="font-semibold text-white mb-1">Instant Feedback</h3>
+                <p className="text-sm text-white/70">Get detailed feedback on your clinical reasoning</p>
               </LiquidCard>
               
-              <LiquidCard className="p-6 text-center">
-                <Clock className="w-8 h-8 text-purple-600 mx-auto mb-3" />
-                <h3 className="font-semibold text-gray-900 mb-1">Track Progress</h3>
-                <p className="text-sm text-gray-600">Monitor your improvement over time</p>
+              <LiquidCard className="p-6 text-center bg-white/10 backdrop-blur-sm border-white/20">
+                <Clock className="w-8 h-8 text-white mx-auto mb-3" />
+                <h3 className="font-semibold text-white mb-1">Track Progress</h3>
+                <p className="text-sm text-white/70">Monitor your improvement over time</p>
               </LiquidCard>
             </div>
           </div>
@@ -434,15 +467,15 @@ const CaseWise = () => {
 
         {phase === 'case' && currentCase && (
           <div className="max-w-4xl mx-auto">
-            <LiquidCard className="p-6 mb-6">
+            <LiquidCard className="p-6 mb-6 bg-white/10 backdrop-blur-sm border-white/20">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center space-x-4">
-                  <User className="w-8 h-8 text-blue-600" />
+                  <User className="w-8 h-8 text-white" />
                   <div>
-                    <h2 className="text-xl font-bold text-gray-900">
+                    <h2 className="text-xl font-bold text-white">
                       {currentCase.patient_name}
                     </h2>
-                    <p className="text-gray-600">
+                    <p className="text-white/80">
                       {currentCase.age} year old {currentCase.gender}
                     </p>
                   </div>
@@ -452,54 +485,56 @@ const CaseWise = () => {
                 </Badge>
               </div>
 
-              <div className="bg-blue-50 p-4 rounded-lg mb-6">
-                <h3 className="font-semibold text-gray-900 mb-2">Presenting Complaint</h3>
-                <p className="text-gray-700">{currentCase.presenting_complaint}</p>
+              <div className="bg-white/20 p-4 rounded-lg mb-6">
+                <h3 className="font-semibold text-white mb-2">Presenting Complaint</h3>
+                <p className="text-white/90">{currentCase.presenting_complaint}</p>
               </div>
 
               {/* Vitals */}
               <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
-                <div className="bg-white p-3 rounded-lg border text-center">
-                  <Thermometer className="w-5 h-5 text-red-500 mx-auto mb-1" />
-                  <div className="text-sm font-medium">Temp</div>
-                  <div className="text-xs text-gray-600">{currentCase.vitals.temperature}</div>
+                <div className="bg-white/20 p-3 rounded-lg text-center">
+                  <Thermometer className="w-5 h-5 text-red-300 mx-auto mb-1" />
+                  <div className="text-sm font-medium text-white">Temp</div>
+                  <div className="text-xs text-white/80">{currentCase.vitals.temperature}</div>
                 </div>
-                <div className="bg-white p-3 rounded-lg border text-center">
-                  <Heart className="w-5 h-5 text-red-500 mx-auto mb-1" />
-                  <div className="text-sm font-medium">BP</div>
-                  <div className="text-xs text-gray-600">{currentCase.vitals.blood_pressure}</div>
+                <div className="bg-white/20 p-3 rounded-lg text-center">
+                  <Heart className="w-5 h-5 text-red-300 mx-auto mb-1" />
+                  <div className="text-sm font-medium text-white">BP</div>
+                  <div className="text-xs text-white/80">{currentCase.vitals.blood_pressure}</div>
                 </div>
-                <div className="bg-white p-3 rounded-lg border text-center">
-                  <Activity className="w-5 h-5 text-blue-500 mx-auto mb-1" />
-                  <div className="text-sm font-medium">HR</div>
-                  <div className="text-xs text-gray-600">{currentCase.vitals.heart_rate}</div>
+                <div className="bg-white/20 p-3 rounded-lg text-center">
+                  <Activity className="w-5 h-5 text-blue-300 mx-auto mb-1" />
+                  <div className="text-sm font-medium text-white">HR</div>
+                  <div className="text-xs text-white/80">{currentCase.vitals.heart_rate}</div>
                 </div>
-                <div className="bg-white p-3 rounded-lg border text-center">
-                  <Activity className="w-5 h-5 text-green-500 mx-auto mb-1" />
-                  <div className="text-sm font-medium">RR</div>
-                  <div className="text-xs text-gray-600">{currentCase.vitals.respiratory_rate}</div>
+                <div className="bg-white/20 p-3 rounded-lg text-center">
+                  <Activity className="w-5 h-5 text-green-300 mx-auto mb-1" />
+                  <div className="text-sm font-medium text-white">RR</div>
+                  <div className="text-xs text-white/80">{currentCase.vitals.respiratory_rate}</div>
                 </div>
-                <div className="bg-white p-3 rounded-lg border text-center">
-                  <Activity className="w-5 h-5 text-blue-500 mx-auto mb-1" />
-                  <div className="text-sm font-medium">O2 Sat</div>
-                  <div className="text-xs text-gray-600">{currentCase.vitals.oxygen_saturation}</div>
+                <div className="bg-white/20 p-3 rounded-lg text-center">
+                  <Activity className="w-5 h-5 text-blue-300 mx-auto mb-1" />
+                  <div className="text-sm font-medium text-white">O2 Sat</div>
+                  <div className="text-xs text-white/80">{currentCase.vitals.oxygen_saturation}</div>
                 </div>
               </div>
 
               <div className="flex space-x-4">
-                <LiquidButton onClick={() => setPhase('history')}>
+                <LiquidButton onClick={() => setPhase('history')} className="bg-white/20 hover:bg-white/30">
                   Ask Questions
                   <ChevronRight className="w-4 h-4 ml-2" />
                 </LiquidButton>
                 <Button 
                   variant="outline" 
                   onClick={() => setPhase('investigations')}
+                  className="border-white/30 text-white hover:bg-white/10"
                 >
                   Order Tests
                 </Button>
                 <Button 
                   variant="outline" 
                   onClick={() => setPhase('diagnosis')}
+                  className="border-white/30 text-white hover:bg-white/10"
                 >
                   Make Diagnosis
                 </Button>
@@ -510,40 +545,46 @@ const CaseWise = () => {
 
         {phase === 'history' && currentCase && currentAttempt && (
           <div className="max-w-4xl mx-auto">
-            <LiquidCard className="p-6 mb-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">History Taking</h2>
+            <LiquidCard className="p-6 mb-6 bg-white/10 backdrop-blur-sm border-white/20">
+              <h2 className="text-xl font-bold text-white mb-4">History Taking</h2>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 {availableQuestions.map((question, index) => (
                   <Button
                     key={index}
                     variant="outline"
-                    className="text-left h-auto p-4"
+                    className="text-left h-auto p-4 border-white/30 text-white hover:bg-white/10"
                     onClick={() => askQuestion(question)}
                     disabled={currentAttempt.questions_asked.includes(question)}
                   >
                     {currentAttempt.questions_asked.includes(question) && (
-                      <CheckCircle className="w-4 h-4 mr-2 text-green-500" />
+                      <CheckCircle className="w-4 h-4 mr-2 text-green-400" />
                     )}
                     {question}
                   </Button>
                 ))}
               </div>
 
-              {currentAttempt.questions_asked.length > 0 && (
-                <div className="bg-green-50 p-4 rounded-lg mb-6">
-                  <h3 className="font-semibold text-gray-900 mb-2">Questions Asked:</h3>
-                  <ul className="space-y-1">
-                    {currentAttempt.questions_asked.map((q, index) => (
-                      <li key={index} className="text-sm text-gray-700">• {q}</li>
+              {/* Patient Responses */}
+              {Object.keys(patientResponses).length > 0 && (
+                <div className="bg-white/20 p-4 rounded-lg mb-6">
+                  <h3 className="font-semibold text-white mb-2">Patient Responses:</h3>
+                  <div className="space-y-3">
+                    {Object.entries(patientResponses).map(([question, response], index) => (
+                      <div key={index} className="border-l-2 border-white/30 pl-3">
+                        <div className="text-sm text-white/70 mb-1">Q: {question}</div>
+                        <div className="text-white">{response}</div>
+                      </div>
                     ))}
-                  </ul>
+                  </div>
                 </div>
               )}
 
               <div className="flex space-x-4">
-                <Button onClick={() => setPhase('case')}>Back to Case</Button>
-                <LiquidButton onClick={() => setPhase('investigations')}>
+                <Button onClick={() => setPhase('case')} className="bg-white/20 hover:bg-white/30">
+                  Back to Case
+                </Button>
+                <LiquidButton onClick={() => setPhase('investigations')} className="bg-white/20 hover:bg-white/30">
                   Order Tests
                   <ChevronRight className="w-4 h-4 ml-2" />
                 </LiquidButton>
@@ -554,40 +595,56 @@ const CaseWise = () => {
 
         {phase === 'investigations' && currentCase && currentAttempt && (
           <div className="max-w-4xl mx-auto">
-            <LiquidCard className="p-6 mb-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Investigations</h2>
+            <LiquidCard className="p-6 mb-6 bg-white/10 backdrop-blur-sm border-white/20">
+              <h2 className="text-xl font-bold text-white mb-4">Investigations</h2>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 {availableInvestigations.map((investigation, index) => (
                   <Button
                     key={index}
                     variant="outline"
-                    className="text-left h-auto p-4"
+                    className="text-left h-auto p-4 border-white/30 text-white hover:bg-white/10"
                     onClick={() => orderInvestigation(investigation)}
                     disabled={currentAttempt.investigations_ordered.includes(investigation)}
                   >
                     {currentAttempt.investigations_ordered.includes(investigation) && (
-                      <CheckCircle className="w-4 h-4 mr-2 text-green-500" />
+                      <CheckCircle className="w-4 h-4 mr-2 text-green-400" />
                     )}
                     {investigation}
                   </Button>
                 ))}
               </div>
 
+              {/* Test Feedback */}
+              {Object.keys(testFeedback).length > 0 && (
+                <div className="bg-white/20 p-4 rounded-lg mb-6">
+                  <h3 className="font-semibold text-white mb-2">Clinical Reasoning:</h3>
+                  <div className="space-y-2">
+                    {Object.entries(testFeedback).map(([test, feedback], index) => (
+                      <div key={index} className="text-sm">
+                        <span className="text-white/80">{test}:</span> <span className="text-white">{feedback}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {currentAttempt.investigations_ordered.length > 0 && (
-                <div className="bg-blue-50 p-4 rounded-lg mb-6">
-                  <h3 className="font-semibold text-gray-900 mb-2">Tests Ordered:</h3>
+                <div className="bg-white/20 p-4 rounded-lg mb-6">
+                  <h3 className="font-semibold text-white mb-2">Tests Ordered:</h3>
                   <ul className="space-y-1">
                     {currentAttempt.investigations_ordered.map((test, index) => (
-                      <li key={index} className="text-sm text-gray-700">• {test}</li>
+                      <li key={index} className="text-sm text-white/90">• {test}</li>
                     ))}
                   </ul>
                 </div>
               )}
 
               <div className="flex space-x-4">
-                <Button onClick={() => setPhase('history')}>Back to History</Button>
-                <LiquidButton onClick={() => setPhase('diagnosis')}>
+                <Button onClick={() => setPhase('history')} className="bg-white/20 hover:bg-white/30">
+                  Back to History
+                </Button>
+                <LiquidButton onClick={() => setPhase('diagnosis')} className="bg-white/20 hover:bg-white/30">
                   Make Diagnosis
                   <ChevronRight className="w-4 h-4 ml-2" />
                 </LiquidButton>
@@ -598,26 +655,26 @@ const CaseWise = () => {
 
         {phase === 'diagnosis' && currentCase && (
           <div className="max-w-4xl mx-auto">
-            <LiquidCard className="p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Final Diagnosis</h2>
+            <LiquidCard className="p-6 bg-white/10 backdrop-blur-sm border-white/20">
+              <h2 className="text-xl font-bold text-white mb-4">Final Diagnosis</h2>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 {commonDiagnoses.map((diagnosis, index) => (
                   <LiquidButton
                     key={index}
                     onClick={() => submitDiagnosis(diagnosis)}
-                    className="h-auto p-4 text-left"
+                    className="h-auto p-4 text-left bg-white/20 hover:bg-white/30"
                   >
                     {diagnosis}
                   </LiquidButton>
                 ))}
               </div>
 
-              <div className="border-t pt-4">
+              <div className="border-t border-white/20 pt-4">
                 <Button
                   variant="outline"
                   onClick={() => setShowCustomInput(!showCustomInput)}
-                  className="mb-4"
+                  className="mb-4 border-white/30 text-white hover:bg-white/10"
                 >
                   {showCustomInput ? 'Hide' : 'Enter'} Custom Diagnosis
                 </Button>
@@ -628,11 +685,12 @@ const CaseWise = () => {
                       placeholder="Enter your diagnosis..."
                       value={customDiagnosis}
                       onChange={(e) => setCustomDiagnosis(e.target.value)}
-                      className="w-full"
+                      className="w-full bg-white/20 border-white/30 text-white placeholder-white/60"
                     />
                     <LiquidButton
                       onClick={() => submitDiagnosis(customDiagnosis)}
                       disabled={!customDiagnosis.trim()}
+                      className="bg-white/20 hover:bg-white/30"
                     >
                       Submit Diagnosis
                     </LiquidButton>
@@ -641,7 +699,7 @@ const CaseWise = () => {
               </div>
 
               <div className="flex justify-center mt-6">
-                <Button onClick={() => setPhase('investigations')}>
+                <Button onClick={() => setPhase('investigations')} className="bg-white/20 hover:bg-white/30">
                   Back to Tests
                 </Button>
               </div>
@@ -651,35 +709,36 @@ const CaseWise = () => {
 
         {phase === 'feedback' && currentCase && currentAttempt && (
           <div className="max-w-4xl mx-auto">
-            <LiquidCard className="p-6 mb-6">
+            <LiquidCard className="p-6 mb-6 bg-white/10 backdrop-blur-sm border-white/20">
               <div className="text-center mb-6">
-                <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl font-bold text-blue-600">
+                <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl font-bold text-white">
                     {currentAttempt.score}%
                   </span>
                 </div>
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">Case Complete!</h2>
-                <p className="text-gray-600">
-                  Correct Diagnosis: <span className="font-semibold">{currentCase.correct_diagnosis}</span>
+                <h2 className="text-2xl font-bold text-white mb-2">Case Complete!</h2>
+                <p className="text-white/80">
+                  Correct Diagnosis: <span className="font-semibold text-white">{currentCase.correct_diagnosis}</span>
                 </p>
-                <p className="text-gray-600">
-                  Your Diagnosis: <span className="font-semibold">{currentAttempt.user_diagnosis}</span>
+                <p className="text-white/80">
+                  Your Diagnosis: <span className="font-semibold text-white">{currentAttempt.user_diagnosis}</span>
                 </p>
               </div>
 
-              <div className="bg-gray-50 p-4 rounded-lg mb-6">
-                <h3 className="font-semibold text-gray-900 mb-2">Detailed Feedback</h3>
-                <div className="text-gray-700 whitespace-pre-wrap">{feedback}</div>
+              <div className="bg-white/20 p-4 rounded-lg mb-6">
+                <h3 className="font-semibold text-white mb-2">Detailed Feedback</h3>
+                <div className="text-white/90 whitespace-pre-wrap">{feedback}</div>
               </div>
 
               <div className="flex justify-center space-x-4">
-                <LiquidButton onClick={() => setPhase('menu')}>
+                <LiquidButton onClick={() => setPhase('menu')} className="bg-white/20 hover:bg-white/30">
                   <RotateCcw className="w-4 h-4 mr-2" />
                   New Case
                 </LiquidButton>
                 <Button 
                   variant="outline" 
                   onClick={() => window.location.href = '/dashboard'}
+                  className="border-white/30 text-white hover:bg-white/10"
                 >
                   Back to Dashboard
                 </Button>

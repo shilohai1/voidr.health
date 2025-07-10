@@ -4,6 +4,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.50.3';
 
 const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
+const elevenLabsApiKey = Deno.env.get('ELEVENLABS_API_KEY');
 const supabaseUrl = Deno.env.get('SUPABASE_URL');
 const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
 
@@ -11,6 +12,25 @@ const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
+
+const medicalConditions = [
+  'Acute STEMI', 'NSTEMI', 'Unstable angina', 'Acute appendicitis', 'Community-acquired pneumonia',
+  'Hospital-acquired pneumonia', 'Acute CVA (stroke)', 'TIA', 'Sepsis', 'Septic shock',
+  'Acute cholecystitis', 'Acute pancreatitis', 'Acute renal colic', 'UTI/pyelonephritis',
+  'Acute asthma exacerbation', 'COPD exacerbation', 'Pulmonary embolism', 'DVT',
+  'Acute gastroenteritis', 'IBD flare', 'Acute migraine', 'Tension headache',
+  'Diabetic ketoacidosis', 'Hyperosmolar hyperglycemic state', 'Hypoglycemia',
+  'Acute heart failure', 'Atrial fibrillation', 'SVT', 'VT', 'Pneumothorax',
+  'Acute abdomen', 'Bowel obstruction', 'GI bleeding', 'Meningitis', 'Encephalitis'
+];
+
+const patientNames = [
+  'John Smith', 'Mary Johnson', 'David Wilson', 'Sarah Brown', 'Michael Davis',
+  'Emma Taylor', 'James Anderson', 'Lisa White', 'Robert Thompson', 'Jennifer Garcia',
+  'William Martinez', 'Patricia Rodriguez', 'Christopher Lewis', 'Elizabeth Walker',
+  'Daniel Hall', 'Susan Allen', 'Matthew Young', 'Jessica King', 'Anthony Wright',
+  'Helen Scott', 'Mark Green', 'Carol Adams', 'Steven Baker', 'Nancy Nelson'
+];
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -32,28 +52,33 @@ serve(async (req) => {
     if (action === 'generate-case') {
       const { difficulty = 'medium', specialty = 'general' } = caseData || {};
       
-      const prompt = `Generate a realistic medical case scenario for a ${difficulty} difficulty level in ${specialty} medicine. 
+      const randomCondition = medicalConditions[Math.floor(Math.random() * medicalConditions.length)];
+      const randomName = patientNames[Math.floor(Math.random() * patientNames.length)];
+      const randomAge = Math.floor(Math.random() * 60) + 20; // 20-80 years
+      const randomGender = Math.random() > 0.5 ? 'male' : 'female';
+      
+      const prompt = `Generate a realistic medical case scenario for ${randomCondition} in a ${randomAge}-year-old ${randomGender} patient named ${randomName}. 
+      
+      Use proper medical terminology, abbreviations, and realistic clinical presentations. Make it challenging but educational for medical students preparing for USMLE/OSCE/PLAB.
       
       Please respond with ONLY a valid JSON object in this exact format:
       {
-        "patient_name": "realistic name",
-        "age": 45,
-        "gender": "male",
-        "presenting_complaint": "chief complaint in 1-2 sentences",
+        "patient_name": "${randomName}",
+        "age": ${randomAge},
+        "gender": "${randomGender}",
+        "presenting_complaint": "realistic chief complaint with proper medical terminology (2-3 sentences)",
         "vitals": {
-          "temperature": "98.6°F",
-          "blood_pressure": "120/80",
-          "heart_rate": "72 bpm",
-          "respiratory_rate": "16/min",
-          "oxygen_saturation": "98%"
+          "temperature": "realistic temp with units",
+          "blood_pressure": "realistic BP",
+          "heart_rate": "realistic HR with bpm",
+          "respiratory_rate": "realistic RR with /min",
+          "oxygen_saturation": "realistic O2 sat with %"
         },
-        "context": "brief background/history",
-        "medical_history": "relevant past medical history",
-        "correct_diagnosis": "primary diagnosis",
-        "urgency_level": "routine"
-      }
-      
-      Make it realistic and educational for medical students preparing for USMLE/OSCE/PLAB.`;
+        "context": "relevant clinical context and circumstances",
+        "medical_history": "relevant PMH, medications, allergies, social history",
+        "correct_diagnosis": "${randomCondition}",
+        "urgency_level": "critical/urgent/routine based on condition"
+      }`;
 
       const response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
@@ -64,10 +89,10 @@ serve(async (req) => {
         body: JSON.stringify({
           model: 'gpt-4o-mini',
           messages: [
-            { role: 'system', content: 'You are a medical education expert creating realistic patient scenarios. Always respond with valid JSON only.' },
+            { role: 'system', content: 'You are a senior consultant physician creating realistic patient scenarios for medical education. Use proper medical terminology and abbreviations.' },
             { role: 'user', content: prompt }
           ],
-          temperature: 0.8,
+          temperature: 0.9,
         }),
       });
 
@@ -82,34 +107,33 @@ serve(async (req) => {
       
       let caseScenario;
       try {
-        // Clean the content to ensure it's valid JSON
         const cleanContent = content.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
         caseScenario = JSON.parse(cleanContent);
       } catch (parseError) {
         console.error('JSON parsing error:', parseError);
         console.error('Content that failed to parse:', content);
         
-        // Fallback case if JSON parsing fails
+        // Generate a fallback case with random elements
+        const fallbackCondition = medicalConditions[Math.floor(Math.random() * medicalConditions.length)];
         caseScenario = {
-          patient_name: "John Smith",
-          age: 42,
-          gender: "male",
-          presenting_complaint: "Patient presents with acute chest pain that started 2 hours ago while at rest.",
+          patient_name: randomName,
+          age: randomAge,
+          gender: randomGender,
+          presenting_complaint: `Patient presents with symptoms consistent with ${fallbackCondition}. Clinical presentation requires immediate assessment.`,
           vitals: {
-            temperature: "98.6°F",
-            blood_pressure: "140/90",
+            temperature: "37.2°C",
+            blood_pressure: "140/90 mmHg",
             heart_rate: "95 bpm",
             respiratory_rate: "18/min",
             oxygen_saturation: "97%"
           },
-          context: "Patient was watching TV when sudden onset of crushing chest pain occurred.",
-          medical_history: "Hypertension, smoking history of 20 pack-years, family history of coronary artery disease.",
-          correct_diagnosis: "Acute Myocardial Infarction",
-          urgency_level: "critical"
+          context: "Patient presented to ED with acute onset of symptoms.",
+          medical_history: "No significant past medical history. No known drug allergies.",
+          correct_diagnosis: fallbackCondition,
+          urgency_level: "urgent"
         };
       }
 
-      // Store in database
       const { data: newCase, error } = await supabase
         .from('case_scenarios')
         .insert({
@@ -130,28 +154,18 @@ serve(async (req) => {
       });
     }
 
-    if (action === 'provide-feedback') {
-      const { attempt, scenario } = caseData;
+    if (action === 'patient-response') {
+      const { question, scenario } = caseData;
       
-      const prompt = `As a medical educator, provide detailed feedback on this case attempt:
-
-      Patient: ${scenario.patient_name}, ${scenario.age}yo ${scenario.gender}
+      const prompt = `You are ${scenario.patient_name}, a ${scenario.age}-year-old ${scenario.gender} patient with ${scenario.correct_diagnosis}.
+      
+      Context: ${scenario.context}
+      Medical History: ${scenario.medical_history}
       Presenting complaint: ${scenario.presenting_complaint}
-      Correct diagnosis: ${scenario.correct_diagnosis}
       
-      Student's approach:
-      - Questions asked: ${JSON.stringify(attempt.questions_asked)}
-      - Investigations ordered: ${JSON.stringify(attempt.investigations_ordered)}
-      - Diagnosis: ${attempt.user_diagnosis}
-      - Management: ${JSON.stringify(attempt.management_plan)}
+      A doctor is asking you: "${question}"
       
-      Provide constructive feedback highlighting:
-      1. What they did well
-      2. What they missed
-      3. Appropriate next steps
-      4. Learning points
-      
-      Keep it encouraging but educational.`;
+      Respond as the patient would, using natural language but providing medically relevant information. Be realistic about what a patient would know and how they would describe symptoms. Keep responses concise (1-2 sentences).`;
 
       const response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
@@ -162,9 +176,132 @@ serve(async (req) => {
         body: JSON.stringify({
           model: 'gpt-4o-mini',
           messages: [
-            { role: 'system', content: 'You are a supportive medical educator providing feedback to students.' },
+            { role: 'system', content: 'You are a patient responding to medical questions. Be realistic and natural.' },
             { role: 'user', content: prompt }
           ],
+          temperature: 0.7,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`OpenAI API error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      const patientResponse = data.choices[0].message.content;
+
+      // Generate voiceover using ElevenLabs
+      let audioContent = null;
+      if (elevenLabsApiKey) {
+        try {
+          const voiceResponse = await fetch('https://api.elevenlabs.io/v1/text-to-speech/pNczCjzI2devNBz1zQrb', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${elevenLabsApiKey}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              text: patientResponse,
+              model_id: 'eleven_multilingual_v2',
+              voice_settings: {
+                stability: 0.5,
+                similarity_boost: 0.75
+              }
+            }),
+          });
+
+          if (voiceResponse.ok) {
+            const audioBuffer = await voiceResponse.arrayBuffer();
+            audioContent = btoa(String.fromCharCode(...new Uint8Array(audioBuffer)));
+          }
+        } catch (error) {
+          console.error('ElevenLabs error:', error);
+        }
+      }
+
+      return new Response(JSON.stringify({ 
+        response: patientResponse,
+        audioContent 
+      }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    if (action === 'test-feedback') {
+      const { investigation, scenario } = caseData;
+      
+      const prompt = `As a senior consultant physician, provide immediate feedback on ordering "${investigation}" for a patient with ${scenario.correct_diagnosis}.
+      
+      Patient: ${scenario.patient_name}, ${scenario.age}yo ${scenario.gender}
+      Presenting complaint: ${scenario.presenting_complaint}
+      
+      Give a brief (1 sentence) clinical reasoning comment - either positive reinforcement if it's a good choice, or constructive guidance if it's not optimal. Use medical terminology.`;
+
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${openAIApiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'gpt-4o-mini',
+          messages: [
+            { role: 'system', content: 'You are a senior consultant providing brief, educational feedback on investigation choices.' },
+            { role: 'user', content: prompt }
+          ],
+          temperature: 0.6,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`OpenAI API error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      const feedback = data.choices[0].message.content;
+
+      return new Response(JSON.stringify({ feedback }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    if (action === 'provide-feedback') {
+      const { attempt, scenario } = caseData;
+      
+      const prompt = `As a senior consultant physician and medical educator, provide detailed feedback on this case attempt:
+
+      Patient: ${scenario.patient_name}, ${scenario.age}yo ${scenario.gender}
+      Presenting complaint: ${scenario.presenting_complaint}
+      Correct diagnosis: ${scenario.correct_diagnosis}
+      
+      Student's approach:
+      - Questions asked: ${JSON.stringify(attempt.questions_asked)}
+      - Investigations ordered: ${JSON.stringify(attempt.investigations_ordered)}
+      - Diagnosis: ${attempt.user_diagnosis}
+      - Score: ${attempt.score}%
+      
+      Provide structured feedback covering:
+      1. Diagnostic accuracy and clinical reasoning
+      2. History-taking approach - what was done well and what was missed
+      3. Investigation strategy - appropriateness and cost-effectiveness
+      4. Key learning points and differential diagnoses to consider
+      5. Next steps in management
+      
+      Use proper medical terminology and be constructive but educational. Keep it concise but comprehensive.`;
+
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${openAIApiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'gpt-4o-mini',
+          messages: [
+            { role: 'system', content: 'You are a senior consultant physician providing educational feedback to medical students.' },
+            { role: 'user', content: prompt }
+          ],
+          temperature: 0.7,
         }),
       });
 
