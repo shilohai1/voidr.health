@@ -14,6 +14,158 @@ export type Database = {
   }
   public: {
     Tables: {
+      case_attempts: {
+        Row: {
+          completed: boolean | null
+          created_at: string
+          feedback: string | null
+          id: string
+          investigations_ordered: Json | null
+          management_plan: Json | null
+          questions_asked: Json | null
+          scenario_id: string
+          score: number | null
+          time_taken: number | null
+          updated_at: string
+          user_diagnosis: string | null
+          user_id: string
+        }
+        Insert: {
+          completed?: boolean | null
+          created_at?: string
+          feedback?: string | null
+          id?: string
+          investigations_ordered?: Json | null
+          management_plan?: Json | null
+          questions_asked?: Json | null
+          scenario_id: string
+          score?: number | null
+          time_taken?: number | null
+          updated_at?: string
+          user_diagnosis?: string | null
+          user_id: string
+        }
+        Update: {
+          completed?: boolean | null
+          created_at?: string
+          feedback?: string | null
+          id?: string
+          investigations_ordered?: Json | null
+          management_plan?: Json | null
+          questions_asked?: Json | null
+          scenario_id?: string
+          score?: number | null
+          time_taken?: number | null
+          updated_at?: string
+          user_diagnosis?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "case_attempts_scenario_id_fkey"
+            columns: ["scenario_id"]
+            isOneToOne: false
+            referencedRelation: "case_scenarios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      case_scenarios: {
+        Row: {
+          age: number
+          context: string | null
+          correct_diagnosis: string
+          created_at: string
+          difficulty_level: string
+          gender: string
+          id: string
+          medical_history: string | null
+          patient_name: string
+          presenting_complaint: string
+          specialty: string | null
+          updated_at: string
+          urgency_level: string
+          vitals: Json
+        }
+        Insert: {
+          age: number
+          context?: string | null
+          correct_diagnosis: string
+          created_at?: string
+          difficulty_level?: string
+          gender: string
+          id?: string
+          medical_history?: string | null
+          patient_name: string
+          presenting_complaint: string
+          specialty?: string | null
+          updated_at?: string
+          urgency_level?: string
+          vitals?: Json
+        }
+        Update: {
+          age?: number
+          context?: string | null
+          correct_diagnosis?: string
+          created_at?: string
+          difficulty_level?: string
+          gender?: string
+          id?: string
+          medical_history?: string | null
+          patient_name?: string
+          presenting_complaint?: string
+          specialty?: string | null
+          updated_at?: string
+          urgency_level?: string
+          vitals?: Json
+        }
+        Relationships: []
+      }
+      case_wise_stats: {
+        Row: {
+          average_score: number | null
+          best_streak: number | null
+          cases_this_month: number | null
+          completed_cases: number | null
+          created_at: string
+          current_streak: number | null
+          id: string
+          last_case_date: string | null
+          total_cases: number | null
+          total_time_spent: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          average_score?: number | null
+          best_streak?: number | null
+          cases_this_month?: number | null
+          completed_cases?: number | null
+          created_at?: string
+          current_streak?: number | null
+          id?: string
+          last_case_date?: string | null
+          total_cases?: number | null
+          total_time_spent?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          average_score?: number | null
+          best_streak?: number | null
+          cases_this_month?: number | null
+          completed_cases?: number | null
+          created_at?: string
+          current_streak?: number | null
+          id?: string
+          last_case_date?: string | null
+          total_cases?: number | null
+          total_time_spent?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
@@ -174,6 +326,19 @@ export type Database = {
     Functions: {
       increment_usage_count: {
         Args: { user_uuid: string }
+        Returns: undefined
+      }
+      initialize_case_wise_stats: {
+        Args: { user_uuid: string }
+        Returns: undefined
+      }
+      update_case_wise_stats: {
+        Args: {
+          user_uuid: string
+          new_score: number
+          time_spent: number
+          completed: boolean
+        }
         Returns: undefined
       }
     }

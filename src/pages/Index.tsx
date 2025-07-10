@@ -20,6 +20,7 @@ const Index = () => {
       dropdownItems: [
         { name: 'StudyWithAI', url: '#studywithai' },
         { name: 'ClinicBot', url: '#clinicbot' },
+        { name: 'Case Wise', url: '/case-wise' },
         { name: 'AskVoidr', url: '/symptom-checker' }
       ]
     },
