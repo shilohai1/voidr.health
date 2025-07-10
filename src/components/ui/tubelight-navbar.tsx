@@ -112,13 +112,13 @@ export function NavBar({ items, className }: NavBarProps) {
                 </button>
 
                 {/* Smooth Liquid Glass Dropdown */}
-                {item.hasDropdown && openDropdown === item.name && (
+               {item.hasDropdown && openDropdown === item.name && (
                   <motion.div
                     initial={{ opacity: 0, y: -10, scale: 0.95 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: -10, scale: 0.95 }}
                     transition={{ duration: 0.2, ease: "easeOut" }}
-                    className="absolute top-full mt-2 left-0 min-w-[180px] z-50"
+                    className="absolute top-full mt-2 left-0 min-w-[180px] z-50 rounded-t-[1.5rem] rounded-b-[1.5rem] overflow-hidden"
                     onMouseLeave={() => setOpenDropdown(null)}
                     style={{
                       background: 'rgba(255, 255, 255, 0.9)',
@@ -126,8 +126,8 @@ export function NavBar({ items, className }: NavBarProps) {
                       border: '1px solid rgba(255, 255, 255, 0.2)',
                     }}
                   >
-                    <div className="rounded-xl shadow-lg py-2 overflow-hidden">
-                      <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-white/5 rounded-xl" />
+                    <div className="rounded-t-[1.5rem] rounded-b-[1.5rem] shadow-lg py-2 overflow-hidden">
+                      <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-white/5 rounded-t-[1.5rem] rounded-b-[1.5rem]" />
                       <div className="relative">
                         {item.dropdownItems?.map((dropdownItem, index) => (
                           <motion.div
