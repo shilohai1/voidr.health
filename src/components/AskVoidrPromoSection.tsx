@@ -8,7 +8,7 @@ const AskVoidrPromoSection = () => {
   return (
     <section 
       id="AskVoidrPromoSection"
-      className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8 rounded-t-[3rem] sm:rounded-t-[4rem] md:rounded-t-[5rem] rounded-b-[3rem] sm:rounded-b-[4rem] md:rounded-b-[5rem] relative z-10"  
+      className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8 rounded-b-[3rem] sm:rounded-b-[4rem] md:rounded-b-[5rem] relative z-10"  
       style={{ backgroundColor: '#72ccc6' }}
     >
       <div className="max-w-7xl mx-auto">
