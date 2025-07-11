@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
@@ -78,17 +77,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     // Set up auth state listener
+    console.log('Setting up auth state listener...');
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
+        console.log('Auth state changed:', { event, session });
         setSession(session);
         setUser(session?.user ?? null);
         
         // Fetch profile when user logs in
         if (session?.user) {
+          console.log('User logged in, fetching profile...');
           setTimeout(() => {
             fetchProfile(session.user.id);
           }, 0);
         } else {
+          console.log('No user session, clearing profile');
           setProfile(null);
         }
         
@@ -97,18 +100,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     );
 
     // Check for existing session
+    console.log('Checking for existing session...');
     supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log('Got existing session:', session);
       setSession(session);
       setUser(session?.user ?? null);
       
       if (session?.user) {
+        console.log('Found existing user, fetching profile...');
         fetchProfile(session.user.id);
       }
       
       setLoading(false);
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      console.log('Cleaning up auth subscription');
+      subscription.unsubscribe();
+    };
   }, []);
 
   const signUp = async (email: string, password: string, name?: string) => {
