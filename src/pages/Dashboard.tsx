@@ -8,7 +8,14 @@ import { Video, FileText, Stethoscope } from 'lucide-react';
 
 const Dashboard = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white via-white to-[#236dcf]">
+    <div
+      className="min-h-screen"
+      style={{
+        backgroundColor: "#5fcfb9",
+        backgroundImage:
+          "linear-gradient(246deg, rgba(95, 207, 185, 1) 0%, rgba(88, 177, 209, 1) 100%)",
+      }}
+    >
       <DashboardSidebar />
       
       <div className="lg:ml-16 transition-all duration-300">
