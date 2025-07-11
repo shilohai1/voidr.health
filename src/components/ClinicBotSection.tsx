@@ -77,7 +77,7 @@ const ClinicBotSection = () => {
             </div>
 
             <div className="flex justify-center"> {/* Added flex and justify-center */}
-              <Link to="/study-with-ai">
+              <Link to="/clinic-bot">
                 <Button size="lg" className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 text-lg">
                   Try ClinicBot Now
                 </Button>
