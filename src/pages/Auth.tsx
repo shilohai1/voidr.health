@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+rt React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { LiquidButton } from '@/components/ui/liquid-glass-button';
 import { Eye, EyeOff, Mail, Lock, User } from 'lucide-react';
@@ -7,7 +7,7 @@ import { useToast } from '@/hooks/use-toast';
 
 interface InputProps {
   label?: string;
-  placeholder?: string;
+  placeholderimpo?: string;
   icon?: React.ReactNode;
   type?: string;
   value?: string;
@@ -183,7 +183,14 @@ const Auth = () => {
   // Social login buttons removed per request.
 
   return (
-    <div className="min-h-screen bg-[#171d40] relative overflow-hidden flex items-center justify-center p-4">
+    <div
+      className="min-h-screen relative overflow-hidden flex items-center justify-center p-4"
+      style={{
+        backgroundColor: "#5f77cf",
+        backgroundImage:
+          "linear-gradient(271deg, rgba(95, 119, 207, 1) 0%, rgba(19, 19, 66, 1) 100%)",
+      }}
+    >
       {/* Animated background elements */}
       <div className="absolute inset-0 opacity-30">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-[#180180]/30 to-[#200505]/30 rounded-full blur-3xl animate-pulse"></div>
@@ -192,16 +199,16 @@ const Auth = () => {
       </div>
 
       <div className="w-full max-w-6xl mx-auto flex items-center justify-center relative z-10">
-        <div className="w-full lg:w-[80%] xl:w-[70%] flex rounded-2xl overflow-hidden shadow-2xl"
+        <div className="w-full max-w-md mx-auto rounded-2xl overflow-hidden shadow-2xl"
              style={{
                background: `linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)`,
                backdropFilter: 'blur(20px)',
                border: '1px solid rgba(255,255,255,0.1)'
              }}>
           
-          {/* Left Form Section */}
+          {/* Form Section */}
           <div
-            className="w-full lg:w-1/2 p-8 lg:p-16 relative overflow-hidden"
+            className="w-full p-6 sm:p-8 md:p-10 relative overflow-hidden"
             onMouseMove={handleMouseMove}
             onMouseEnter={() => setIsHovering(true)}
             onMouseLeave={() => setIsHovering(false)}
@@ -310,25 +317,7 @@ const Auth = () => {
             </div>
           </div>
 
-          {/* Right Image Section */}
-          <div className="hidden lg:block w-1/2 relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-[#181132]/50 to-[#100220]/50 z-10"></div>
-            <img
-              src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?auto=format&fit=crop&w=800&q=80"
-              alt="Medical professionals"
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 z-20 flex items-center justify-center p-8">
-              <div className="text-center text-white">
-                <h2 className="text-3xl font-bold mb-4">
-                  Join thousands of medical professionals
-                </h2>
-                <p className="text-lg text-white/80">
-                  AI-powered tools designed specifically for busy Medical students, Residents, and Doctors.
-                </p>
-              </div>
-            </div>
-          </div>
+          {/* Right image section removed per request */}
         </div>
       </div>
     </div>
