@@ -7,7 +7,7 @@ const Footer = () => {
   return (
     <footer className="bg-gray-900 text-white py-8 sm:py-12 px-4 sm:px-6 md:px-8">
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 sm:gap-8">
           {/* Logo and Description */}
           <div className="col-span-1 sm:col-span-2 lg:col-span-2">
             <picture>
@@ -72,8 +72,25 @@ const Footer = () => {
             </ul>
           </div>
 
+          {/* Legal */}
+          <div className="order-4 lg:order-3">
+            <h4 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Legal</h4>
+            <ul className="space-y-2">
+              <li>
+                <Link to="/privacy-policy" className="text-gray-400 hover:text-white transition-colors text-sm sm:text-base">
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link to="/terms-conditions" className="text-gray-400 hover:text-white transition-colors text-sm sm:text-base">
+                  Terms & Conditions
+                </Link>
+              </li>
+            </ul>
+          </div>
+
           {/* Created by Section */}
-          <div className="order-2 lg:order-3 sm:text-right lg:text-right">
+          <div className="order-2 lg:order-4 sm:text-right lg:text-right">
             <div className="bg-primary/10 border border-primary/20 rounded-lg p-3 sm:p-4 inline-block w-full sm:w-auto">
               <p className="text-xs sm:text-sm text-gray-300 flex items-center gap-1 justify-center sm:justify-end">
                 Created by a med student with <Heart className="w-4 h-4 text-red-500 fill-current flex-shrink-0" /> for med students
