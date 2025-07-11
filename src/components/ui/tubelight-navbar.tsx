@@ -182,3 +182,6 @@ export const TubelightNavbar = () => {
     </nav>
   );
 };
+
+// Also export as NavBar for backwards compatibility
+export const NavBar = TubelightNavbar;

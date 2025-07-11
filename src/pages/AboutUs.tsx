@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { NavBar } from '@/components/ui/tubelight-navbar';
+import { TubelightNavbar } from '@/components/ui/tubelight-navbar';
 import Footer from '@/components/Footer';
 import { User } from 'lucide-react';
 
@@ -33,7 +33,7 @@ const AboutUs = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#f8fbff] via-white to-[#f3fceb]">
-      <NavBar items={navItems} />
+      <TubelightNavbar />
       
       {/* Hero Section */}
       <section className="pt-32 pb-20 px-4">

@@ -15,7 +15,7 @@ const ClinicBot = () => {
   const [generatedSummary, setGeneratedSummary] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(null);
   
-  const { summarizeFile, loading, error } = useFileSummarization();
+  const { generateSummary, downloadSummaryAsPDF, isLoading, summary } = useFileSummarization();
   const { toast } = useToast();
 
   const uploadOptions = [
@@ -49,26 +49,28 @@ const ClinicBot = () => {
     }
 
     try {
-      let result;
-      
       if (uploadedFile) {
-        result = await summarizeFile(uploadedFile);
+        await generateSummary(uploadedFile);
       } else {
-        const constrainedPrompt = `Please summarize the following text in approximately ${wordCount[0]} words: ${input}`;
-        result = await summarizeFile(undefined, constrainedPrompt);
+        // For manual text, we need to create a text file
+        const blob = new Blob([input], { type: 'text/plain' });
+        const file = new File([blob], 'manual_input.txt', { type: 'text/plain' });
+        await generateSummary(file);
       }
 
-      setGeneratedSummary({
-        ...result,
-        wordCount: wordCount[0],
-        originalText: input,
-        fileName: uploadedFile?.name || 'Manual Input'
-      });
+      if (summary) {
+        setGeneratedSummary({
+          summary_text: summary,
+          wordCount: wordCount[0],
+          originalText: input,
+          fileName: uploadedFile?.name || 'Manual Input'
+        });
 
-      toast({
-        title: "Summary Generated",
-        description: "Your clinical summary has been created successfully.",
-      });
+        toast({
+          title: "Summary Generated",
+          description: "Your clinical summary has been created successfully.",
+        });
+      }
 
     } catch (error) {
       console.error('Summarization error:', error);
@@ -80,46 +82,11 @@ const ClinicBot = () => {
     }
   };
 
-  const handleDownload = async (format) => {
-    if (!generatedSummary) return;
+  const handleDownload = async () => {
+    if (!summary || !uploadedFile) return;
 
     try {
-      let content = generatedSummary.summary_text;
-      let filename = `clinical-summary-${Date.now()}`;
-      let mimeType = 'text/plain';
-
-      switch (format) {
-        case 'pdf':
-          filename += '.txt';
-          mimeType = 'text/plain';
-          break;
-        case 'gdocs':
-          content = `Clinical Summary\n${'='.repeat(50)}\n\nOriginal Source: ${generatedSummary.fileName}\nGenerated: ${new Date().toLocaleDateString()}\nWord Count Target: ${generatedSummary.wordCount}\n\n${content}`;
-          filename += '.txt';
-          mimeType = 'text/plain';
-          break;
-        case 'word':
-          content = `Clinical Summary\n${'='.repeat(50)}\n\nOriginal Source: ${generatedSummary.fileName}\nGenerated: ${new Date().toLocaleDateString()}\nWord Count Target: ${generatedSummary.wordCount}\n\n${content}`;
-          filename += '.txt';
-          mimeType = 'text/plain';
-          break;
-      }
-
-      const blob = new Blob([content], { type: mimeType });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = filename;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
-
-      toast({
-        title: "Download Started",
-        description: `Your summary is downloading as ${format.toUpperCase()}.`,
-      });
-
+      await downloadSummaryAsPDF(summary, uploadedFile.name);
     } catch (error) {
       toast({
         title: "Download Error",
@@ -243,14 +210,14 @@ const ClinicBot = () => {
               {/* Generate Button */}
               <LiquidButton
                 onClick={handleGenerate}
-                disabled={(!input && !uploadedFile) || loading}
+                disabled={(!input && !uploadedFile) || isLoading}
                 className="w-full"
               >
-                {loading ? 'Generating Summary...' : 'Generate Summary'}
+                {isLoading ? 'Generating Summary...' : 'Generate Summary'}
               </LiquidButton>
 
               {/* Loading State */}
-              {loading && (
+              {isLoading && (
                 <div className="text-center py-4">
                   <div className="flex items-center justify-center space-x-2">
                     <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
@@ -262,7 +229,7 @@ const ClinicBot = () => {
           </LiquidCard>
 
           {/* Generated Summary */}
-          {generatedSummary && (
+          {summary && (
             <LiquidCard className="p-8">
               <div className="space-y-6">
                 <div className="flex justify-between items-center">
@@ -276,11 +243,11 @@ const ClinicBot = () => {
                 {/* Summary Stats */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-gray-50 rounded-lg">
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-primary">{generatedSummary.wordCount}</div>
+                    <div className="text-2xl font-bold text-primary">{wordCount[0]}</div>
                     <div className="text-sm text-gray-600">Target Words</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-primary">{generatedSummary.fileName}</div>
+                    <div className="text-2xl font-bold text-primary">{uploadedFile?.name || 'Manual Input'}</div>
                     <div className="text-sm text-gray-600">Source</div>
                   </div>
                   <div className="text-center">
@@ -298,7 +265,7 @@ const ClinicBot = () => {
                   <div className="prose max-w-none">
                     <h3 className="text-lg font-semibold text-gray-900 mb-4">Clinical Summary:</h3>
                     <div className="whitespace-pre-wrap text-gray-700 leading-relaxed">
-                      {generatedSummary.summary_text}
+                      {summary}
                     </div>
                   </div>
                 </div>
@@ -314,30 +281,14 @@ const ClinicBot = () => {
                     Remove Watermark
                   </LiquidButton>
 
-                  {/* Download Options */}
-                  <div className="flex space-x-2">
-                    <button
-                      onClick={() => handleDownload('pdf')}
-                      className="flex items-center space-x-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-200"
-                    >
-                      <Download className="w-4 h-4" />
-                      <span>PDF</span>
-                    </button>
-                    <button
-                      onClick={() => handleDownload('gdocs')}
-                      className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
-                    >
-                      <Download className="w-4 h-4" />
-                      <span>Google Docs</span>
-                    </button>
-                    <button
-                      onClick={() => handleDownload('word')}
-                      className="flex items-center space-x-2 px-4 py-2 bg-blue-800 text-white rounded-lg hover:bg-blue-900 transition-colors duration-200"
-                    >
-                      <Download className="w-4 h-4" />
-                      <span>Microsoft Word</span>
-                    </button>
-                  </div>
+                  {/* Download PDF Button */}
+                  <button
+                    onClick={handleDownload}
+                    className="flex items-center space-x-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-200"
+                  >
+                    <Download className="w-4 h-4" />
+                    <span>Download PDF</span>
+                  </button>
                 </div>
               </div>
             </LiquidCard>

@@ -1,7 +1,7 @@
 
 import React, { useEffect } from 'react';
 import { TubelightNavbar } from '@/components/ui/tubelight-navbar';
-import { Footer } from '@/components/Footer';
+import Footer from '@/components/Footer';
 
 const TermsConditions = () => {
   useEffect(() => {
@@ -15,7 +15,7 @@ const TermsConditions = () => {
       <div className="pt-20 pb-16">
         <div className="container mx-auto px-4 max-w-4xl">
           <div className="bg-white rounded-lg shadow-sm p-8 md:p-12">
-            <h1 className="text-4xl font-bold text-gray-900 mb-8">Terms of Service for Voidr Health</h1>
+            <h1 className="text-4xl font-bold text-gray-900 mb-8">Terms and Conditions for Voidr Health</h1>
             <p className="text-lg text-gray-600 mb-8">Effective Date: 11th July 2025</p>
             
             <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed space-y-6">

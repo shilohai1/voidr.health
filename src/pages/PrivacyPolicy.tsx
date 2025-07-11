@@ -1,7 +1,7 @@
 
 import React, { useEffect } from 'react';
 import { TubelightNavbar } from '@/components/ui/tubelight-navbar';
-import { Footer } from '@/components/Footer';
+import Footer from '@/components/Footer';
 
 const PrivacyPolicy = () => {
   useEffect(() => {
