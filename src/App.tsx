@@ -10,12 +10,10 @@ import { TubelightNavbar } from "./components/ui/tubelight-navbar";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
-import StudyWithAI from "./pages/StudyWithAI";
 import ClinicBot from "./pages/ClinicBot";
 import CaseWise from "./pages/CaseWise";
 import SymptomChecker from "./pages/SymptomChecker";
 import Projects from "./pages/Projects";
-import ExportHistory from "./pages/ExportHistory";
 import Pricing from "./pages/Pricing";
 import AboutUs from "./pages/AboutUs";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
@@ -36,12 +34,10 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-            <Route path="/study-with-ai" element={<ProtectedRoute><StudyWithAI /></ProtectedRoute>} />
             <Route path="/clinic-bot" element={<ProtectedRoute><ClinicBot /></ProtectedRoute>} />
             <Route path="/case-wise" element={<ProtectedRoute><CaseWise /></ProtectedRoute>} />
              <Route path="/symptom-checker" element={<ProtectedRoute><SymptomChecker /></ProtectedRoute>} />
             <Route path="/projects" element={<ProtectedRoute><Projects /></ProtectedRoute>} />
-            <Route path="/export-history" element={<ProtectedRoute><ExportHistory /></ProtectedRoute>} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/about" element={<AboutUs />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />

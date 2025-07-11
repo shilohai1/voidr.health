@@ -1,106 +1,123 @@
 
-import React, { useState } from 'react';
-import DashboardSidebar from '@/components/DashboardSidebar';
-import { LiquidButton } from '@/components/ui/liquid-glass-button';
-import { LiquidCard } from '@/components/ui/liquid-glass-card';
+import React, { useState, useRef } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import { Badge } from '@/components/ui/badge';
+import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
+import { Textarea } from '@/components/ui/textarea';
+import { 
+  Upload, 
+  FileText, 
+  Sparkles, 
+  Download,
+  CheckCircle,
+  AlertCircle,
+  Brain,
+  Clock,
+  FileCheck,
+  Paperclip
+} from 'lucide-react';
 import { useFileSummarization } from '@/hooks/useFileSummarization';
-import { useToast } from '@/hooks/use-toast';
-import { Upload, FileText, Download, CheckCircle } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import { LiquidCard } from '@/components/ui/liquid-glass-card';
+import { LiquidButton } from '@/components/ui/liquid-glass-button';
+import { Link } from 'react-router-dom';
 
-const ClinicBot = () => {
-  const [input, setInput] = useState('');
+const StudyWithAI = () => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [scriptText, setScriptText] = useState('');
   const [wordCount, setWordCount] = useState([500]);
-  const [showUploadOptions, setShowUploadOptions] = useState(false);
-  const [generatedSummary, setGeneratedSummary] = useState(null);
-  const [uploadedFile, setUploadedFile] = useState(null);
-  
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const { generateSummary, downloadSummaryAsPDF, isLoading, summary } = useFileSummarization();
-  const { toast } = useToast();
+  const { user } = useAuth();
 
-  const uploadOptions = [
-    { name: 'Upload PDF', type: 'pdf', accept: '.pdf' },
-    { name: 'Upload Word Document', type: 'word', accept: '.doc,.docx' },
-  ];
+  const handleFileSelect = (file: File) => {
+    const validTypes = [
+      'application/pdf',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'application/msword',
+      'text/plain'
+    ];
 
-  const handleFileUpload = (event, fileType) => {
-    const file = event.target.files[0];
-    if (file) {
-      setUploadedFile(file);
-      setInput(`File uploaded: ${file.name}`);
-      setShowUploadOptions(false);
-      
-      toast({
-        title: "File Uploaded",
-        description: `${file.name} has been uploaded successfully.`,
-      });
-    }
-  };
-
-  const handleGenerate = async () => {
-    if (!input && !uploadedFile) {
-      toast({
-        title: "Missing Input",
-        description: "Please enter text or upload a file to summarize.",
-        variant: "destructive"
-      });
+    if (!validTypes.includes(file.type)) {
+      alert('Please select a valid file type (PDF, Word, or Text)');
       return;
     }
 
-    try {
-      if (uploadedFile) {
-        await generateSummary(uploadedFile);
-      } else {
-        // For manual text, we need to create a text file
-        const blob = new Blob([input], { type: 'text/plain' });
-        const file = new File([blob], 'manual_input.txt', { type: 'text/plain' });
-        await generateSummary(file);
-      }
+    if (file.size > 10 * 1024 * 1024) {
+      alert('File size must be less than 10MB');
+      return;
+    }
 
-      if (summary) {
-        setGeneratedSummary({
-          summary_text: summary,
-          wordCount: wordCount[0],
-          originalText: input,
-          fileName: uploadedFile?.name || 'Manual Input'
-        });
+    setSelectedFile(file);
+  };
 
-        toast({
-          title: "Summary Generated",
-          description: "Your clinical summary has been created successfully.",
-        });
-      }
-
-    } catch (error) {
-      console.error('Summarization error:', error);
-      toast({
-        title: "Generation Error",
-        description: error.message || "Failed to generate summary. Please try again.",
-        variant: "destructive"
-      });
+  const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      handleFileSelect(file);
     }
   };
 
-  const handleDownload = async () => {
-    if (!summary || !uploadedFile) return;
-
-    try {
-      await downloadSummaryAsPDF(summary, uploadedFile.name);
-    } catch (error) {
-      toast({
-        title: "Download Error",
-        description: "Failed to download the summary. Please try again.",
-        variant: "destructive"
-      });
+  const handleSummarize = async () => {
+    if (!scriptText.trim() && !selectedFile) {
+      alert('Please enter text or upload a file');
+      return;
+    }
+    
+    if (selectedFile) {
+      await generateSummary(selectedFile);
+    } else {
+      // Create a temporary file from the text input
+      const blob = new Blob([scriptText], { type: 'text/plain' });
+      const file = new File([blob], 'manual_input.txt', { type: 'text/plain' });
+      await generateSummary(file);
     }
   };
 
-  const removeWatermark = () => {
-    toast({
-      title: "Premium Feature",
-      description: "Upgrade to premium to remove watermarks from your summaries.",
-    });
+  const handleDownload = () => {
+    if (summary) {
+      const filename = selectedFile ? selectedFile.name : 'manual_input.txt';
+      downloadSummaryAsPDF(summary, filename);
+    }
   };
+
+  const getWordCountFromText = (text: string) => {
+    return text.trim().split(/\s+/).filter(word => word.length > 0).length;
+  };
+
+  if (!user) {
+    return (
+      <div
+        className="min-h-screen flex items-center justify-center"
+        style={{
+          backgroundColor: "#5fcfb9",
+          backgroundImage:
+            "linear-gradient(246deg, rgba(95, 207, 185, 1) 0%, rgba(88, 177, 209, 1) 100%)",
+        }}
+      >
+        <LiquidCard className="max-w-md w-full mx-4 p-8 text-center">
+          <div className="flex justify-center mb-4">
+            <picture>
+              <source srcSet="/lovable-uploads/ef109c7d-da65-4b73-8c54-766471cc628c.png" type="image/png" />
+              <img 
+                src="/lovable-uploads/ef109c7d-da65-4b73-8c54-766471cc628c.png" 
+                alt="ClinicBot" 
+                className="h-16 w-auto"
+              />
+            </picture>
+          </div>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">ClinicBot</h1>
+          <p className="text-gray-600 mb-6">Please log in to access ClinicBot</p>
+          <LiquidButton onClick={() => window.location.href = '/auth'}>
+            Sign In
+          </LiquidButton>
+        </LiquidCard>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -111,196 +128,210 @@ const ClinicBot = () => {
           "linear-gradient(246deg, rgba(95, 207, 185, 1) 0%, rgba(88, 177, 209, 1) 100%)",
       }}
     >
-      <DashboardSidebar />
-      
-      <div className="ml-16 p-4 md:p-8 transition-all duration-300">
-        <div className="max-w-4xl mx-auto">
-          {/* Header */}
-          <div className="mb-8 md:mb-12 text-center">
-            <img
-              src="/lovable-uploads/ef109c7d-da65-4b73-8c54-766471cc628c.png"
-              alt="ClinicBot Interface"
-              className="w-full max-w-md mx-auto mb-6 rounded-2xl shadow-lg"
-            />
-            <h1 className="text-3xl md:text-4xl font-bold text-black mb-4">Welcome to ClinicBot</h1>
-            <p className="text-lg md:text-xl text-gray-600">
-              Summarise your clinic files, lecture notes and documents into Short notes
-            </p>
+      <div className="container mx-auto px-4 py-8">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center space-x-4">
+            <Link to="/dashboard" className="p-3 bg-white/20 backdrop-blur-sm rounded-xl hover:bg-white/30 transition-colors">
+              <picture>
+                <source srcSet="/lovable-uploads/ef109c7d-da65-4b73-8c54-766471cc628c.png" type="image/png" />
+                <img 
+                  src="/lovable-uploads/ef109c7d-da65-4b73-8c54-766471cc628c.png" 
+                  alt="ClinicBot" 
+                  className="h-8 w-auto"
+                />
+              </picture>
+            </Link>
+            <div>
+              <h1 className="text-3xl font-bold text-white">ClinicBot</h1>
+              <p className="text-white/80">AI-Powered Document Summarization</p>
+            </div>
           </div>
+          <Badge className="bg-green-500 text-white px-4 py-2">
+            <Brain className="w-4 h-4 mr-2" />
+            Smart AI
+          </Badge>
+        </div>
 
-          <LiquidCard className="p-6 md:p-8 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Input Section */}
+          <LiquidCard className="p-8 bg-white/10 backdrop-blur-sm border-white/20">
+            <div className="text-center mb-6">
+              <FileText className="w-16 h-16 text-white mx-auto mb-4" />
+              <h2 className="text-2xl font-bold text-white mb-2">Enter Your Content</h2>
+              <p className="text-white/70">
+                Input your script or upload a PDF file for AI summarization
+              </p>
+            </div>
+
+            {/* Text Input Area */}
             <div className="space-y-6">
-              {/* Input Section */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Enter your notes or upload a document
-                </label>
+              <div className="space-y-3">
+                <Label className="text-white font-medium">Enter your script (10,000+ words supported)</Label>
                 <div className="relative">
-                  <textarea
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    placeholder={uploadedFile ? `File uploaded: ${uploadedFile.name}` : "Enter your clinical notes, lecture content, or any medical text you want to summarize..."}
-                    className="w-full h-32 md:h-40 p-4 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200"
-                    disabled={!!uploadedFile}
+                  <Textarea
+                    value={scriptText}
+                    onChange={(e) => setScriptText(e.target.value)}
+                    placeholder="Paste your script, research paper, or medical document here..."
+                    className="min-h-[200px] bg-white/20 border-white/30 text-white placeholder:text-white/60 resize-none"
                   />
-                  
-                  {/* Upload Dropdown */}
-                  <div className="absolute top-4 right-4">
-                    <button
-                      onClick={() => setShowUploadOptions(!showUploadOptions)}
-                      className="p-2 text-gray-500 hover:text-primary transition-colors duration-200"
+                  <div className="absolute top-3 right-3 flex items-center space-x-2">
+                    <Button
+                      onClick={() => fileInputRef.current?.click()}
+                      variant="ghost"
+                      size="sm"
+                      className="bg-white/20 hover:bg-white/30 text-white p-2"
                     >
-                      <Upload className="w-5 h-5" />
-                    </button>
-                    
-                    {showUploadOptions && (
-                      <div className="absolute right-0 top-10 z-10 bg-white border border-gray-200 rounded-lg shadow-lg min-w-[180px] transition-all duration-200">
-                        {uploadOptions.map((option) => (
-                          <label
-                            key={option.type}
-                            className="block w-full p-3 text-left hover:bg-gray-50 first:rounded-t-lg last:rounded-b-lg transition-all duration-200 cursor-pointer text-black"
-                          >
-                            <input
-                              type="file"
-                              accept={option.accept}
-                              onChange={(e) => handleFileUpload(e, option.type)}
-                              className="hidden"
-                            />
-                            {option.name}
-                          </label>
-                        ))}
-                      </div>
-                    )}
+                      <Paperclip className="w-4 h-4" />
+                    </Button>
                   </div>
-
-                  {/* Clear uploaded file button */}
-                  {uploadedFile && (
-                    <button
-                      onClick={() => {
-                        setUploadedFile(null);
-                        setInput('');
-                      }}
-                      className="absolute bottom-4 right-4 text-sm text-red-600 hover:text-red-800 transition-colors"
-                    >
-                      Clear file
-                    </button>
+                </div>
+                <div className="flex justify-between text-sm text-white/60">
+                  <span>Words: {getWordCountFromText(scriptText)}</span>
+                  {selectedFile && (
+                    <span className="flex items-center space-x-1">
+                      <FileCheck className="w-4 h-4" />
+                      <span>{selectedFile.name}</span>
+                    </span>
                   )}
                 </div>
               </div>
 
-              {/* Word Count Slider - Only show for manual text input */}
-              {!uploadedFile && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-3">
-                    Target word count: {wordCount[0]} words
-                  </label>
-                  <div className="px-2">
-                    <Slider
-                      value={wordCount}
-                      onValueChange={setWordCount}
-                      max={1000}
-                      min={100}
-                      step={50}
-                      className="w-full"
-                    />
-                    <div className="flex justify-between text-sm text-gray-500 mt-2">
-                      <span>100 words</span>
-                      <span>1000 words</span>
-                    </div>
-                  </div>
+              {/* Word Count Slider */}
+              <div className="space-y-3">
+                <Label className="text-white font-medium">Summary Length: {wordCount[0]} words</Label>
+                <Slider
+                  value={wordCount}
+                  onValueChange={setWordCount}
+                  max={1000}
+                  min={100}
+                  step={50}
+                  className="w-full"
+                  showTooltip={true}
+                  tooltipContent={(value) => `${value} words`}
+                />
+                <div className="flex justify-between text-xs text-white/60">
+                  <span>100 words</span>
+                  <span>1000 words</span>
                 </div>
-              )}
+              </div>
 
-              {/* Generate Button */}
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept=".pdf,.doc,.docx,.txt"
+                onChange={handleFileInput}
+                className="hidden"
+              />
+            </div>
+
+            {/* Summarize Button */}
+            <div className="mt-6">
               <LiquidButton
-                onClick={handleGenerate}
-                disabled={(!input && !uploadedFile) || isLoading}
-                className="w-full"
+                onClick={handleSummarize}
+                disabled={isLoading || (!scriptText.trim() && !selectedFile)}
+                className="w-full text-lg py-4 bg-white/20 hover:bg-white/30 text-white disabled:opacity-50"
               >
-                {isLoading ? 'Generating Summary...' : 'Generate Summary'}
+                {isLoading ? (
+                  <>
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2" />
+                    Analyzing Content...
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="w-5 h-5 mr-2" />
+                    Generate Summary ({wordCount[0]} words)
+                  </>
+                )}
               </LiquidButton>
-
-              {/* Loading State */}
-              {isLoading && (
-                <div className="text-center py-4">
-                  <div className="flex items-center justify-center space-x-2">
-                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
-                    <span className="text-gray-600">Processing your content...</span>
-                  </div>
-                </div>
-              )}
             </div>
           </LiquidCard>
 
-          {/* Generated Summary */}
-          {summary && (
-            <LiquidCard className="p-6 md:p-8">
-              <div className="space-y-6">
-                <div className="flex justify-between items-center">
-                  <h2 className="text-xl font-bold text-gray-900">Generated Summary</h2>
-                  <div className="flex items-center space-x-2">
-                    <CheckCircle className="w-5 h-5 text-green-600" />
-                    <span className="text-sm text-green-600">Complete</span>
-                  </div>
-                </div>
+          {/* Results Section */}
+          <LiquidCard className="p-8 bg-white/10 backdrop-blur-sm border-white/20">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-2xl font-bold text-white">AI Summary</h3>
+              {summary && (
+                <LiquidButton
+                  onClick={handleDownload}
+                  className="bg-white/20 hover:bg-white/30 text-white"
+                >
+                  <Download className="w-4 h-4 mr-2" />
+                  Download PDF
+                </LiquidButton>
+              )}
+            </div>
 
-                {/* Summary Stats */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-gray-50 rounded-lg">
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-primary">{wordCount[0]}</div>
-                    <div className="text-sm text-gray-600">Target Words</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-primary">{uploadedFile?.name || 'Manual Input'}</div>
-                    <div className="text-sm text-gray-600">Source</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-primary">✓</div>
-                    <div className="text-sm text-gray-600">Processed</div>
-                  </div>
+            {isLoading ? (
+              <div className="space-y-4">
+                <div className="flex items-center space-x-2 text-white/80">
+                  <Clock className="w-4 h-4" />
+                  <span>Processing your content...</span>
                 </div>
-                
-                <div className="bg-gray-50 p-6 rounded-lg border relative">
-                  {/* Watermark */}
-                  <div className="absolute top-2 right-2 text-xs text-gray-400 opacity-50">
-                    Generated by ClinicBot
+                <Progress value={65} className="w-full" />
+                <div className="bg-white/20 p-4 rounded-lg">
+                  <div className="animate-pulse space-y-2">
+                    <div className="h-3 bg-white/30 rounded w-full"></div>
+                    <div className="h-3 bg-white/30 rounded w-4/5"></div>
+                    <div className="h-3 bg-white/30 rounded w-3/4"></div>
                   </div>
-                  
-                  <div className="prose max-w-none">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Clinical Summary:</h3>
-                    <div className="whitespace-pre-wrap text-gray-700 leading-relaxed">
-                      {summary}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Action Buttons */}
-                <div className="flex flex-wrap gap-4">
-                  {/* Remove Watermark Button */}
-                  <LiquidButton 
-                    onClick={removeWatermark}
-                    size="sm"
-                    className="bg-yellow-600 hover:bg-yellow-700"
-                  >
-                    Remove Watermark
-                  </LiquidButton>
-
-                  {/* Download PDF Button */}
-                  <button
-                    onClick={handleDownload}
-                    className="flex items-center space-x-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-200"
-                  >
-                    <Download className="w-4 h-4" />
-                    <span>Download PDF</span>
-                  </button>
                 </div>
               </div>
-            </LiquidCard>
-          )}
+            ) : summary ? (
+              <div className="space-y-4">
+                <div className="flex items-center space-x-2 text-green-400">
+                  <CheckCircle className="w-5 h-5" />
+                  <span className="font-medium">Summary Generated Successfully</span>
+                </div>
+                <div className="bg-white/20 p-6 rounded-lg">
+                  <div className="text-white/90 leading-relaxed whitespace-pre-wrap">
+                    {summary}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="text-center py-12">
+                <AlertCircle className="w-16 h-16 text-white/40 mx-auto mb-4" />
+                <p className="text-white/60 text-lg">
+                  Your AI-generated summary will appear here
+                </p>
+                <p className="text-white/40 text-sm mt-2">
+                  Enter text or upload a document to get started
+                </p>
+              </div>
+            )}
+          </LiquidCard>
+        </div>
+
+        {/* Feature Highlights */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
+          <LiquidCard className="p-6 text-center bg-white/10 backdrop-blur-sm border-white/20">
+            <Brain className="w-10 h-10 text-white mx-auto mb-4" />
+            <h4 className="text-white font-semibold mb-2">Medical Expertise</h4>
+            <p className="text-white/70 text-sm">
+              Our AI understands medical terminology and provides accurate, contextual summaries
+            </p>
+          </LiquidCard>
+          
+          <LiquidCard className="p-6 text-center bg-white/10 backdrop-blur-sm border-white/20">
+            <Clock className="w-10 h-10 text-white mx-auto mb-4" />
+            <h4 className="text-white font-semibold mb-2">Lightning Fast</h4>
+            <p className="text-white/70 text-sm">
+              Get comprehensive summaries in seconds, not hours of manual reading
+            </p>
+          </LiquidCard>
+          
+          <LiquidCard className="p-6 text-center bg-white/10 backdrop-blur-sm border-white/20">
+            <Download className="w-10 h-10 text-white mx-auto mb-4" />
+            <h4 className="text-white font-semibold mb-2">Export Ready</h4>
+            <p className="text-white/70 text-sm">
+              Download your summaries as professional PDFs for easy sharing and storage
+            </p>
+          </LiquidCard>
         </div>
       </div>
     </div>
   );
 };
 
-export default ClinicBot;
+export default StudyWithAI;
