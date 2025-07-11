@@ -371,7 +371,14 @@ const CaseWise = () => {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#236dcf] to-teal-500 flex items-center justify-center">
+      <div
+        className="min-h-screen flex items-center justify-center"
+        style={{
+          backgroundColor: "#5fcfb9",
+          backgroundImage:
+            "linear-gradient(246deg, rgba(95, 207, 185, 1) 0%, rgba(88, 177, 209, 1) 100%)",
+        }}
+      >
         <LiquidCard className="max-w-md w-full mx-4 p-8 text-center">
           <div className="flex justify-center mb-4">
             <picture>
@@ -394,7 +401,14 @@ const CaseWise = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#236dcf] to-teal-500">
+    <div
+      className="min-h-screen"
+      style={{
+        backgroundColor: "#5fcfb9",
+        backgroundImage:
+          "linear-gradient(246deg, rgba(95, 207, 185, 1) 0%, rgba(88, 177, 209, 1) 100%)",
+      }}
+    >
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
