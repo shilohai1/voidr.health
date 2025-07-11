@@ -72,15 +72,15 @@ const Dashboard = () => {
             </div>
           </div>
           
-          {/* Logout Button */}
+           {/* Logout Button */}
           <LiquidButton
             onClick={handleLogout}
-            className="bg-white/20 hover:bg-white/30 text-white border-white/30 flex items-center gap-2 self-start md:self-auto"
+            className="bg-white/20 hover:bg-white/30 text-white border-white/30 self-start md:self-auto"
           >
-            <LogOut className="w-4 h-4" />
             Logout
           </LiquidButton>
         </div>
+
 
         {/* Quick Stats */}
         {!loading && content && (
