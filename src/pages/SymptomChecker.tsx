@@ -305,10 +305,10 @@ const SymptomChecker = () => {
                     }}
                     className="w-full sm:w-auto min-h-[44px] bg-blue-600 text-white hover:bg-blue-700 transition-colors"
                   >
-                    Start New Assessment
+                     Start New Assessment
                   </Button>
-                  <Link to="/" className="w-full sm:w-auto">
-                    <Button className="w-full sm:w-auto min-h-[44px] bg-gray-600 text-white hover:bg-gray-700 transition-colors">Back to Home</Button>
+                  <Link to="/dashboard" className="w-full sm:w-auto">
+                    <Button className="w-full sm:w-auto min-h-[44px] bg-gray-600 text-white hover:bg-gray-700 transition-colors">Back to Dashboard</Button>
                   </Link>
                 </div>
               </>
