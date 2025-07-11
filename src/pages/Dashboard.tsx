@@ -8,8 +8,7 @@ import {
   Activity,
   ArrowRight,
   Sparkles,
-  Clock,
-  LogOut
+  Clock
 } from 'lucide-react';
 import { LiquidButton } from '@/components/ui/liquid-glass-button';
 import { useUserContent } from '@/hooks/useUserContent';
