@@ -14,8 +14,8 @@ import {
 export const TubelightNavbar = () => {
   const location = useLocation();
   
-  // Hide navbar on auth page
-  if (location.pathname === '/auth') {
+  // Only show navbar on landing page
+  if (location.pathname !== '/') {
     return null;
   }
 
