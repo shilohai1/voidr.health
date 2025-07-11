@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -17,30 +16,10 @@ import { useUserContent } from '@/hooks/useUserContent';
 import { Link, useNavigate } from 'react-router-dom';
 import SymptomAnalyzerCard from '@/components/SymptomAnalyzerCard';
 
-const Dashboard = () => {
-  const { user, signOut } = useAuth();
-  const { content, loading } = useUserContent();
-  const navigate = useNavigate();
-
-  const handleLogout = async () => {
-    await signOut();
-    navigate('/');
-  };
-
-  if (!user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Please sign in to access your dashboard</h1>
-          <Link to="/auth">
-            <LiquidButton>Sign In</LiquidButton>
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
-  // Mock symptom analysis count for now - this would come from actual symptom entries
+const DashboardContent = ({ user, content, handleLogout }: any) => {
+  console.log('DashboardContent: Rendering with content:', { content });
+  
+  // Mock symptom analysis count for now
   const symptomAnalysisCount = 0;
 
   return (
@@ -72,44 +51,42 @@ const Dashboard = () => {
             </div>
           </div>
           
-           {/* Logout Button */}
+          {/* Logout Button */}
           <LiquidButton
             onClick={handleLogout}
             className="bg-white/20 hover:bg-white/30 text-white border-white/30 self-start md:self-auto"
           >
+            <LogOut className="w-4 h-4 mr-2" />
             Logout
           </LiquidButton>
         </div>
 
-
         {/* Quick Stats */}
-        {!loading && content && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-            <Card className="bg-white/10 backdrop-blur-sm border-white/20 text-white">
-              <CardContent className="p-6 text-center">
-                <FileText className="w-8 h-8 mx-auto mb-2 text-white/80" />
-                <div className="text-2xl font-bold">{content.total_summaries}</div>
-                <div className="text-sm text-white/70">Documents Summarized</div>
-              </CardContent>
-            </Card>
-            
-            <Card className="bg-white/10 backdrop-blur-sm border-white/20 text-white">
-              <CardContent className="p-6 text-center">
-                <Activity className="w-8 h-8 mx-auto mb-2 text-white/80" />
-                <div className="text-2xl font-bold">{symptomAnalysisCount}</div>
-                <div className="text-sm text-white/70">Symptoms Analyzed</div>
-              </CardContent>
-            </Card>
-            
-            <Card className="bg-white/10 backdrop-blur-sm border-white/20 text-white">
-              <CardContent className="p-6 text-center">
-                <Clock className="w-8 h-8 mx-auto mb-2 text-white/80" />
-                <div className="text-2xl font-bold">24/7</div>
-                <div className="text-sm text-white/70">AI Availability</div>
-              </CardContent>
-            </Card>
-          </div>
-        )}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          <Card className="bg-white/10 backdrop-blur-sm border-white/20 text-white">
+            <CardContent className="p-6 text-center">
+              <FileText className="w-8 h-8 mx-auto mb-2 text-white/80" />
+              <div className="text-2xl font-bold">{content?.total_summaries || 0}</div>
+              <div className="text-sm text-white/70">Documents Summarized</div>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-white/10 backdrop-blur-sm border-white/20 text-white">
+            <CardContent className="p-6 text-center">
+              <Activity className="w-8 h-8 mx-auto mb-2 text-white/80" />
+              <div className="text-2xl font-bold">{symptomAnalysisCount}</div>
+              <div className="text-sm text-white/70">Symptoms Analyzed</div>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-white/10 backdrop-blur-sm border-white/20 text-white">
+            <CardContent className="p-6 text-center">
+              <Clock className="w-8 h-8 mx-auto mb-2 text-white/80" />
+              <div className="text-2xl font-bold">24/7</div>
+              <div className="text-sm text-white/70">AI Availability</div>
+            </CardContent>
+          </Card>
+        </div>
 
         {/* Main Services Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
@@ -206,7 +183,6 @@ const Dashboard = () => {
               <Link to="/case-wise">
                 <LiquidButton className="w-full group bg-orange-600 hover:bg-orange-700 text-white">
                   Start Simulation
-                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                 </LiquidButton>
               </Link>
             </CardContent>
@@ -271,6 +247,87 @@ const Dashboard = () => {
       </div>
     </div>
   );
+};
+
+const Dashboard = () => {
+  const { user, signOut } = useAuth();
+  const { content, loading, error } = useUserContent();
+  const navigate = useNavigate();
+  const [renderError, setRenderError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    console.log('Dashboard: Component mounted', { user, loading, error });
+  }, []);
+
+  useEffect(() => {
+    console.log('Dashboard: State changed', { user, loading, error, content });
+  }, [user, loading, error, content]);
+
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      navigate('/');
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  };
+
+  try {
+    // Not authenticated
+    if (!user) {
+      console.log('Dashboard: No user, showing sign in message');
+      return (
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold text-gray-900 mb-4">Please sign in to access your dashboard</h1>
+            <Link to="/auth">
+              <LiquidButton>Sign In</LiquidButton>
+            </Link>
+          </div>
+        </div>
+      );
+    }
+
+    // Loading state
+    if (loading) {
+      console.log('Dashboard: Loading content');
+      return (
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#5fcfb9] to-[#58b1d1]">
+          <div className="text-center text-white">
+            <h1 className="text-2xl font-bold mb-4">Loading Dashboard...</h1>
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto"></div>
+          </div>
+        </div>
+      );
+    }
+
+    // Error state
+    if (error || renderError) {
+      console.error('Dashboard: Error state', { error, renderError });
+      return (
+        <div className="min-h-screen flex items-center justify-center bg-red-50">
+          <div className="text-center p-8 bg-white rounded-lg shadow-lg">
+            <h1 className="text-2xl font-bold text-red-600 mb-4">Error Loading Dashboard</h1>
+            <p className="text-gray-600 mb-4">{error || renderError?.message}</p>
+            <button 
+              onClick={() => window.location.reload()} 
+              className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+            >
+              Retry
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    // Render main content
+    console.log('Dashboard: Rendering main content');
+    return <DashboardContent user={user} content={content} handleLogout={handleLogout} />;
+  } catch (error) {
+    console.error('Dashboard: Render error caught:', error);
+    setRenderError(error as Error);
+    return null;
+  }
 };
 
 export default Dashboard;
