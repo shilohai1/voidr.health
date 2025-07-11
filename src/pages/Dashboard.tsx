@@ -156,7 +156,6 @@ const Dashboard = () => {
               <Link to="/clinic-bot">
                 <LiquidButton className="w-full group bg-green-600 hover:bg-green-700 text-white">
                   Launch ClinicBot
-                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                 </LiquidButton>
               </Link>
             </CardContent>
