@@ -18,7 +18,7 @@ const ClinicBotSection = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Text Content */}
           <div className="space-y-8">
-            <div>
+            <div className="text-center"> {/* Added text-center */}
               <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
                 ClinicBot
               </h2>
@@ -76,22 +76,23 @@ const ClinicBotSection = () => {
               </div>
             </div>
 
-            <Link to="/study-with-ai">
-              <Button size="lg" className="group bg-green-600 hover:bg-green-700 text-white px-8 py-4 text-lg">
-                Try ClinicBot Now
-                <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-              </Button>
-            </Link>
+            <div className="flex justify-center"> {/* Added flex and justify-center */}
+              <Link to="/study-with-ai">
+                <Button size="lg" className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 text-lg">
+                  Try ClinicBot Now
+                </Button>
+              </Link>
+            </div>
           </div>
 
           {/* Product Demo Image */}
-          <div className="lg:order-first">
-            <div className="relative">
+          <div className="lg:order-first flex justify-center items-center">
+            <div className="relative w-full max-w-[800px]">
               <div className="absolute inset-0 bg-gradient-to-r from-green-400 to-emerald-500 rounded-2xl blur-xl opacity-20"></div>
               <img
                 src="/lovable-uploads/ef109c7d-da65-4b73-8c54-766471cc628c.png"
                 alt="ClinicBot Interface Demo"
-                className="relative w-full h-auto rounded-2xl shadow-2xl border border-green-200"
+                className="relative w-full h-auto object-contain rounded-2xl shadow-2xl border border-green-200"
               />
             </div>
           </div>
