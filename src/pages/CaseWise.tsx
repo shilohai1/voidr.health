@@ -460,7 +460,7 @@ const CaseWise = () => {
                 <img 
                   src="/lovable-uploads/7e5bb1d3-2b2f-4bae-bb4a-ec509545e99d.png" 
                   alt="VOIDR" 
-                  className="h-8 w-auto"
+                  className="h-12 w-auto"
                 />
               </picture>
             </Link>
