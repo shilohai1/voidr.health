@@ -242,7 +242,7 @@ const Auth = () => {
                     <img 
                       src="/lovable-uploads/7e5bb1d3-2b2f-4bae-bb4a-ec509545e99d.png" 
                       alt="VOIDR" 
-                      className="h-12 w-auto mx-auto mb-6"
+                     className="h-16 sm:h-20 md:h-24 w-auto mx-auto mb-8"
                     />
                   </picture>
                   <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
