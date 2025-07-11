@@ -348,16 +348,16 @@ const SymptomChecker = () => {
       <div className="container mx-auto">
         {/* Header */}
         <div className="text-center mb-6 sm:mb-8">
-          <Link to="/" className="inline-flex items-center gap-2 text-white hover:text-white/80 mb-4 p-2 -m-2">
+          <Link to="/dashboard" className="inline-flex items-center gap-2 text-white hover:text-white/80 mb-4 p-2 -m-2">
             <ArrowLeft className="w-4 h-4 text-white" />
-            <span className="text-sm sm:text-base text-white">Back to Home</span>
+            <span className="text-sm sm:text-base text-white">Back to Dashboard</span>
           </Link>
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2">AskVoidr Symptom Checker</h1>
           <p className="text-sm sm:text-base text-white/80 max-w-2xl mx-auto">
             Get AI-powered insights about your symptoms. Remember, this is not a substitute for professional medical advice.
           </p>
         </div>
-
+        
         {/* Progress Bar */}
         {currentStep < 6 && (
           <div className="max-w-md mx-auto mb-6 sm:mb-8">
