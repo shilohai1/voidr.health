@@ -1,12 +1,40 @@
 
 import React from 'react';
-import { Link } from 'react-router-dom';
-import DashboardSidebar from '@/components/DashboardSidebar';
-import { LiquidCard } from '@/components/ui/liquid-glass-card';
+import { useAuth } from '@/contexts/AuthContext';
+import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { 
+  FileText, 
+  Video, 
+  Brain, 
+  Activity,
+  ArrowRight, 
+  Sparkles,
+  Clock,
+  TrendingUp
+} from 'lucide-react';
 import { LiquidButton } from '@/components/ui/liquid-glass-button';
-import { Video, FileText, Stethoscope } from 'lucide-react';
+import { useUserContent } from '@/hooks/useUserContent';
+import { Link } from 'react-router-dom';
+import SymptomAnalyzerCard from '@/components/SymptomAnalyzerCard';
 
 const Dashboard = () => {
+  const { user } = useAuth();
+  const { content, loading } = useUserContent();
+
+  if (!user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">Please sign in to access your dashboard</h1>
+          <Link to="/auth">
+            <LiquidButton>Sign In</LiquidButton>
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div
       className="min-h-screen"
@@ -16,148 +44,261 @@ const Dashboard = () => {
           "linear-gradient(246deg, rgba(95, 207, 185, 1) 0%, rgba(88, 177, 209, 1) 100%)",
       }}
     >
-      <DashboardSidebar />
-      
-      <div className="lg:ml-16 transition-all duration-300">
-        <div className="min-h-screen flex flex-col">
-          <div className="flex-1 px-4 py-8 lg:px-8 lg:py-12">
-            <div className="max-w-6xl mx-auto">
-              {/* Header */}
-              <div className="mb-8 lg:mb-12 text-center">
-                <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-black mb-4">Choose your Service</h1>
-              </div>
-
-              {/* Service Cards - Reordered: ClinicBot, Case Wise, StudyWithAI */}
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto">
-                {/* ClinicBot Card */}
-                <LiquidCard className="w-full p-6">
-                  <div className="space-y-6">
-                    <div className="flex items-center space-x-4">
-                      <div className="p-3 bg-green-100 rounded-lg">
-                        <FileText className="w-8 h-8 text-green-600" />
-                      </div>
-                      <div>
-                        <h3 className="text-xl lg:text-2xl font-bold text-gray-900">ClinicBot</h3>
-                        <p className="text-sm lg:text-base text-gray-600">Streamline clinical documentation</p>
-                      </div>
-                    </div>
-                    
-                    <p className="text-sm lg:text-base text-gray-700">
-                      Summarise your clinic files, lecture notes and documents into short, 
-                      actionable notes with AI assistance.
-                    </p>
-                    
-                    <ul className="space-y-2 text-xs lg:text-sm text-gray-600">
-                      <li className="flex items-center">
-                        <div className="w-2 h-2 bg-green-500 rounded-full mr-3 flex-shrink-0"></div>
-                        Automated note taking
-                      </li>
-                      <li className="flex items-center">
-                        <div className="w-2 h-2 bg-green-500 rounded-full mr-3 flex-shrink-0"></div>
-                        Clinical decision support
-                      </li>
-                      <li className="flex items-center">
-                        <div className="w-2 h-2 bg-green-500 rounded-full mr-3 flex-shrink-0"></div>
-                        Multiple export formats
-                      </li>
-                    </ul>
-
-                    <Link to="/clinic-bot" className="block">
-                      <LiquidButton className="w-full min-h-[44px]">
-                        View ClinicBot
-                      </LiquidButton>
-                    </Link>
-                  </div>
-                </LiquidCard>
-
-                {/* Case Wise Card */}
-                <LiquidCard className="w-full p-6">
-                  <div className="space-y-6">
-                    <div className="flex items-center space-x-4">
-                      <div className="p-3 bg-blue-100 rounded-lg">
-                        <Stethoscope className="w-8 h-8 text-blue-600" />
-                      </div>
-                      <div>
-                        <h3 className="text-xl lg:text-2xl font-bold text-gray-900">Case Wise</h3>
-                        <p className="text-sm lg:text-base text-gray-600">Interactive medical simulator</p>
-                      </div>
-                    </div>
-                    
-                    <p className="text-sm lg:text-base text-gray-700">
-                      Practice clinical reasoning with AI-generated patient scenarios. 
-                      Perfect for USMLE, OSCE, and PLAB preparation.
-                    </p>
-                    
-                    <ul className="space-y-2 text-xs lg:text-sm text-gray-600">
-                      <li className="flex items-center">
-                        <div className="w-2 h-2 bg-blue-500 rounded-full mr-3 flex-shrink-0"></div>
-                        Real-world medical cases
-                      </li>
-                      <li className="flex items-center">
-                        <div className="w-2 h-2 bg-blue-500 rounded-full mr-3 flex-shrink-0"></div>
-                        Instant AI feedback
-                      </li>
-                      <li className="flex items-center">
-                        <div className="w-2 h-2 bg-blue-500 rounded-full mr-3 flex-shrink-0"></div>
-                        Progress tracking
-                      </li>
-                    </ul>
-
-                    <Link to="/case-wise" className="block">
-                      <LiquidButton className="w-full min-h-[44px]">
-                        Begin Simulation
-                      </LiquidButton>
-                    </Link>
-                  </div>
-                </LiquidCard>
-
-                {/* StudyWithAI Card - Coming Soon */}
-                <LiquidCard className="w-full p-6 relative">
-                  <div className="absolute top-4 right-4 bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                    Coming Soon
-                  </div>
-                  <div className="space-y-6 opacity-75">
-                    <div className="flex items-center space-x-4">
-                      <div className="p-3 bg-blue-100 rounded-lg">
-                        <Video className="w-8 h-8 text-blue-600" />
-                      </div>
-                      <div>
-                        <h3 className="text-xl lg:text-2xl font-bold text-gray-900">StudyWithAI</h3>
-                        <p className="text-sm lg:text-base text-gray-600">Generate AI-powered explainer videos</p>
-                      </div>
-                    </div>
-                    
-                    <p className="text-sm lg:text-base text-gray-700">
-                      Create short educational medical videos instantly based on your prompts. 
-                      Perfect for visual learners who want quick, comprehensive explanations.
-                    </p>
-                    
-                    <ul className="space-y-2 text-xs lg:text-sm text-gray-600">
-                      <li className="flex items-center">
-                        <div className="w-2 h-2 bg-blue-500 rounded-full mr-3 flex-shrink-0"></div>
-                        AI-powered video generation
-                      </li>
-                      <li className="flex items-center">
-                        <div className="w-2 h-2 bg-blue-500 rounded-full mr-3 flex-shrink-0"></div>
-                        Medical concepts simplified
-                      </li>
-                      <li className="flex items-center">
-                        <div className="w-2 h-2 bg-blue-500 rounded-full mr-3 flex-shrink-0"></div>
-                        Multiple quality options
-                      </li>
-                    </ul>
-
-                    <LiquidButton 
-                      className="w-full min-h-[44px] opacity-50 cursor-not-allowed"
-                      disabled
-                    >
-                      Coming Soon
-                    </LiquidButton>
-                  </div>
-                </LiquidCard>
-              </div>
+      <div className="container mx-auto px-4 py-8">
+        {/* Header */}
+        <div className="mb-12">
+          <div className="flex items-center mb-4">
+            <picture>
+              <source srcSet="/lovable-uploads/7e5bb1d3-2b2f-4bae-bb4a-ec509545e99d.webp" type="image/webp" />
+              <img 
+                src="/lovable-uploads/7e5bb1d3-2b2f-4bae-bb4a-ec509545e99d.png" 
+                alt="VOIDR" 
+                className="h-12 w-auto mr-4"
+              />
+            </picture>
+            <div>
+              <h1 className="text-4xl font-bold text-white mb-2">
+                Welcome back, {user.user_metadata?.name || user.email?.split('@')[0]}! 👋
+              </h1>
+              <p className="text-white/80 text-lg">Your AI-powered medical companion</p>
             </div>
           </div>
+        </div>
+
+        {/* Quick Stats */}
+        {!loading && content && (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <Card className="bg-white/10 backdrop-blur-sm border-white/20 text-white">
+              <CardContent className="p-6 text-center">
+                <FileText className="w-8 h-8 mx-auto mb-2 text-white/80" />
+                <div className="text-2xl font-bold">{content.total_summaries}</div>
+                <div className="text-sm text-white/70">Documents Summarized</div>
+              </CardContent>
+            </Card>
+            
+            <Card className="bg-white/10 backdrop-blur-sm border-white/20 text-white">
+              <CardContent className="p-6 text-center">
+                <Video className="w-8 h-8 mx-auto mb-2 text-white/80" />
+                <div className="text-2xl font-bold">{content.total_videos}</div>
+                <div className="text-sm text-white/70">Videos Generated</div>
+              </CardContent>
+            </Card>
+            
+            <Card className="bg-white/10 backdrop-blur-sm border-white/20 text-white">
+              <CardContent className="p-6 text-center">
+                <Clock className="w-8 h-8 mx-auto mb-2 text-white/80" />
+                <div className="text-2xl font-bold">24/7</div>
+                <div className="text-sm text-white/70">AI Availability</div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
+        {/* Main Services Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
+          {/* ClinicBot Card */}
+          <Card className="group relative overflow-hidden bg-gradient-to-br from-green-50 to-emerald-50 border-green-200 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+            <div className="absolute top-4 right-4">
+              <Badge variant="secondary" className="bg-green-100 text-green-700 border-green-200">
+                Document AI
+              </Badge>
+            </div>
+            
+            <CardContent className="p-8">
+              <div className="flex items-center mb-4">
+                <div className="p-3 bg-green-100 rounded-xl mr-4 group-hover:bg-green-200 transition-colors">
+                  <FileText className="w-8 h-8 text-green-600" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-1">ClinicBot</h3>
+                  <p className="text-green-600 font-medium">Smart Summarization</p>
+                </div>
+              </div>
+              
+              <p className="text-gray-600 mb-8 leading-relaxed">
+                Transform lengthy medical documents, research papers, and case studies into 
+                concise, actionable summaries. Perfect for busy healthcare professionals 
+                and medical students.
+              </p>
+              
+              <div className="space-y-3 mb-8">
+                <div className="flex items-center text-sm text-gray-600">
+                  <div className="w-2 h-2 bg-green-400 rounded-full mr-3"></div>
+                  AI-powered document analysis
+                </div>
+                <div className="flex items-center text-sm text-gray-600">
+                  <div className="w-2 h-2 bg-green-400 rounded-full mr-3"></div>
+                  Medical terminology expertise
+                </div>
+                <div className="flex items-center text-sm text-gray-600">
+                  <div className="w-2 h-2 bg-green-400 rounded-full mr-3"></div>
+                  Instant PDF downloads
+                </div>
+              </div>
+              
+              <Link to="/study-with-ai">
+                <LiquidButton className="w-full group bg-green-600 hover:bg-green-700 text-white">
+                  Launch ClinicBot
+                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                </LiquidButton>
+              </Link>
+            </CardContent>
+          </Card>
+
+          {/* AskVoidr Symptom Analyzer Card */}
+          <SymptomAnalyzerCard />
+
+          {/* Video Generation Card */}
+          <Card className="group relative overflow-hidden bg-gradient-to-br from-purple-50 to-pink-50 border-purple-200 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+            <div className="absolute top-4 right-4">
+              <Badge variant="secondary" className="bg-purple-100 text-purple-700 border-purple-200">
+                Video AI
+              </Badge>
+            </div>
+            
+            <CardContent className="p-8">
+              <div className="flex items-center mb-4">
+                <div className="p-3 bg-purple-100 rounded-xl mr-4 group-hover:bg-purple-200 transition-colors">
+                  <Video className="w-8 h-8 text-purple-600" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-1">AskVoidr</h3>
+                  <p className="text-purple-600 font-medium">Video Generation</p>
+                </div>
+              </div>
+              
+              <p className="text-gray-600 mb-8 leading-relaxed">
+                Convert your medical scripts into engaging educational videos with AI voiceovers. 
+                Create professional content for presentations, training, or patient education.
+              </p>
+              
+              <div className="space-y-3 mb-8">
+                <div className="flex items-center text-sm text-gray-600">
+                  <div className="w-2 h-2 bg-purple-400 rounded-full mr-3"></div>
+                  Professional AI voiceovers
+                </div>
+                <div className="flex items-center text-sm text-gray-600">
+                  <div className="w-2 h-2 bg-purple-400 rounded-full mr-3"></div>
+                  Multiple video styles
+                </div>
+                <div className="flex items-center text-sm text-gray-600">
+                  <div className="w-2 h-2 bg-purple-400 rounded-full mr-3"></div>
+                  High-quality output
+                </div>
+              </div>
+              
+              <Link to="/projects">
+                <LiquidButton className="w-full group bg-purple-600 hover:bg-purple-700 text-white">
+                  Create Videos
+                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                </LiquidButton>
+              </Link>
+            </CardContent>
+          </Card>
+
+          {/* Case Wise Card */}
+          <Card className="group relative overflow-hidden bg-gradient-to-br from-orange-50 to-red-50 border-orange-200 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+            <div className="absolute top-4 right-4">
+              <Badge variant="secondary" className="bg-orange-100 text-orange-700 border-orange-200">
+                Simulation
+              </Badge>
+            </div>
+            
+            <CardContent className="p-8">
+              <div className="flex items-center mb-4">
+                <div className="p-3 bg-orange-100 rounded-xl mr-4 group-hover:bg-orange-200 transition-colors">
+                  <Brain className="w-8 h-8 text-orange-600" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-1">Case Wise</h3>
+                  <p className="text-orange-600 font-medium">Medical Simulator</p>
+                </div>
+              </div>
+              
+              <p className="text-gray-600 mb-8 leading-relaxed">
+                Practice clinical reasoning with realistic patient scenarios. From history-taking 
+                to diagnosis and management - sharpen your medical skills with AI-powered cases.
+              </p>
+              
+              <div className="space-y-3 mb-8">
+                <div className="flex items-center text-sm text-gray-600">
+                  <div className="w-2 h-2 bg-orange-400 rounded-full mr-3"></div>
+                  Interactive patient scenarios
+                </div>
+                <div className="flex items-center text-sm text-gray-600">
+                  <div className="w-2 h-2 bg-orange-400 rounded-full mr-3"></div>
+                  Real-time AI feedback
+                </div>
+                <div className="flex items-center text-sm text-gray-600">
+                  <div className="w-2 h-2 bg-orange-400 rounded-full mr-3"></div>
+                  Progress tracking
+                </div>
+              </div>
+              
+              <Link to="/case-wise">
+                <LiquidButton className="w-full group bg-orange-600 hover:bg-orange-700 text-white">
+                  Start Simulation
+                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                </LiquidButton>
+              </Link>
+            </CardContent>
+          </Card>
+
+          {/* Coming Soon Card */}
+          <Card className="group relative overflow-hidden bg-gradient-to-br from-gray-50 to-slate-50 border-gray-200 opacity-75">
+            <div className="absolute top-4 right-4">
+              <Badge variant="secondary" className="bg-gray-100 text-gray-600 border-gray-200">
+                Coming Soon
+              </Badge>
+            </div>
+            
+            <CardContent className="p-8">
+              <div className="flex items-center mb-4">
+                <div className="p-3 bg-gray-100 rounded-xl mr-4">
+                  <Sparkles className="w-8 h-8 text-gray-500" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold text-gray-600 mb-1">More Tools</h3>
+                  <p className="text-gray-500 font-medium">Advanced Features</p>
+                </div>
+              </div>
+              
+              <p className="text-gray-500 mb-8 leading-relaxed">
+                We're constantly working on new AI-powered tools to enhance your medical 
+                practice and education. Stay tuned for exciting updates!
+              </p>
+              
+              <LiquidButton className="w-full bg-gray-300 text-gray-600 cursor-not-allowed">
+                Coming Soon
+                <Clock className="w-4 h-4 ml-2" />
+              </LiquidButton>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Footer CTA */}
+        <div className="mt-16 text-center">
+          <Card className="bg-white/10 backdrop-blur-sm border-white/20 p-8">
+            <h2 className="text-2xl font-bold text-white mb-4">
+              Ready to Transform Your Medical Practice?
+            </h2>
+            <p className="text-white/80 mb-6 max-w-2xl mx-auto">
+              Join thousands of healthcare professionals who trust VOIDR for their daily medical tasks. 
+              Experience the future of medical AI today.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <Link to="/study-with-ai">
+                <LiquidButton className="bg-white/20 hover:bg-white/30 text-white border-white/30">
+                  Start with ClinicBot
+                </LiquidButton>
+              </Link>
+              <Link to="/case-wise">
+                <LiquidButton className="bg-white/20 hover:bg-white/30 text-white border-white/30">
+                  Try Case Simulation
+                </LiquidButton>
+              </Link>
+            </div>
+          </Card>
         </div>
       </div>
     </div>

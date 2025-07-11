@@ -1,62 +1,24 @@
 
-import React from 'react';
-import { NavBar } from '@/components/ui/tubelight-navbar';
-import HeroSection from '@/components/HeroSection';
-import PainSolutionSection from '@/components/PainSolutionSection';
-import ProductPreviewSection from '@/components/ProductPreviewSection';
-import CaseWisePromoSection from '@/components/CaseWisePromoSection';
-import AskVoidrPromoSection from '@/components/AskVoidrPromoSection';
-import TestimonialsSection from '@/components/TestimonialsSection';
-import PricingSection from '@/components/PricingSection';
-import FAQSection from '@/components/FAQSection';
-import Footer from '@/components/Footer';
-import { User } from 'lucide-react';
+import { HeroSection } from "@/components/HeroSection";
+import { PainSolutionSection } from "@/components/PainSolutionSection";
+import ClinicBotSection from "@/components/ClinicBotSection";
+import { CaseWisePromoSection } from "@/components/CaseWisePromoSection";
+import { AskVoidrPromoSection } from "@/components/AskVoidrPromoSection";
+import { TestimonialsSection } from "@/components/TestimonialsSection";
+import { PricingSection } from "@/components/PricingSection";
+import { FAQSection } from "@/components/FAQSection";
+import { Footer } from "@/components/Footer";
 
 const Index = () => {
-  const navItems = [
-    { 
-      name: 'Services', 
-      url: '#services',
-      hasDropdown: true,
-      dropdownItems: [
-        { name: 'AskVoidr', url: '#askvoidr' },
-        { name: 'Case Wise', url: '#casewise' },
-        { name: 'ClinicBot', url: '#clinicbot' }
-      ]
-    },
-    { name: 'Pricing', url: '#pricing' },
-    { name: 'Affiliates', url: '/affiliates' },
-    { 
-      name: 'About Us', 
-      url: '#about',
-      hasDropdown: true,
-      dropdownItems: [
-        { name: 'Who We Are', url: '/about' },
-        { name: 'Instagram', url: 'https://www.instagram.com/voidr.health/' },
-        { name: 'Twitter', url: 'https://x.com/voidrhealth' }
-      ]
-    },
-    { name: 'Login', url: '/auth', icon: User }
-  ];
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#f8fbff] via-white to-[#f3fceb]">
-      <NavBar items={navItems} />
+    <div className="min-h-screen">
       <HeroSection />
       <PainSolutionSection />
-      <div id="clinicbot">
-        <ProductPreviewSection />
-      </div>
-      <div id="casewise">
-        <CaseWisePromoSection />
-      </div>
-      <div id="askvoidr">
-        <AskVoidrPromoSection />
-      </div>
+      <ClinicBotSection />
+      <CaseWisePromoSection />
+      <AskVoidrPromoSection />
       <TestimonialsSection />
-      <div id="pricing">
-        <PricingSection />
-      </div>
+      <PricingSection />
       <FAQSection />
       <Footer />
     </div>

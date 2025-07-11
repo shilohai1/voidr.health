@@ -1,197 +1,184 @@
 
-"use client"
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Menu, X, ChevronDown } from 'lucide-react';
+import { Button } from './button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from './dropdown-menu';
 
-import React, { useEffect, useState, useRef } from "react"
-import { motion } from "framer-motion"
-import { LucideIcon, User } from "lucide-react"
-import { cn } from "@/lib/utils"
-import { Link } from "react-router-dom"
+export const TubelightNavbar = () => {
+  const [isOpen, setIsOpen] = useState(false);
 
-interface NavItem {
-  name: string
-  url: string
-  icon?: LucideIcon
-  hasDropdown?: boolean
-  dropdownItems?: { name: string; url: string }[]
-}
-
-interface NavBarProps {
-  items: NavItem[]
-  className?: string
-}
-
-export function NavBar({ items, className }: NavBarProps) {
-  const [activeTab, setActiveTab] = useState(items[0]?.name || "")
-  const [isMobile, setIsMobile] = useState(false)
-  const [openDropdown, setOpenDropdown] = useState<string | null>(null)
-  
-  const navRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768)
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
     }
-
-    handleResize()
-    window.addEventListener("resize", handleResize)
-    return () => window.removeEventListener("resize", handleResize)
-  }, [])
-
-  const handleItemClick = (item: NavItem) => {
-    if (item.hasDropdown) {
-      setOpenDropdown(openDropdown === item.name ? null : item.name)
-    } else {
-      setActiveTab(item.name)
-      setOpenDropdown(null)
-      
-      // Handle scroll to section
-      if (item.url.startsWith('#')) {
-        const element = document.querySelector(item.url)
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth' })
-        }
-      }
-    }
-  }
+  };
 
   return (
-    <div className={cn("fixed top-0 left-1/2 -translate-x-1/2 z-50 pt-6 w-full max-w-7xl px-16", className)}>
-      <div 
-        ref={navRef}
-        className="flex items-center justify-between bg-white/10 border border-white/20 backdrop-blur-lg py-3 px-6 rounded-full shadow-lg"
-      >
-        {/* Logo */}
-        <div className="flex items-center">
-          <Link to="/">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200">
+      <div className="container mx-auto px-4">
+        <div className="flex items-center justify-between h-16">
+          {/* Logo */}
+          <Link to="/" className="flex items-center space-x-2">
             <picture>
               <source srcSet="/lovable-uploads/7e5bb1d3-2b2f-4bae-bb4a-ec509545e99d.webp" type="image/webp" />
               <img 
                 src="/lovable-uploads/7e5bb1d3-2b2f-4bae-bb4a-ec509545e99d.png" 
                 alt="VOIDR" 
-                className="h-8 w-auto cursor-pointer"
+                className="h-8 w-auto"
               />
             </picture>
           </Link>
-        </div>
 
-        {/* Center Navigation */}
-        <div className="hidden md:flex items-center gap-8">
-          {items.slice(0, -1).map((item) => {
-            const isActive = activeTab === item.name
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-8">
+            <Link 
+              to="/" 
+              className="text-gray-700 hover:text-gray-900 transition-colors font-medium"
+            >
+              Home
+            </Link>
+            
+            {/* Services Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger className="flex items-center text-gray-700 hover:text-gray-900 transition-colors font-medium">
+                Services
+                <ChevronDown className="ml-1 h-4 w-4" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-48">
+                <DropdownMenuItem onClick={() => scrollToSection('clinicbot-section')}>
+                  ClinicBot
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/symptom-checker">AskVoidr</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/case-wise">Case Wise</Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
 
-            return (
-              <div key={item.name} className="relative">
-                <button
-                  onClick={() => handleItemClick(item)}
-                  onMouseEnter={() => item.hasDropdown && setOpenDropdown(item.name)}
-                  className={cn(
-                    "relative cursor-pointer text-sm font-semibold px-4 py-2 rounded-full transition-all duration-300",
-                    "hover:opacity-80 text-black",
-                    isActive && "opacity-100"
-                  )}
-                >
-                  {item.name}
-                  {isActive && (
-                    <motion.div
-                      layoutId="lamp"
-                      className="absolute inset-0 w-full bg-primary/10 rounded-full -z-10"
-                      initial={false}
-                      transition={{
-                        type: "spring",
-                        stiffness: 300,
-                        damping: 30,
-                      }}
-                    >
-                      <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-8 h-1 bg-primary rounded-t-full">
-                        <div className="absolute w-12 h-6 bg-primary/20 rounded-full blur-md -top-2 -left-2" />
-                        <div className="absolute w-8 h-6 bg-primary/20 rounded-full blur-md -top-1" />
-                        <div className="absolute w-4 h-4 bg-primary/20 rounded-full blur-sm top-0 left-2" />
-                      </div>
-                    </motion.div>
-                  )}
-                </button>
+            <button 
+              onClick={() => scrollToSection('pricing')}
+              className="text-gray-700 hover:text-gray-900 transition-colors font-medium"
+            >
+              Pricing
+            </button>
+            
+            <button 
+              onClick={() => scrollToSection('about')}
+              className="text-gray-700 hover:text-gray-900 transition-colors font-medium"
+            >
+              About
+            </button>
+          </div>
 
-                {/* Smooth Liquid Glass Dropdown */}
-                {item.hasDropdown && openDropdown === item.name && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -10, scale: 0.95 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                    transition={{ duration: 0.2, ease: "easeOut" }}
-                    className="absolute top-full mt-2 left-0 min-w-[180px] z-50 rounded-t-[1.5rem] rounded-b-[1.5rem] overflow-hidden"
-                    onMouseLeave={() => setOpenDropdown(null)}
-                    style={{
-                      background: 'rgba(255, 255, 255, 0.9)',
-                      backdropFilter: 'blur(10px)',
-                      border: '1px solid rgba(255, 255, 255, 0.2)',
-                    }}
-                  >
-                    <div className="rounded-t-[1.5rem] rounded-b-[1.5rem] shadow-lg py-2 overflow-hidden">
-                      <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-white/5 rounded-t-[1.5rem] rounded-b-[1.5rem]" />
-                      <div className="relative">
-                        {item.dropdownItems?.map((dropdownItem, index) => (
-                          <motion.div
-                            key={dropdownItem.name}
-                            initial={{ opacity: 0, x: -10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: index * 0.05 }}
-                          >
-                            {dropdownItem.url.startsWith('http') ? (
-                              <a
-                                href={dropdownItem.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                onClick={() => setOpenDropdown(null)}
-                                className="block w-full text-left px-4 py-3 text-sm hover:bg-primary/10 transition-all duration-200 relative group text-black"
-                              >
-                                <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
-                                <span className="relative">{dropdownItem.name}</span>
-                              </a>
-                            ) : dropdownItem.url.startsWith('#') ? (
-                              <button
-                                onClick={() => {
-                                  setOpenDropdown(null);
-                                  const element = document.querySelector(dropdownItem.url);
-                                  if (element) {
-                                    element.scrollIntoView({ behavior: 'smooth' });
-                                  }
-                                }}
-                                className="block w-full text-left px-4 py-3 text-sm hover:bg-primary/10 transition-all duration-200 relative group text-black"
-                              >
-                                <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
-                                <span className="relative">{dropdownItem.name}</span>
-                              </button>
-                            ) : (
-                              <Link
-                                to={dropdownItem.url}
-                                onClick={() => setOpenDropdown(null)}
-                                className="block w-full text-left px-4 py-3 text-sm hover:bg-primary/10 transition-all duration-200 relative group text-black"
-                              >
-                                <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
-                                <span className="relative">{dropdownItem.name}</span>
-                              </Link>
-                            )}
-                          </motion.div>
-                        ))}
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-              </div>
-            )
-          })}
-        </div>
+          {/* Auth Buttons */}
+          <div className="hidden md:flex items-center space-x-4">
+            <Link to="/auth">
+              <Button variant="ghost" className="text-gray-700 hover:text-gray-900">
+                Sign In
+              </Button>
+            </Link>
+            <Link to="/auth">
+              <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white">
+                Get Started
+              </Button>
+            </Link>
+          </div>
 
-        {/* Login Button - Direct Link */}
-        <div className="flex items-center">
-          <Link 
-            to="/auth"
-            className="p-2 rounded-lg hover:bg-primary/10 transition-colors text-black"
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="md:hidden p-2 rounded-md text-gray-700 hover:text-gray-900 hover:bg-gray-100"
           >
-            <User size={20} />
-          </Link>
+            {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
         </div>
+
+        {/* Mobile Navigation */}
+        {isOpen && (
+          <div className="md:hidden border-t border-gray-200 py-4">
+            <div className="flex flex-col space-y-4">
+              <Link 
+                to="/"
+                className="text-gray-700 hover:text-gray-900 transition-colors font-medium px-2 py-1"
+                onClick={() => setIsOpen(false)}
+              >
+                Home
+              </Link>
+              
+              <div className="px-2">
+                <div className="text-gray-700 font-medium mb-2">Services</div>
+                <div className="pl-4 space-y-2">
+                  <button
+                    onClick={() => {
+                      scrollToSection('clinicbot-section');
+                      setIsOpen(false);
+                    }}
+                    className="block text-gray-600 hover:text-gray-900 transition-colors"
+                  >
+                    ClinicBot
+                  </button>
+                  <Link
+                    to="/symptom-checker"
+                    className="block text-gray-600 hover:text-gray-900 transition-colors"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    AskVoidr
+                  </Link>
+                  <Link
+                    to="/case-wise"
+                    className="block text-gray-600 hover:text-gray-900 transition-colors"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    Case Wise
+                  </Link>
+                </div>
+              </div>
+              
+              <button
+                onClick={() => {
+                  scrollToSection('pricing');
+                  setIsOpen(false);
+                }}
+                className="text-gray-700 hover:text-gray-900 transition-colors font-medium px-2 py-1 text-left"
+              >
+                Pricing
+              </button>
+              
+              <button
+                onClick={() => {
+                  scrollToSection('about');
+                  setIsOpen(false);
+                }}
+                className="text-gray-700 hover:text-gray-900 transition-colors font-medium px-2 py-1 text-left"
+              >
+                About
+              </button>
+              
+              <div className="pt-4 border-t border-gray-200 space-y-2">
+                <Link to="/auth" onClick={() => setIsOpen(false)}>
+                  <Button variant="ghost" className="w-full justify-start text-gray-700 hover:text-gray-900">
+                    Sign In
+                  </Button>
+                </Link>
+                <Link to="/auth" onClick={() => setIsOpen(false)}>
+                  <Button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white">
+                    Get Started
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
-    </div>
-  )
-}
+    </nav>
+  );
+};

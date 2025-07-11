@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -5,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
+import { Input } from '@/components/ui/input';
 import { 
   Clock, 
   Heart, 
@@ -14,7 +16,9 @@ import {
   Brain,
   Award,
   CheckCircle,
-  Loader
+  Loader,
+  Plus,
+  Calendar
 } from 'lucide-react';
 import { LiquidCard } from '@/components/ui/liquid-glass-card';
 import { LiquidButton } from '@/components/ui/liquid-glass-button';
@@ -54,6 +58,7 @@ interface UserStats {
   current_streak: number;
   best_streak: number;
   cases_this_month: number;
+  daily_streak: number;
 }
 
 const CaseWise = () => {
@@ -71,6 +76,8 @@ const CaseWise = () => {
   const [testFeedback, setTestFeedback] = useState<{[key: string]: string}>({});
   const [diagnosisSubmitted, setDiagnosisSubmitted] = useState(false);
   const [evaluatingDiagnosis, setEvaluatingDiagnosis] = useState(false);
+  const [customQuestion, setCustomQuestion] = useState<string>('');
+  const [customInvestigation, setCustomInvestigation] = useState<string>('');
 
   const availableQuestions = [
     "Can you tell me more about when this pain started?",
@@ -86,7 +93,13 @@ const CaseWise = () => {
     "Have you noticed any changes in your bowel habits?",
     "Any shortness of breath or chest pain?",
     "Any recent weight loss or night sweats?",
-    "Do you smoke or drink alcohol regularly?"
+    "Do you smoke or drink alcohol regularly?",
+    "Have you had any recent surgeries or hospitalizations?",
+    "Are you experiencing any dizziness or lightheadedness?",
+    "Have you noticed any changes in your appetite?",
+    "Any recent changes in your sleep patterns?",
+    "Do you have any history of mental health conditions?",
+    "Have you been under any unusual stress lately?"
   ];
 
   const availableInvestigations = [
@@ -105,7 +118,21 @@ const CaseWise = () => {
     "D-dimer",
     "Inflammatory markers (CRP, ESR)",
     "Coagulation screen (PT/INR, APTT)",
-    "Echocardiogram"
+    "Echocardiogram",
+    "Thyroid function tests (TFTs)",
+    "HbA1c",
+    "Lipid profile",
+    "Vitamin B12 & Folate",
+    "Iron studies",
+    "Bone profile",
+    "Magnesium levels",
+    "Lactate",
+    "Procalcitonin",
+    "BNP/NT-proBNP",
+    "Arterial Doppler",
+    "Venous Doppler",
+    "MRI Brain",
+    "CT Angiogram"
   ];
 
   const commonDiagnoses = [
@@ -161,7 +188,8 @@ const CaseWise = () => {
           average_score: 0,
           current_streak: 0,
           best_streak: 0,
-          cases_this_month: 0
+          cases_this_month: 0,
+          daily_streak: 0
         });
       }
     } catch (error) {
@@ -210,6 +238,8 @@ const CaseWise = () => {
       setTestFeedback({});
       setDiagnosisSubmitted(false);
       setEvaluatingDiagnosis(false);
+      setCustomQuestion('');
+      setCustomInvestigation('');
       toast.success('New case generated successfully!');
     } catch (error) {
       console.error('Error generating case:', error);
@@ -259,6 +289,13 @@ const CaseWise = () => {
     }
   };
 
+  const askCustomQuestion = async () => {
+    if (customQuestion.trim() && currentAttempt && currentCase) {
+      await askQuestion(customQuestion.trim());
+      setCustomQuestion('');
+    }
+  };
+
   const orderInvestigation = async (investigation: string) => {
     if (currentAttempt && currentCase) {
       setCurrentAttempt({
@@ -286,6 +323,13 @@ const CaseWise = () => {
         console.error('Error getting test feedback:', error);
         toast.success('Investigation ordered!');
       }
+    }
+  };
+
+  const orderCustomInvestigation = async () => {
+    if (customInvestigation.trim() && currentAttempt && currentCase) {
+      await orderInvestigation(customInvestigation.trim());
+      setCustomInvestigation('');
     }
   };
 
@@ -430,8 +474,11 @@ const CaseWise = () => {
             <LiquidCard className="p-4 bg-white/10 backdrop-blur-sm border-white/20">
               <div className="flex items-center space-x-6 text-sm">
                 <div className="text-center">
-                  <div className="font-bold text-white">{userStats.current_streak}</div>
-                  <div className="text-white/70">Streak</div>
+                  <div className="font-bold text-white flex items-center gap-1">
+                    <Calendar className="w-4 h-4" />
+                    {userStats.daily_streak}
+                  </div>
+                  <div className="text-white/70">Daily Streak</div>
                 </div>
                 <div className="text-center">
                   <div className="font-bold text-white">{Math.round(userStats.average_score)}%</div>
@@ -579,6 +626,28 @@ const CaseWise = () => {
             <LiquidCard className="p-6 mb-6 bg-white/10 backdrop-blur-sm border-white/20">
               <h2 className="text-xl font-bold text-white mb-4">History Taking</h2>
               
+              {/* Custom Question Input */}
+              <div className="mb-6 p-4 bg-white/20 rounded-lg">
+                <h3 className="font-semibold text-white mb-2">Ask Custom Question</h3>
+                <div className="flex space-x-2">
+                  <Input
+                    value={customQuestion}
+                    onChange={(e) => setCustomQuestion(e.target.value)}
+                    placeholder="Type your custom question here..."
+                    className="flex-1 bg-white/20 border-white/30 text-white placeholder-white/60"
+                    onKeyPress={(e) => e.key === 'Enter' && askCustomQuestion()}
+                  />
+                  <LiquidButton
+                    onClick={askCustomQuestion}
+                    disabled={!customQuestion.trim()}
+                    className="bg-white/20 hover:bg-white/30 text-white"
+                  >
+                    <Plus className="w-4 h-4 mr-1" />
+                    Ask
+                  </LiquidButton>
+                </div>
+              </div>
+              
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 {availableQuestions.map((question, index) => (
                   <LiquidButton
@@ -627,6 +696,28 @@ const CaseWise = () => {
           <div className="max-w-4xl mx-auto">
             <LiquidCard className="p-6 mb-6 bg-white/10 backdrop-blur-sm border-white/20">
               <h2 className="text-xl font-bold text-white mb-4">Investigations</h2>
+              
+              {/* Custom Investigation Input */}
+              <div className="mb-6 p-4 bg-white/20 rounded-lg">
+                <h3 className="font-semibold text-white mb-2">Order Custom Investigation</h3>
+                <div className="flex space-x-2">
+                  <Input
+                    value={customInvestigation}
+                    onChange={(e) => setCustomInvestigation(e.target.value)}
+                    placeholder="Type custom investigation here..."
+                    className="flex-1 bg-white/20 border-white/30 text-white placeholder-white/60"
+                    onKeyPress={(e) => e.key === 'Enter' && orderCustomInvestigation()}
+                  />
+                  <LiquidButton
+                    onClick={orderCustomInvestigation}
+                    disabled={!customInvestigation.trim()}
+                    className="bg-white/20 hover:bg-white/30 text-white"
+                  >
+                    <Plus className="w-4 h-4 mr-1" />
+                    Order
+                  </LiquidButton>
+                </div>
+              </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 {availableInvestigations.map((investigation, index) => (

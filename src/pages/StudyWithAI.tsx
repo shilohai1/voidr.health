@@ -1,360 +1,337 @@
 
-import React, { useState } from 'react';
-import DashboardSidebar from '@/components/DashboardSidebar';
-import { LiquidButton } from '@/components/ui/liquid-glass-button';
-import { LiquidCard } from '@/components/ui/liquid-glass-card';
-import { useVideoGeneration } from '@/hooks/useVideoGeneration';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState, useRef } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import { Badge } from '@/components/ui/badge';
 import { 
-  Heart, 
-  Stethoscope, 
-  Microscope, 
-  Pill, 
-  Dna, 
-  Users,
+  Upload, 
+  FileText, 
+  Sparkles, 
   Download,
-  Play,
-  Loader2
+  CheckCircle,
+  AlertCircle,
+  Brain,
+  Clock,
+  FileCheck
 } from 'lucide-react';
+import { useFileSummarization } from '@/hooks/useFileSummarization';
+import { useAuth } from '@/contexts/AuthContext';
+import { LiquidCard } from '@/components/ui/liquid-glass-card';
+import { LiquidButton } from '@/components/ui/liquid-glass-button';
+import { Link } from 'react-router-dom';
 
 const StudyWithAI = () => {
-  const [prompt, setPrompt] = useState('');
-  const [category, setCategory] = useState('');
-  const [difficulty, setDifficulty] = useState('');
-  const [showCategories, setShowCategories] = useState(false);
-  const [generatedVideo, setGeneratedVideo] = useState(null);
-  const [videoStatus, setVideoStatus] = useState('');
-  const [pollingInterval, setPollingInterval] = useState(null);
-  
-  const { generateVideo, getVideoStatus, loading } = useVideoGeneration();
-  const { toast } = useToast();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [dragActive, setDragActive] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const { generateSummary, downloadSummaryAsPDF, isLoading, summary } = useFileSummarization();
+  const { user } = useAuth();
 
-  const categories = [
-    { name: 'Anatomy', icon: Heart },
-    { name: 'Physiology', icon: Stethoscope },
-    { name: 'Biochemistry', icon: Dna },
-    { name: 'Pathology', icon: Microscope },
-    { name: 'Microbiology', icon: Users },
-    { name: 'Pharmacology', icon: Pill },
-  ];
-
-  const handleGenerateVideo = async () => {
-    if (!prompt || !category || !difficulty) {
-      toast({
-        title: "Missing Information",
-        description: "Please fill in all fields before generating the video.",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    try {
-      setVideoStatus('generating');
-      setGeneratedVideo(null);
-      
-      // Clear any existing polling interval
-      if (pollingInterval) {
-        clearInterval(pollingInterval);
-      }
-      
-      const result = await generateVideo({
-        user_script: prompt,
-        voice_option: 'professional',
-        video_style: difficulty.toLowerCase(),
-        category,
-        difficulty
-      });
-
-      toast({
-        title: "Video Generation Started",
-        description: "Your video is being generated. This may take a few minutes.",
-      });
-
-      // Start polling for video status
-      if (result.video_id) {
-        const interval = setInterval(async () => {
-          try {
-            const statusResult = await getVideoStatus(result.video_id);
-            console.log('Polling status:', statusResult);
-            
-            if (statusResult.status === 'completed') {
-              setGeneratedVideo(statusResult);
-              setVideoStatus('completed');
-              clearInterval(interval);
-              setPollingInterval(null);
-              
-              toast({
-                title: "Video Ready!",
-                description: "Your educational video has been generated successfully.",
-              });
-            } else if (statusResult.status === 'failed') {
-              setVideoStatus('failed');
-              clearInterval(interval);
-              setPollingInterval(null);
-              
-              toast({
-                title: "Generation Failed",
-                description: "There was an error generating your video. Please try again.",
-                variant: "destructive"
-              });
-            }
-          } catch (pollError) {
-            console.error('Polling error:', pollError);
-          }
-        }, 5000); // Poll every 5 seconds
-        
-        setPollingInterval(interval);
-      }
-
-    } catch (error) {
-      console.error('Video generation error:', error);
-      toast({
-        title: "Generation Error",
-        description: error.message || "Failed to generate video. Please try again.",
-        variant: "destructive"
-      });
-      setVideoStatus('failed');
+  const handleDrag = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.type === "dragenter" || e.type === "dragover") {
+      setDragActive(true);
+    } else if (e.type === "dragleave") {
+      setDragActive(false);
     }
   };
 
-  const handleDownload = async () => {
-    if (!generatedVideo?.video_url) {
-      toast({
-        title: "Download Error",
-        description: "No video available for download.",
-        variant: "destructive"
-      });
-      return;
-    }
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
 
-    try {
-      const response = await fetch(generatedVideo.video_url);
-      const blob = await response.blob();
-      
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `study-video-${category}-${difficulty}.mp4`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
-      
-      toast({
-        title: "Download Started",
-        description: "Your video is downloading.",
-      });
-    } catch (error) {
-      console.error('Download error:', error);
-      toast({
-        title: "Download Error",
-        description: "Failed to download the video. Please try again.",
-        variant: "destructive"
-      });
+    const files = e.dataTransfer.files;
+    if (files && files[0]) {
+      handleFileSelect(files[0]);
     }
   };
 
-  // Cleanup polling interval on unmount
-  React.useEffect(() => {
-    return () => {
-      if (pollingInterval) {
-        clearInterval(pollingInterval);
-      }
-    };
-  }, [pollingInterval]);
+  const handleFileSelect = (file: File) => {
+    const validTypes = [
+      'application/pdf',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'application/msword',
+      'text/plain'
+    ];
+
+    if (!validTypes.includes(file.type)) {
+      alert('Please select a valid file type (PDF, Word, or Text)');
+      return;
+    }
+
+    if (file.size > 10 * 1024 * 1024) {
+      alert('File size must be less than 10MB');
+      return;
+    }
+
+    setSelectedFile(file);
+  };
+
+  const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      handleFileSelect(file);
+    }
+  };
+
+  const handleSummarize = async () => {
+    if (!selectedFile) return;
+    await generateSummary(selectedFile);
+  };
+
+  const handleDownload = () => {
+    if (summary && selectedFile) {
+      downloadSummaryAsPDF(summary, selectedFile.name);
+    }
+  };
+
+  if (!user) {
+    return (
+      <div
+        className="min-h-screen flex items-center justify-center"
+        style={{
+          backgroundColor: "#5fcfb9",
+          backgroundImage:
+            "linear-gradient(246deg, rgba(95, 207, 185, 1) 0%, rgba(88, 177, 209, 1) 100%)",
+        }}
+      >
+        <LiquidCard className="max-w-md w-full mx-4 p-8 text-center">
+          <div className="flex justify-center mb-4">
+            <picture>
+              <source srcSet="/lovable-uploads/7e5bb1d3-2b2f-4bae-bb4a-ec509545e99d.webp" type="image/webp" />
+              <img 
+                src="/lovable-uploads/7e5bb1d3-2b2f-4bae-bb4a-ec509545e99d.png" 
+                alt="VOIDR" 
+                className="h-16 w-auto"
+              />
+            </picture>
+          </div>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">ClinicBot</h1>
+          <p className="text-gray-600 mb-6">Please log in to access ClinicBot</p>
+          <LiquidButton onClick={() => window.location.href = '/auth'}>
+            Sign In
+          </LiquidButton>
+        </LiquidCard>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      <DashboardSidebar />
-      
-      <div className="ml-16 p-4 md:p-8 transition-all duration-300">
-        <div className="max-w-4xl mx-auto">
-          {/* Header */}
-          <div className="mb-8 md:mb-12 text-center">
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">StudyWithAI</h1>
-            <p className="text-lg md:text-xl text-gray-600">
-              Create educational medical videos with AI-powered script generation and voiceover
-            </p>
-          </div>
-
-          <LiquidCard className="p-6 md:p-8 mb-8 bg-white/80 backdrop-blur-sm">
-            <div className="space-y-6">
-              {/* Prompt Input */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Enter your medical topic or prompt
-                </label>
-                <textarea
-                  value={prompt}
-                  onChange={(e) => setPrompt(e.target.value)}
-                  placeholder="e.g., Explain the cardiac cycle and its phases..."
-                  className="w-full h-32 p-4 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
-                  disabled={loading || videoStatus === 'generating'}
+    <div
+      className="min-h-screen"
+      style={{
+        backgroundColor: "#5fcfb9",
+        backgroundImage:
+          "linear-gradient(246deg, rgba(95, 207, 185, 1) 0%, rgba(88, 177, 209, 1) 100%)",
+      }}
+    >
+      <div className="container mx-auto px-4 py-8">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center space-x-4">
+            <Link to="/dashboard" className="p-3 bg-white/20 backdrop-blur-sm rounded-xl hover:bg-white/30 transition-colors">
+              <picture>
+                <source srcSet="/lovable-uploads/7e5bb1d3-2b2f-4bae-bb4a-ec509545e99d.webp" type="image/webp" />
+                <img 
+                  src="/lovable-uploads/7e5bb1d3-2b2f-4bae-bb4a-ec509545e99d.png" 
+                  alt="VOIDR" 
+                  className="h-8 w-auto"
                 />
-              </div>
+              </picture>
+            </Link>
+            <div>
+              <h1 className="text-3xl font-bold text-white">ClinicBot</h1>
+              <p className="text-white/80">AI-Powered Document Summarization</p>
+            </div>
+          </div>
+          <Badge className="bg-green-500 text-white px-4 py-2">
+            <Brain className="w-4 h-4 mr-2" />
+            Smart AI
+          </Badge>
+        </div>
 
-              {/* Category Selection */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Choose a category
-                </label>
-                <div className="relative">
-                  <button
-                    onMouseEnter={() => setShowCategories(true)}
-                    onMouseLeave={() => setShowCategories(false)}
-                    className="w-full p-4 border border-gray-300 rounded-lg text-left bg-white hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 disabled:opacity-50"
-                    disabled={loading || videoStatus === 'generating'}
-                  >
-                    {category || 'Select a category...'}
-                  </button>
-                  
-                  {showCategories && !loading && videoStatus !== 'generating' && (
-                    <div 
-                      className="absolute z-20 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg transition-all duration-300 ease-out"
-                      onMouseEnter={() => setShowCategories(true)}
-                      onMouseLeave={() => setShowCategories(false)}
-                    >
-                      {categories.map((cat) => {
-                        const Icon = cat.icon;
-                        return (
-                          <button
-                            key={cat.name}
-                            onClick={() => {
-                              setCategory(cat.name);
-                              setShowCategories(false);
-                            }}
-                            className="w-full p-4 text-left hover:bg-gray-50 flex items-center space-x-3 first:rounded-t-lg last:rounded-b-lg transition-all duration-200"
-                          >
-                            <Icon className="w-5 h-5 text-blue-600" />
-                            <span className="text-gray-900">{cat.name}</span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
-              </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Upload Section */}
+          <LiquidCard className="p-8 bg-white/10 backdrop-blur-sm border-white/20">
+            <div className="text-center mb-6">
+              <FileText className="w-16 h-16 text-white mx-auto mb-4" />
+              <h2 className="text-2xl font-bold text-white mb-2">Upload Your Document</h2>
+              <p className="text-white/70">
+                Upload medical documents, research papers, or case studies for instant AI summarization
+              </p>
+            </div>
 
-              {/* Difficulty Level */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Difficulty Level
-                </label>
-                <div className="flex space-x-4">
-                  {['Basic', 'Clinical'].map((level) => (
-                    <button
-                      key={level}
-                      onClick={() => setDifficulty(level)}
-                      disabled={loading || videoStatus === 'generating'}
-                      className={`px-6 py-3 rounded-lg font-medium transition-all duration-200 disabled:opacity-50 ${
-                        difficulty === level
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                      }`}
-                    >
-                      {level}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Generate Button */}
-              <LiquidButton
-                onClick={handleGenerateVideo}
-                disabled={!prompt || !category || !difficulty || loading || videoStatus === 'generating'}
-                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white"
-              >
-                {loading || videoStatus === 'generating' ? (
+            {/* File Upload Area */}
+            <div
+              className={`border-2 border-dashed rounded-xl p-8 text-center transition-all duration-300 ${
+                dragActive 
+                  ? 'border-white bg-white/20' 
+                  : 'border-white/30 hover:border-white/50 hover:bg-white/10'
+              }`}
+              onDragEnter={handleDrag}
+              onDragLeave={handleDrag}
+              onDragOver={handleDrag}
+              onDrop={handleDrop}
+            >
+              <Upload className="w-12 h-12 text-white/60 mx-auto mb-4" />
+              
+              {selectedFile ? (
+                <div className="space-y-3">
                   <div className="flex items-center justify-center space-x-2">
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    <span>Generating Video...</span>
+                    <FileCheck className="w-5 h-5 text-green-400" />
+                    <span className="text-white font-medium">{selectedFile.name}</span>
                   </div>
-                ) : (
-                  'Generate Video'
-                )}
-              </LiquidButton>
-
-              {/* Status Display */}
-              {videoStatus === 'generating' && (
-                <div className="text-center py-6 bg-blue-50 rounded-lg">
-                  <div className="flex items-center justify-center space-x-2 mb-4">
-                    <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
-                    <span className="text-gray-700 font-medium">Creating your video...</span>
-                  </div>
-                  <div className="text-sm text-gray-600">
-                    This process involves AI script generation, voiceover creation, and video production. Please wait...
-                  </div>
+                  <p className="text-white/60 text-sm">
+                    {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
+                  </p>
+                  <LiquidButton
+                    onClick={() => {
+                      setSelectedFile(null);
+                      if (fileInputRef.current) {
+                        fileInputRef.current.value = '';
+                      }
+                    }}
+                    className="text-sm bg-white/20 hover:bg-white/30 text-white"
+                  >
+                    Choose Different File
+                  </LiquidButton>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  <p className="text-white text-lg">
+                    Drag and drop your file here, or
+                  </p>
+                  
+                  <LiquidButton
+                    onClick={() => fileInputRef.current?.click()}
+                    className="bg-white/20 hover:bg-white/30 text-white"
+                  >
+                    Browse Files
+                  </LiquidButton>
+                  
+                  <p className="text-white/60 text-sm">
+                    Supports PDF, Word documents, and text files (up to 10MB)
+                  </p>
                 </div>
               )}
               
-              {videoStatus === 'failed' && (
-                <div className="text-center py-4 bg-red-50 rounded-lg">
-                  <p className="text-red-600 font-medium">Video generation failed. Please try again.</p>
-                </div>
-              )}
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept=".pdf,.doc,.docx,.txt"
+                onChange={handleFileInput}
+                className="hidden"
+              />
             </div>
+
+            {/* Summarize Button */}
+            {selectedFile && (
+              <div className="mt-6">
+                <LiquidButton
+                  onClick={handleSummarize}
+                  disabled={isLoading}
+                  className="w-full text-lg py-4 bg-white/20 hover:bg-white/30 text-white disabled:opacity-50"
+                >
+                  {isLoading ? (
+                    <>
+                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2" />
+                      Analyzing Document...
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="w-5 h-5 mr-2" />
+                      Generate Summary
+                    </>
+                  )}
+                </LiquidButton>
+              </div>
+            )}
           </LiquidCard>
 
-          {/* Video Result */}
-          {generatedVideo && videoStatus === 'completed' && (
-            <LiquidCard className="p-6 md:p-8 bg-white/80 backdrop-blur-sm">
-              <div className="space-y-6">
-                <div className="text-center">
-                  <h2 className="text-2xl font-bold text-gray-900 mb-4">Your Video is Ready!</h2>
+          {/* Results Section */}
+          <LiquidCard className="p-8 bg-white/10 backdrop-blur-sm border-white/20">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-2xl font-bold text-white">AI Summary</h3>
+              {summary && (
+                <LiquidButton
+                  onClick={handleDownload}
+                  className="bg-white/20 hover:bg-white/30 text-white"
+                >
+                  <Download className="w-4 h-4 mr-2" />
+                  Download PDF
+                </LiquidButton>
+              )}
+            </div>
+
+            {isLoading ? (
+              <div className="space-y-4">
+                <div className="flex items-center space-x-2 text-white/80">
+                  <Clock className="w-4 h-4" />
+                  <span>Processing your document...</span>
                 </div>
-                
-                {/* Video Preview */}
-                <div className="relative bg-gray-900 rounded-lg aspect-video flex items-center justify-center overflow-hidden">
-                  {generatedVideo.video_url ? (
-                    <video 
-                      controls 
-                      className="w-full h-full object-cover"
-                      poster={generatedVideo.thumbnail_url}
-                      preload="metadata"
-                    >
-                      <source src={generatedVideo.video_url} type="video/mp4" />
-                      Your browser does not support the video tag.
-                    </video>
-                  ) : (
-                    <div className="text-center text-white">
-                      <Play className="w-16 h-16 mx-auto mb-4 opacity-50" />
-                      <p className="text-lg">Video Preview</p>
-                    </div>
-                  )}
-                </div>
-
-                {/* Generated Script Display */}
-                {generatedVideo.refined_script && (
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <h3 className="font-semibold text-gray-900 mb-2">AI-Generated Script:</h3>
-                    <p className="text-gray-700 text-sm whitespace-pre-wrap">{generatedVideo.refined_script}</p>
+                <Progress value={65} className="w-full" />
+                <div className="bg-white/20 p-4 rounded-lg">
+                  <div className="animate-pulse space-y-2">
+                    <div className="h-3 bg-white/30 rounded w-full"></div>
+                    <div className="h-3 bg-white/30 rounded w-4/5"></div>
+                    <div className="h-3 bg-white/30 rounded w-3/4"></div>
                   </div>
-                )}
-
-                {/* Audio Preview */}
-                {generatedVideo.voice_url && (
-                  <div className="bg-green-50 p-4 rounded-lg">
-                    <h3 className="font-semibold text-gray-900 mb-2">AI-Generated Voiceover:</h3>
-                    <audio controls className="w-full">
-                      <source src={generatedVideo.voice_url} type="audio/mpeg" />
-                      Your browser does not support the audio element.
-                    </audio>
-                  </div>
-                )}
-
-                {/* Download Button */}
-                <div className="flex justify-center">
-                  <LiquidButton 
-                    onClick={handleDownload}
-                    className="flex items-center justify-center space-x-2 bg-gradient-to-r from-green-600 to-blue-600 text-white"
-                  >
-                    <Download className="w-4 h-4" />
-                    <span>Download Video</span>
-                  </LiquidButton>
                 </div>
               </div>
-            </LiquidCard>
-          )}
+            ) : summary ? (
+              <div className="space-y-4">
+                <div className="flex items-center space-x-2 text-green-400">
+                  <CheckCircle className="w-5 h-5" />
+                  <span className="font-medium">Summary Generated Successfully</span>
+                </div>
+                <div className="bg-white/20 p-6 rounded-lg">
+                  <div className="text-white/90 leading-relaxed whitespace-pre-wrap">
+                    {summary}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="text-center py-12">
+                <AlertCircle className="w-16 h-16 text-white/40 mx-auto mb-4" />
+                <p className="text-white/60 text-lg">
+                  Your AI-generated summary will appear here
+                </p>
+                <p className="text-white/40 text-sm mt-2">
+                  Upload a document to get started
+                </p>
+              </div>
+            )}
+          </LiquidCard>
+        </div>
+
+        {/* Feature Highlights */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
+          <LiquidCard className="p-6 text-center bg-white/10 backdrop-blur-sm border-white/20">
+            <Brain className="w-10 h-10 text-white mx-auto mb-4" />
+            <h4 className="text-white font-semibold mb-2">Medical Expertise</h4>
+            <p className="text-white/70 text-sm">
+              Our AI understands medical terminology and provides accurate, contextual summaries
+            </p>
+          </LiquidCard>
+          
+          <LiquidCard className="p-6 text-center bg-white/10 backdrop-blur-sm border-white/20">
+            <Clock className="w-10 h-10 text-white mx-auto mb-4" />
+            <h4 className="text-white font-semibold mb-2">Lightning Fast</h4>
+            <p className="text-white/70 text-sm">
+              Get comprehensive summaries in seconds, not hours of manual reading
+            </p>
+          </LiquidCard>
+          
+          <LiquidCard className="p-6 text-center bg-white/10 backdrop-blur-sm border-white/20">
+            <Download className="w-10 h-10 text-white mx-auto mb-4" />
+            <h4 className="text-white font-semibold mb-2">Export Ready</h4>
+            <p className="text-white/70 text-sm">
+              Download your summaries as professional PDFs for easy sharing and storage
+            </p>
+          </LiquidCard>
         </div>
       </div>
     </div>

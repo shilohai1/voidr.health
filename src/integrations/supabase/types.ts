@@ -129,7 +129,9 @@ export type Database = {
           completed_cases: number | null
           created_at: string
           current_streak: number | null
+          daily_streak: number | null
           id: string
+          last_activity_date: string | null
           last_case_date: string | null
           total_cases: number | null
           total_time_spent: number | null
@@ -143,7 +145,9 @@ export type Database = {
           completed_cases?: number | null
           created_at?: string
           current_streak?: number | null
+          daily_streak?: number | null
           id?: string
+          last_activity_date?: string | null
           last_case_date?: string | null
           total_cases?: number | null
           total_time_spent?: number | null
@@ -157,7 +161,9 @@ export type Database = {
           completed_cases?: number | null
           created_at?: string
           current_streak?: number | null
+          daily_streak?: number | null
           id?: string
+          last_activity_date?: string | null
           last_case_date?: string | null
           total_cases?: number | null
           total_time_spent?: number | null
