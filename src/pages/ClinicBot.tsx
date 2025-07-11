@@ -21,7 +21,6 @@ const ClinicBot = () => {
   const uploadOptions = [
     { name: 'Upload PDF', type: 'pdf', accept: '.pdf' },
     { name: 'Upload Word Document', type: 'word', accept: '.doc,.docx' },
-    { name: 'Upload Google Docs', type: 'text', accept: '.txt' },
   ];
 
   const handleFileUpload = (event, fileType) => {
@@ -114,17 +113,22 @@ const ClinicBot = () => {
     >
       <DashboardSidebar />
       
-      <div className="ml-16 p-8 transition-all duration-300">
+      <div className="ml-16 p-4 md:p-8 transition-all duration-300">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
-          <div className="mb-12 text-center">
-            <h1 className="text-4xl font-bold text-black mb-4">Welcome to ClinicBot</h1>
-            <p className="text-xl text-gray-600">
+          <div className="mb-8 md:mb-12 text-center">
+            <img
+              src="/lovable-uploads/ef109c7d-da65-4b73-8c54-766471cc628c.png"
+              alt="ClinicBot Interface"
+              className="w-full max-w-md mx-auto mb-6 rounded-2xl shadow-lg"
+            />
+            <h1 className="text-3xl md:text-4xl font-bold text-black mb-4">Welcome to ClinicBot</h1>
+            <p className="text-lg md:text-xl text-gray-600">
               Summarise your clinic files, lecture notes and documents into Short notes
             </p>
           </div>
 
-          <LiquidCard className="p-8 mb-8">
+          <LiquidCard className="p-6 md:p-8 mb-8">
             <div className="space-y-6">
               {/* Input Section */}
               <div>
@@ -136,7 +140,7 @@ const ClinicBot = () => {
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     placeholder={uploadedFile ? `File uploaded: ${uploadedFile.name}` : "Enter your clinical notes, lecture content, or any medical text you want to summarize..."}
-                    className="w-full h-40 p-4 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200"
+                    className="w-full h-32 md:h-40 p-4 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200"
                     disabled={!!uploadedFile}
                   />
                   
@@ -230,7 +234,7 @@ const ClinicBot = () => {
 
           {/* Generated Summary */}
           {summary && (
-            <LiquidCard className="p-8">
+            <LiquidCard className="p-6 md:p-8">
               <div className="space-y-6">
                 <div className="flex justify-between items-center">
                   <h2 className="text-xl font-bold text-gray-900">Generated Summary</h2>

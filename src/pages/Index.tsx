@@ -1,4 +1,5 @@
 
+import { TubelightNavbar } from "@/components/ui/tubelight-navbar";
 import HeroSection from "@/components/HeroSection";
 import PainSolutionSection from "@/components/PainSolutionSection";
 import ClinicBotSection from "@/components/ClinicBotSection";
@@ -12,6 +13,7 @@ import Footer from "@/components/Footer";
 const Index = () => {
   return (
     <div className="min-h-screen">
+      <TubelightNavbar />
       <HeroSection />
       <PainSolutionSection />
       <ClinicBotSection />

@@ -89,7 +89,7 @@ const ClinicBotSection = () => {
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-r from-green-400 to-emerald-500 rounded-2xl blur-xl opacity-20"></div>
               <img
-                src="/lovable-uploads/60b51ae3-0ce5-43b4-8f10-3251453ab8ff.webp"
+                src="/lovable-uploads/ef109c7d-da65-4b73-8c54-766471cc628c.png"
                 alt="ClinicBot Interface Demo"
                 className="relative w-full h-auto rounded-2xl shadow-2xl border border-green-200"
               />

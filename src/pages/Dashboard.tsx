@@ -5,22 +5,27 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { 
   FileText, 
-  Video, 
   Brain, 
   Activity,
   ArrowRight, 
   Sparkles,
   Clock,
-  TrendingUp
+  LogOut
 } from 'lucide-react';
 import { LiquidButton } from '@/components/ui/liquid-glass-button';
 import { useUserContent } from '@/hooks/useUserContent';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import SymptomAnalyzerCard from '@/components/SymptomAnalyzerCard';
 
 const Dashboard = () => {
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
   const { content, loading } = useUserContent();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await signOut();
+    navigate('/');
+  };
 
   if (!user) {
     return (
@@ -35,6 +40,9 @@ const Dashboard = () => {
     );
   }
 
+  // Mock symptom analysis count for now - this would come from actual symptom entries
+  const symptomAnalysisCount = 0;
+
   return (
     <div
       className="min-h-screen"
@@ -45,9 +53,9 @@ const Dashboard = () => {
       }}
     >
       <div className="container mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="mb-12">
-          <div className="flex items-center mb-4">
+        {/* Header with Logout Button */}
+        <div className="mb-12 flex flex-col md:flex-row md:items-center md:justify-between">
+          <div className="flex items-center mb-4 md:mb-0">
             <picture>
               <source srcSet="/lovable-uploads/7e5bb1d3-2b2f-4bae-bb4a-ec509545e99d.webp" type="image/webp" />
               <img 
@@ -57,12 +65,21 @@ const Dashboard = () => {
               />
             </picture>
             <div>
-              <h1 className="text-4xl font-bold text-white mb-2">
+              <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
                 Welcome back, {user.user_metadata?.name || user.email?.split('@')[0]}! 👋
               </h1>
               <p className="text-white/80 text-lg">Your AI-powered medical companion</p>
             </div>
           </div>
+          
+          {/* Logout Button */}
+          <LiquidButton
+            onClick={handleLogout}
+            className="bg-white/20 hover:bg-white/30 text-white border-white/30 flex items-center gap-2 self-start md:self-auto"
+          >
+            <LogOut className="w-4 h-4" />
+            Logout
+          </LiquidButton>
         </div>
 
         {/* Quick Stats */}
@@ -78,9 +95,9 @@ const Dashboard = () => {
             
             <Card className="bg-white/10 backdrop-blur-sm border-white/20 text-white">
               <CardContent className="p-6 text-center">
-                <Video className="w-8 h-8 mx-auto mb-2 text-white/80" />
-                <div className="text-2xl font-bold">{content.total_videos}</div>
-                <div className="text-sm text-white/70">Videos Generated</div>
+                <Activity className="w-8 h-8 mx-auto mb-2 text-white/80" />
+                <div className="text-2xl font-bold">{symptomAnalysisCount}</div>
+                <div className="text-sm text-white/70">Symptoms Analyzed</div>
               </CardContent>
             </Card>
             
@@ -104,24 +121,24 @@ const Dashboard = () => {
               </Badge>
             </div>
             
-            <CardContent className="p-8">
+            <CardContent className="p-6 md:p-8">
               <div className="flex items-center mb-4">
                 <div className="p-3 bg-green-100 rounded-xl mr-4 group-hover:bg-green-200 transition-colors">
-                  <FileText className="w-8 h-8 text-green-600" />
+                  <FileText className="w-6 md:w-8 h-6 md:h-8 text-green-600" />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-1">ClinicBot</h3>
+                  <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-1">ClinicBot</h3>
                   <p className="text-green-600 font-medium">Smart Summarization</p>
                 </div>
               </div>
               
-              <p className="text-gray-600 mb-8 leading-relaxed">
+              <p className="text-gray-600 mb-6 md:mb-8 leading-relaxed text-sm md:text-base">
                 Transform lengthy medical documents, research papers, and case studies into 
                 concise, actionable summaries. Perfect for busy healthcare professionals 
                 and medical students.
               </p>
               
-              <div className="space-y-3 mb-8">
+              <div className="space-y-3 mb-6 md:mb-8">
                 <div className="flex items-center text-sm text-gray-600">
                   <div className="w-2 h-2 bg-green-400 rounded-full mr-3"></div>
                   AI-powered document analysis
@@ -148,54 +165,6 @@ const Dashboard = () => {
           {/* AskVoidr Symptom Analyzer Card */}
           <SymptomAnalyzerCard />
 
-          {/* Video Generation Card */}
-          <Card className="group relative overflow-hidden bg-gradient-to-br from-purple-50 to-pink-50 border-purple-200 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-            <div className="absolute top-4 right-4">
-              <Badge variant="secondary" className="bg-purple-100 text-purple-700 border-purple-200">
-                Video AI
-              </Badge>
-            </div>
-            
-            <CardContent className="p-8">
-              <div className="flex items-center mb-4">
-                <div className="p-3 bg-purple-100 rounded-xl mr-4 group-hover:bg-purple-200 transition-colors">
-                  <Video className="w-8 h-8 text-purple-600" />
-                </div>
-                <div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-1">AskVoidr</h3>
-                  <p className="text-purple-600 font-medium">Video Generation</p>
-                </div>
-              </div>
-              
-              <p className="text-gray-600 mb-8 leading-relaxed">
-                Convert your medical scripts into engaging educational videos with AI voiceovers. 
-                Create professional content for presentations, training, or patient education.
-              </p>
-              
-              <div className="space-y-3 mb-8">
-                <div className="flex items-center text-sm text-gray-600">
-                  <div className="w-2 h-2 bg-purple-400 rounded-full mr-3"></div>
-                  Professional AI voiceovers
-                </div>
-                <div className="flex items-center text-sm text-gray-600">
-                  <div className="w-2 h-2 bg-purple-400 rounded-full mr-3"></div>
-                  Multiple video styles
-                </div>
-                <div className="flex items-center text-sm text-gray-600">
-                  <div className="w-2 h-2 bg-purple-400 rounded-full mr-3"></div>
-                  High-quality output
-                </div>
-              </div>
-              
-              <Link to="/projects">
-                <LiquidButton className="w-full group bg-purple-600 hover:bg-purple-700 text-white">
-                  Create Videos
-                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                </LiquidButton>
-              </Link>
-            </CardContent>
-          </Card>
-
           {/* Case Wise Card */}
           <Card className="group relative overflow-hidden bg-gradient-to-br from-orange-50 to-red-50 border-orange-200 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
             <div className="absolute top-4 right-4">
@@ -204,23 +173,23 @@ const Dashboard = () => {
               </Badge>
             </div>
             
-            <CardContent className="p-8">
+            <CardContent className="p-6 md:p-8">
               <div className="flex items-center mb-4">
                 <div className="p-3 bg-orange-100 rounded-xl mr-4 group-hover:bg-orange-200 transition-colors">
-                  <Brain className="w-8 h-8 text-orange-600" />
+                  <Brain className="w-6 md:w-8 h-6 md:h-8 text-orange-600" />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-1">Case Wise</h3>
+                  <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-1">Case Wise</h3>
                   <p className="text-orange-600 font-medium">Medical Simulator</p>
                 </div>
               </div>
               
-              <p className="text-gray-600 mb-8 leading-relaxed">
+              <p className="text-gray-600 mb-6 md:mb-8 leading-relaxed text-sm md:text-base">
                 Practice clinical reasoning with realistic patient scenarios. From history-taking 
                 to diagnosis and management - sharpen your medical skills with AI-powered cases.
               </p>
               
-              <div className="space-y-3 mb-8">
+              <div className="space-y-3 mb-6 md:mb-8">
                 <div className="flex items-center text-sm text-gray-600">
                   <div className="w-2 h-2 bg-orange-400 rounded-full mr-3"></div>
                   Interactive patient scenarios
@@ -244,7 +213,7 @@ const Dashboard = () => {
             </CardContent>
           </Card>
 
-          {/* Coming Soon Card */}
+          {/* StudyWithAI - Coming Soon Card */}
           <Card className="group relative overflow-hidden bg-gradient-to-br from-gray-50 to-slate-50 border-gray-200 opacity-75">
             <div className="absolute top-4 right-4">
               <Badge variant="secondary" className="bg-gray-100 text-gray-600 border-gray-200">
@@ -252,20 +221,20 @@ const Dashboard = () => {
               </Badge>
             </div>
             
-            <CardContent className="p-8">
+            <CardContent className="p-6 md:p-8">
               <div className="flex items-center mb-4">
                 <div className="p-3 bg-gray-100 rounded-xl mr-4">
-                  <Sparkles className="w-8 h-8 text-gray-500" />
+                  <Sparkles className="w-6 md:w-8 h-6 md:h-8 text-gray-500" />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-bold text-gray-600 mb-1">More Tools</h3>
-                  <p className="text-gray-500 font-medium">Advanced Features</p>
+                  <h3 className="text-xl md:text-2xl font-bold text-gray-600 mb-1">StudyWithAI</h3>
+                  <p className="text-gray-500 font-medium">Advanced Study Tools</p>
                 </div>
               </div>
               
-              <p className="text-gray-500 mb-8 leading-relaxed">
-                We're constantly working on new AI-powered tools to enhance your medical 
-                practice and education. Stay tuned for exciting updates!
+              <p className="text-gray-500 mb-6 md:mb-8 leading-relaxed text-sm md:text-base">
+                Enhanced AI-powered study tools and learning resources to accelerate your 
+                medical education journey. More features coming soon!
               </p>
               
               <LiquidButton className="w-full bg-gray-300 text-gray-600 cursor-not-allowed">
@@ -278,11 +247,11 @@ const Dashboard = () => {
 
         {/* Footer CTA */}
         <div className="mt-16 text-center">
-          <Card className="bg-white/10 backdrop-blur-sm border-white/20 p-8">
-            <h2 className="text-2xl font-bold text-white mb-4">
+          <Card className="bg-white/10 backdrop-blur-sm border-white/20 p-6 md:p-8">
+            <h2 className="text-xl md:text-2xl font-bold text-white mb-4">
               Ready to Transform Your Medical Practice?
             </h2>
-            <p className="text-white/80 mb-6 max-w-2xl mx-auto">
+            <p className="text-white/80 mb-6 max-w-2xl mx-auto text-sm md:text-base">
               Join thousands of healthcare professionals who trust VOIDR for their daily medical tasks. 
               Experience the future of medical AI today.
             </p>
