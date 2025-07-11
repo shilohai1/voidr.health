@@ -42,43 +42,40 @@ serve(async (req) => {
 
     console.log('User authenticated:', user.id)
 
-    // Parse multipart form data
-    const formData = await req.formData()
-    const file = formData.get('file') as File
-    const manualText = formData.get('manual_text') as string
+    // Parse the request body
+    const requestBody = await req.json()
+    const { file, filename, mimeType, wordCount = 500 } = requestBody
 
     let textContent = ''
-    let originalFilename = 'manual_input.txt'
+    let originalFilename = filename || 'manual_input.txt'
 
     if (file) {
-      console.log('Processing uploaded file:', file.name)
-      originalFilename = file.name
+      console.log('Processing file data...')
+      
+      // Decode base64 file
+      const fileBuffer = Uint8Array.from(atob(file), c => c.charCodeAt(0))
       
       // Extract text based on file type
-      if (file.type === 'application/pdf') {
-        // For PDF parsing, we'll extract what we can
-        textContent = `Content from PDF file: ${file.name}. This is a mock extraction. In production, you would use a proper PDF parsing library.`
-      } else if (file.type === 'text/plain') {
-        textContent = await file.text()
-      } else if (file.name.endsWith('.docx') || file.type.includes('word')) {
-        textContent = `Content from Word document: ${file.name}. This is a mock extraction. In production, you would use a proper Word document parsing library.`
+      if (mimeType === 'application/pdf') {
+        textContent = `Content from PDF file: ${originalFilename}. This is a mock extraction. In production, you would use a proper PDF parsing library.`
+      } else if (mimeType === 'text/plain') {
+        textContent = new TextDecoder().decode(fileBuffer)
+      } else if (mimeType?.includes('word')) {
+        textContent = `Content from Word document: ${originalFilename}. This is a mock extraction. In production, you would use a proper Word document parsing library.`
       } else {
-        textContent = await file.text() // Try to read as text anyway
+        textContent = new TextDecoder().decode(fileBuffer)
       }
-    } else if (manualText) {
-      console.log('Processing manual text input')
-      textContent = manualText
-      originalFilename = 'manual_input.txt'
     } else {
       return new Response(
-        JSON.stringify({ error: 'Please provide either a file or manual text input.' }),
+        JSON.stringify({ error: 'No file or text content provided.' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }
 
     console.log('Text content length:', textContent.length)
+    console.log('Target word count:', wordCount)
 
-    // Generate summary
+    // Generate summary with word count constraint
     let summaryText = '';
     const openaiApiKey = Deno.env.get('OPENAI_API_KEY');
     
@@ -96,14 +93,14 @@ serve(async (req) => {
             messages: [
               {
                 role: 'system',
-                content: 'You are a medical expert specializing in creating concise clinical summaries. Summarize the provided content into clear, actionable bullet points that would be useful for healthcare professionals. Focus on key clinical findings, diagnoses, treatments, and recommendations.'
+                content: `You are a medical expert specializing in creating concise clinical summaries. Create a well-structured summary that is EXACTLY ${wordCount} words or as close as possible. Focus on key clinical findings, diagnoses, treatments, and recommendations. Use clear, professional medical language with proper formatting including bullet points and sections where appropriate.`
               },
               {
                 role: 'user',
-                content: `Please create a clinical summary of the following content in bullet point format:\n\n${textContent}`
+                content: `Please create a comprehensive medical summary of the following content in exactly ${wordCount} words. Structure it with clear headings and bullet points for easy reading:\n\n${textContent}`
               }
             ],
-            max_tokens: 2000,
+            max_tokens: Math.max(wordCount * 2, 1000),
             temperature: 0.3
           })
         })
@@ -115,20 +112,20 @@ serve(async (req) => {
         } else {
           const errorData = await openaiResponse.text()
           console.error('OpenAI API error:', errorData)
-          summaryText = `Summary of ${originalFilename}:\n\nThis is a mock summary as the OpenAI API is not available. The content would be processed and summarized here.\n\nOriginal content length: ${textContent.length} characters.`
+          summaryText = `Summary of ${originalFilename} (Target: ${wordCount} words):\n\nThis is a mock summary as the OpenAI API encountered an error. The content would be processed and summarized to approximately ${wordCount} words.\n\nOriginal content length: ${textContent.length} characters.`
         }
       } catch (error) {
         console.error('Error calling OpenAI:', error)
-        summaryText = `Summary of ${originalFilename}:\n\nThis is a mock summary due to an API error. The content would be processed and summarized here.\n\nOriginal content length: ${textContent.length} characters.`
+        summaryText = `Summary of ${originalFilename} (Target: ${wordCount} words):\n\nThis is a mock summary due to an API error. The content would be processed and summarized to approximately ${wordCount} words.\n\nOriginal content length: ${textContent.length} characters.`
       }
     } else {
       console.log('OpenAI API key not found, generating mock summary')
-      summaryText = `Summary of ${originalFilename}:\n\nThis is a mock summary as no OpenAI API key is configured. The content would be processed and summarized here.\n\nOriginal content length: ${textContent.length} characters.`
+      summaryText = `Summary of ${originalFilename} (Target: ${wordCount} words):\n\nThis is a mock summary as no OpenAI API key is configured. The content would be processed and summarized to approximately ${wordCount} words.\n\nOriginal content length: ${textContent.length} characters.`
     }
 
-    // Create summary file
+    // Create summary file content
     const summaryFileName = `${user.id}/summary_${Date.now()}.txt`
-    const summaryFileContent = `Clinical Summary\n================\n\nOriginal File: ${originalFilename}\nGenerated: ${new Date().toISOString()}\n\n${summaryText}`
+    const summaryFileContent = `Clinical Summary\n================\n\nOriginal File: ${originalFilename}\nTarget Length: ${wordCount} words\nGenerated: ${new Date().toISOString()}\n\n${summaryText}`
 
     // Upload summary to Supabase Storage
     let downloadUrl = null;
@@ -190,8 +187,9 @@ serve(async (req) => {
       JSON.stringify({
         summary_id: summaryRecord.id,
         download_url: downloadUrl,
-        summary_text: summaryText,
+        summary: summaryText,
         original_filename: originalFilename,
+        word_count: wordCount,
         message: 'Summary generated successfully'
       }),
       {

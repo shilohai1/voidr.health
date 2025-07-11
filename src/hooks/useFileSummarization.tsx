@@ -9,7 +9,7 @@ export const useFileSummarization = () => {
   const [summary, setSummary] = useState<string>('');
   const { session } = useAuth();
 
-  const generateSummary = async (file: File) => {
+  const generateSummary = async (file: File, wordCount: number = 500) => {
     if (!session) {
       toast.error('Please sign in to use this feature');
       return;
@@ -27,6 +27,7 @@ export const useFileSummarization = () => {
           file: base64File,
           filename: file.name,
           mimeType: file.type,
+          wordCount: wordCount,
         },
         headers: {
           Authorization: `Bearer ${session.access_token}`,
@@ -43,7 +44,7 @@ export const useFileSummarization = () => {
       }
 
       setSummary(data.summary);
-      toast.success('Summary generated successfully!');
+      toast.success(`Summary generated successfully! (${wordCount} words)`);
     } catch (error) {
       console.error('Error generating summary:', error);
       const errorMessage = error instanceof Error ? error.message : 'Failed to generate summary';

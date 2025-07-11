@@ -4,6 +4,9 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
+import { Label } from '@/components/ui/label';
+import { Slider } from '@/components/ui/slider';
+import { Textarea } from '@/components/ui/textarea';
 import { 
   Upload, 
   FileText, 
@@ -13,7 +16,8 @@ import {
   AlertCircle,
   Brain,
   Clock,
-  FileCheck
+  FileCheck,
+  Paperclip
 } from 'lucide-react';
 import { useFileSummarization } from '@/hooks/useFileSummarization';
 import { useAuth } from '@/contexts/AuthContext';
@@ -23,31 +27,11 @@ import { Link } from 'react-router-dom';
 
 const StudyWithAI = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [dragActive, setDragActive] = useState(false);
+  const [scriptText, setScriptText] = useState('');
+  const [wordCount, setWordCount] = useState([500]);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const { generateSummary, downloadSummaryAsPDF, isLoading, summary } = useFileSummarization();
   const { user } = useAuth();
-
-  const handleDrag = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (e.type === "dragenter" || e.type === "dragover") {
-      setDragActive(true);
-    } else if (e.type === "dragleave") {
-      setDragActive(false);
-    }
-  };
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(false);
-
-    const files = e.dataTransfer.files;
-    if (files && files[0]) {
-      handleFileSelect(files[0]);
-    }
-  };
 
   const handleFileSelect = (file: File) => {
     const validTypes = [
@@ -78,14 +62,30 @@ const StudyWithAI = () => {
   };
 
   const handleSummarize = async () => {
-    if (!selectedFile) return;
-    await generateSummary(selectedFile);
+    if (!scriptText.trim() && !selectedFile) {
+      alert('Please enter text or upload a file');
+      return;
+    }
+    
+    if (selectedFile) {
+      await generateSummary(selectedFile);
+    } else {
+      // Create a temporary file from the text input
+      const blob = new Blob([scriptText], { type: 'text/plain' });
+      const file = new File([blob], 'manual_input.txt', { type: 'text/plain' });
+      await generateSummary(file);
+    }
   };
 
   const handleDownload = () => {
-    if (summary && selectedFile) {
-      downloadSummaryAsPDF(summary, selectedFile.name);
+    if (summary) {
+      const filename = selectedFile ? selectedFile.name : 'manual_input.txt';
+      downloadSummaryAsPDF(summary, filename);
     }
+  };
+
+  const getWordCountFromText = (text: string) => {
+    return text.trim().split(/\s+/).filter(word => word.length > 0).length;
   };
 
   if (!user) {
@@ -101,10 +101,10 @@ const StudyWithAI = () => {
         <LiquidCard className="max-w-md w-full mx-4 p-8 text-center">
           <div className="flex justify-center mb-4">
             <picture>
-              <source srcSet="/lovable-uploads/7e5bb1d3-2b2f-4bae-bb4a-ec509545e99d.webp" type="image/webp" />
+              <source srcSet="/lovable-uploads/ef109c7d-da65-4b73-8c54-766471cc628c.png" type="image/png" />
               <img 
-                src="/lovable-uploads/7e5bb1d3-2b2f-4bae-bb4a-ec509545e99d.png" 
-                alt="VOIDR" 
+                src="/lovable-uploads/ef109c7d-da65-4b73-8c54-766471cc628c.png" 
+                alt="ClinicBot" 
                 className="h-16 w-auto"
               />
             </picture>
@@ -134,10 +134,10 @@ const StudyWithAI = () => {
           <div className="flex items-center space-x-4">
             <Link to="/dashboard" className="p-3 bg-white/20 backdrop-blur-sm rounded-xl hover:bg-white/30 transition-colors">
               <picture>
-                <source srcSet="/lovable-uploads/7e5bb1d3-2b2f-4bae-bb4a-ec509545e99d.webp" type="image/webp" />
+                <source srcSet="/lovable-uploads/ef109c7d-da65-4b73-8c54-766471cc628c.png" type="image/png" />
                 <img 
-                  src="/lovable-uploads/7e5bb1d3-2b2f-4bae-bb4a-ec509545e99d.png" 
-                  alt="VOIDR" 
+                  src="/lovable-uploads/ef109c7d-da65-4b73-8c54-766471cc628c.png" 
+                  alt="ClinicBot" 
                   className="h-8 w-auto"
                 />
               </picture>
@@ -154,70 +154,68 @@ const StudyWithAI = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Upload Section */}
+          {/* Input Section */}
           <LiquidCard className="p-8 bg-white/10 backdrop-blur-sm border-white/20">
             <div className="text-center mb-6">
               <FileText className="w-16 h-16 text-white mx-auto mb-4" />
-              <h2 className="text-2xl font-bold text-white mb-2">Upload Your Document</h2>
+              <h2 className="text-2xl font-bold text-white mb-2">Enter Your Content</h2>
               <p className="text-white/70">
-                Upload medical documents, research papers, or case studies for instant AI summarization
+                Input your script or upload a PDF file for AI summarization
               </p>
             </div>
 
-            {/* File Upload Area */}
-            <div
-              className={`border-2 border-dashed rounded-xl p-8 text-center transition-all duration-300 ${
-                dragActive 
-                  ? 'border-white bg-white/20' 
-                  : 'border-white/30 hover:border-white/50 hover:bg-white/10'
-              }`}
-              onDragEnter={handleDrag}
-              onDragLeave={handleDrag}
-              onDragOver={handleDrag}
-              onDrop={handleDrop}
-            >
-              <Upload className="w-12 h-12 text-white/60 mx-auto mb-4" />
-              
-              {selectedFile ? (
-                <div className="space-y-3">
-                  <div className="flex items-center justify-center space-x-2">
-                    <FileCheck className="w-5 h-5 text-green-400" />
-                    <span className="text-white font-medium">{selectedFile.name}</span>
+            {/* Text Input Area */}
+            <div className="space-y-6">
+              <div className="space-y-3">
+                <Label className="text-white font-medium">Enter your script (10,000+ words supported)</Label>
+                <div className="relative">
+                  <Textarea
+                    value={scriptText}
+                    onChange={(e) => setScriptText(e.target.value)}
+                    placeholder="Paste your script, research paper, or medical document here..."
+                    className="min-h-[200px] bg-white/20 border-white/30 text-white placeholder:text-white/60 resize-none"
+                  />
+                  <div className="absolute top-3 right-3 flex items-center space-x-2">
+                    <Button
+                      onClick={() => fileInputRef.current?.click()}
+                      variant="ghost"
+                      size="sm"
+                      className="bg-white/20 hover:bg-white/30 text-white p-2"
+                    >
+                      <Paperclip className="w-4 h-4" />
+                    </Button>
                   </div>
-                  <p className="text-white/60 text-sm">
-                    {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
-                  </p>
-                  <LiquidButton
-                    onClick={() => {
-                      setSelectedFile(null);
-                      if (fileInputRef.current) {
-                        fileInputRef.current.value = '';
-                      }
-                    }}
-                    className="text-sm bg-white/20 hover:bg-white/30 text-white"
-                  >
-                    Choose Different File
-                  </LiquidButton>
                 </div>
-              ) : (
-                <div className="space-y-4">
-                  <p className="text-white text-lg">
-                    Drag and drop your file here, or
-                  </p>
-                  
-                  <LiquidButton
-                    onClick={() => fileInputRef.current?.click()}
-                    className="bg-white/20 hover:bg-white/30 text-white"
-                  >
-                    Browse Files
-                  </LiquidButton>
-                  
-                  <p className="text-white/60 text-sm">
-                    Supports PDF, Word documents, and text files (up to 10MB)
-                  </p>
+                <div className="flex justify-between text-sm text-white/60">
+                  <span>Words: {getWordCountFromText(scriptText)}</span>
+                  {selectedFile && (
+                    <span className="flex items-center space-x-1">
+                      <FileCheck className="w-4 h-4" />
+                      <span>{selectedFile.name}</span>
+                    </span>
+                  )}
                 </div>
-              )}
-              
+              </div>
+
+              {/* Word Count Slider */}
+              <div className="space-y-3">
+                <Label className="text-white font-medium">Summary Length: {wordCount[0]} words</Label>
+                <Slider
+                  value={wordCount}
+                  onValueChange={setWordCount}
+                  max={1000}
+                  min={100}
+                  step={50}
+                  className="w-full"
+                  showTooltip={true}
+                  tooltipContent={(value) => `${value} words`}
+                />
+                <div className="flex justify-between text-xs text-white/60">
+                  <span>100 words</span>
+                  <span>1000 words</span>
+                </div>
+              </div>
+
               <input
                 ref={fileInputRef}
                 type="file"
@@ -228,27 +226,25 @@ const StudyWithAI = () => {
             </div>
 
             {/* Summarize Button */}
-            {selectedFile && (
-              <div className="mt-6">
-                <LiquidButton
-                  onClick={handleSummarize}
-                  disabled={isLoading}
-                  className="w-full text-lg py-4 bg-white/20 hover:bg-white/30 text-white disabled:opacity-50"
-                >
-                  {isLoading ? (
-                    <>
-                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2" />
-                      Analyzing Document...
-                    </>
-                  ) : (
-                    <>
-                      <Sparkles className="w-5 h-5 mr-2" />
-                      Generate Summary
-                    </>
-                  )}
-                </LiquidButton>
-              </div>
-            )}
+            <div className="mt-6">
+              <LiquidButton
+                onClick={handleSummarize}
+                disabled={isLoading || (!scriptText.trim() && !selectedFile)}
+                className="w-full text-lg py-4 bg-white/20 hover:bg-white/30 text-white disabled:opacity-50"
+              >
+                {isLoading ? (
+                  <>
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2" />
+                    Analyzing Content...
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="w-5 h-5 mr-2" />
+                    Generate Summary ({wordCount[0]} words)
+                  </>
+                )}
+              </LiquidButton>
+            </div>
           </LiquidCard>
 
           {/* Results Section */}
@@ -270,7 +266,7 @@ const StudyWithAI = () => {
               <div className="space-y-4">
                 <div className="flex items-center space-x-2 text-white/80">
                   <Clock className="w-4 h-4" />
-                  <span>Processing your document...</span>
+                  <span>Processing your content...</span>
                 </div>
                 <Progress value={65} className="w-full" />
                 <div className="bg-white/20 p-4 rounded-lg">
@@ -300,7 +296,7 @@ const StudyWithAI = () => {
                   Your AI-generated summary will appear here
                 </p>
                 <p className="text-white/40 text-sm mt-2">
-                  Upload a document to get started
+                  Enter text or upload a document to get started
                 </p>
               </div>
             )}
