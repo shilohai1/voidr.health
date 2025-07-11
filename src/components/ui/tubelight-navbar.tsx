@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, ChevronDown, Building2, Users, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -12,6 +12,13 @@ import {
 } from './dropdown-menu';
 
 export const TubelightNavbar = () => {
+  const location = useLocation();
+  
+  // Hide navbar on auth page
+  if (location.pathname === '/auth') {
+    return null;
+  }
+
   const [activeTab, setActiveTab] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
