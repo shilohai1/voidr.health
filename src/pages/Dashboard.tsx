@@ -31,8 +31,8 @@ const DashboardContent = ({ user, content, handleLogout }: any) => {
       }}
     >
       <div className="container mx-auto px-4 py-8">
-        {/* Header with Logout Button */}
-        <div className="mb-12 flex flex-col md:flex-row md:items-center md:justify-between">
+        {/* Header without Logout Button */}
+        <div className="mb-12 flex flex-col md:flex-row md:items-center">
           <div className="flex items-center mb-4 md:mb-0">
             <picture>
               <source srcSet="/lovable-uploads/7e5bb1d3-2b2f-4bae-bb4a-ec509545e99d.webp" type="image/webp" />
@@ -49,44 +49,9 @@ const DashboardContent = ({ user, content, handleLogout }: any) => {
               <p className="text-white/80 text-lg">Your AI-powered medical companion</p>
             </div>
           </div>
-          
-          {/* Logout Button */}
-          <LiquidButton
-            onClick={handleLogout}
-            className="bg-white/20 hover:bg-white/30 text-white border-white/30 self-start md:self-auto"
-          >
-            Logout
-          </LiquidButton>
         </div>
 
         {/* Quick Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          <Card className="bg-white/10 backdrop-blur-sm border-white/20 text-white">
-            <CardContent className="p-6 text-center">
-              <FileText className="w-8 h-8 mx-auto mb-2 text-white/80" />
-              <div className="text-2xl font-bold">{content?.total_summaries || 0}</div>
-              <div className="text-sm text-white/70">Documents Summarized</div>
-            </CardContent>
-          </Card>
-          
-          <Card className="bg-white/10 backdrop-blur-sm border-white/20 text-white">
-            <CardContent className="p-6 text-center">
-              <Activity className="w-8 h-8 mx-auto mb-2 text-white/80" />
-              <div className="text-2xl font-bold">{symptomAnalysisCount}</div>
-              <div className="text-sm text-white/70">Symptoms Analyzed</div>
-            </CardContent>
-          </Card>
-          
-          <Card className="bg-white/10 backdrop-blur-sm border-white/20 text-white">
-            <CardContent className="p-6 text-center">
-              <Clock className="w-8 h-8 mx-auto mb-2 text-white/80" />
-              <div className="text-2xl font-bold">24/7</div>
-              <div className="text-sm text-white/70">AI Availability</div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Main Services Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
           {/* ClinicBot Card */}
           <Card className="group relative overflow-hidden bg-gradient-to-br from-green-50 to-emerald-50 border-green-200 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
@@ -166,11 +131,11 @@ const DashboardContent = ({ user, content, handleLogout }: any) => {
               <div className="space-y-3 mb-6 md:mb-8">
                 <div className="flex items-center text-sm text-gray-600">
                   <div className="w-2 h-2 bg-orange-400 rounded-full mr-3"></div>
-                  Interactive patient scenarios
+                  Interactive patient cases
                 </div>
                 <div className="flex items-center text-sm text-gray-600">
                   <div className="w-2 h-2 bg-orange-400 rounded-full mr-3"></div>
-                  Real-time AI feedback
+                  Real-time feedback
                 </div>
                 <div className="flex items-center text-sm text-gray-600">
                   <div className="w-2 h-2 bg-orange-400 rounded-full mr-3"></div>
@@ -185,62 +150,16 @@ const DashboardContent = ({ user, content, handleLogout }: any) => {
               </Link>
             </CardContent>
           </Card>
-
-          {/* StudyWithAI - Coming Soon Card */}
-          <Card className="group relative overflow-hidden bg-gradient-to-br from-gray-50 to-slate-50 border-gray-200 opacity-75">
-            <div className="absolute top-4 right-4">
-              <Badge variant="secondary" className="bg-gray-100 text-gray-600 border-gray-200">
-                Coming Soon
-              </Badge>
-            </div>
-            
-            <CardContent className="p-6 md:p-8">
-              <div className="flex items-center mb-4">
-                <div className="p-3 bg-gray-100 rounded-xl mr-4">
-                  <Sparkles className="w-6 md:w-8 h-6 md:h-8 text-gray-500" />
-                </div>
-                <div>
-                  <h3 className="text-xl md:text-2xl font-bold text-gray-600 mb-1">StudyWithAI</h3>
-                  <p className="text-gray-500 font-medium">Advanced Study Tools</p>
-                </div>
-              </div>
-              
-              <p className="text-gray-500 mb-6 md:mb-8 leading-relaxed text-sm md:text-base">
-                Enhanced AI-powered study tools and learning resources to accelerate your 
-                medical education journey. More features coming soon!
-              </p>
-              
-              <LiquidButton className="w-full bg-gray-300 text-gray-600 cursor-not-allowed">
-                Coming Soon
-                <Clock className="w-4 h-4 ml-2" />
-              </LiquidButton>
-            </CardContent>
-          </Card>
         </div>
 
-        {/* Footer CTA */}
+        {/* Logout Button at Bottom */}
         <div className="mt-16 text-center">
-          <Card className="bg-white/10 backdrop-blur-sm border-white/20 p-6 md:p-8">
-            <h2 className="text-xl md:text-2xl font-bold text-white mb-4">
-              Ready to Transform Your Medical Practice?
-            </h2>
-            <p className="text-white/80 mb-6 max-w-2xl mx-auto text-sm md:text-base">
-              Join thousands of healthcare professionals who trust VOIDR for their daily medical tasks. 
-              Experience the future of medical AI today.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Link to="/study-with-ai">
-                <LiquidButton className="bg-white/20 hover:bg-white/30 text-white border-white/30">
-                  Start with ClinicBot
-                </LiquidButton>
-              </Link>
-              <Link to="/case-wise">
-                <LiquidButton className="bg-white/20 hover:bg-white/30 text-white border-white/30">
-                  Try Case Simulation
-                </LiquidButton>
-              </Link>
-            </div>
-          </Card>
+          <LiquidButton
+            onClick={handleLogout}
+            className="bg-white/20 hover:bg-white/30 text-white border-white/30"
+          >
+            Logout
+          </LiquidButton>
         </div>
       </div>
     </div>
