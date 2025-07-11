@@ -7,7 +7,7 @@ import { useToast } from '@/hooks/use-toast';
 
 interface InputProps {
   label?: string;
-  placeholderimpo?: string;
+  placeholder?: string;
   icon?: React.ReactNode;
   type?: string;
   value?: string;
