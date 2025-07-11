@@ -134,7 +134,7 @@ const StudyWithAI = () => {
           <div className="flex items-center space-x-4">
             <Link to="/dashboard" className="p-3 bg-white/20 backdrop-blur-sm rounded-xl hover:bg-white/30 transition-colors">
               <picture>
-                <source srcSet="/lovable-uploads/ef109c7d-da65-4b73-8c54-766471cc628c.png" type="image/png" />
+                <source srcSet="/lovable-uploads/7e5bb1d3-2b2f-4bae-bb4a-ec509545e99d.png" type="image/png" />
                 <img 
                   src="/lovable-uploads/ef109c7d-da65-4b73-8c54-766471cc628c.png" 
                   alt="ClinicBot" 
