@@ -136,7 +136,7 @@ const StudyWithAI = () => {
               <picture>
                 <source srcSet="/lovable-uploads/7e5bb1d3-2b2f-4bae-bb4a-ec509545e99d.png" type="image/png" />
                 <img 
-                  src="/lovable-uploads/ef109c7d-da65-4b73-8c54-766471cc628c.png" 
+                  src="/lovable-uploads/7e5bb1d3-2b2f-4bae-bb4a-ec509545e99d.png" 
                   alt="ClinicBot" 
                   className="h-8 w-auto"
                 />
