@@ -5,7 +5,10 @@ import { LiquidButton } from '@/components/ui/liquid-glass-button';
 
 const CaseWisePromoSection = () => {
   return (
-    <section className="py-16 sm:py-20 md:py-24 px-4 sm:px-6 md:px-8 bg-gradient-to-br from-[#236dcf] to-[#1e5aa8]">
+    <section 
+      id="CaseWisePromoSection"
+      className="py-16 sm:py-20 md:py-24 px-4 sm:px-6 md:px-8 bg-gradient-to-br from-[#236dcf] to-[#1e5aa8]"
+    >
       <div className="max-w-7xl mx-auto">
         {/* Curved container */}
         <div className="bg-gradient-to-br from-[#236dcf] to-[#1e5aa8] rounded-t-[3rem] sm:rounded-t-[4rem] md:rounded-t-[5rem] rounded-b-[3rem] sm:rounded-b-[4rem] md:rounded-b-[5rem] p-8 sm:p-12 md:p-16">
