@@ -55,7 +55,6 @@ const DashboardContent = ({ user, content, handleLogout }: any) => {
             onClick={handleLogout}
             className="bg-white/20 hover:bg-white/30 text-white border-white/30 self-start md:self-auto"
           >
-            <LogOut className="w-4 h-4 mr-2" />
             Logout
           </LiquidButton>
         </div>
