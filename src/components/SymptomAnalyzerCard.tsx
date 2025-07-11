@@ -50,7 +50,6 @@ const SymptomAnalyzerCard = () => {
         <Link to="/symptom-checker">
           <LiquidButton className="w-full group bg-blue-600 hover:bg-blue-700 text-white">
             Start AskVoidr
-            <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
           </LiquidButton>
         </Link>
       </CardContent>
