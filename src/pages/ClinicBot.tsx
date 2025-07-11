@@ -137,7 +137,14 @@ const ClinicBot = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div
+      className="min-h-screen"
+      style={{
+        backgroundColor: "#5fcfb9",
+        backgroundImage:
+          "linear-gradient(246deg, rgba(95, 207, 185, 1) 0%, rgba(88, 177, 209, 1) 100%)",
+      }}
+    >
       <DashboardSidebar />
       
       <div className="ml-16 p-8 transition-all duration-300">
