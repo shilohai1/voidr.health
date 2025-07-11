@@ -1,4 +1,4 @@
-rt React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { LiquidButton } from '@/components/ui/liquid-glass-button';
 import { Eye, EyeOff, Mail, Lock, User } from 'lucide-react';
