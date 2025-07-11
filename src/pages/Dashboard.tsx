@@ -7,7 +7,7 @@ import {
   FileText, 
   Brain, 
   Activity,
-  Arrowright,
+  ArrowRight,
   Sparkles,
   Clock,
   LogOut
