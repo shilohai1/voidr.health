@@ -45,7 +45,7 @@ export const TubelightNavbar = () => {
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 pt-6">
+     <nav className="fixed top-0 left-0 right-0 z-50 pt-4 pb-2"> {/* Adjusted padding */}
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
@@ -55,7 +55,7 @@ export const TubelightNavbar = () => {
               <img 
                 src="/lovable-uploads/7e5bb1d3-2b2f-4bae-bb4a-ec509545e99d.png" 
                 alt="VOIDR" 
-                className="h-12 w-auto"
+                className="h-24 w-auto" // Changed from h-12 to h-24 (96px)
               />
             </picture>
           </Link>
