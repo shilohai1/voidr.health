@@ -6,8 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { 
   FileText, 
   Brain, 
-  Activity,
-  ArrowRight, 
+  Activity, 
   Sparkles,
   Clock,
   LogOut
