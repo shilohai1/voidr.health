@@ -150,6 +150,37 @@ const DashboardContent = ({ user, content, handleLogout }: any) => {
               </Link>
             </CardContent>
           </Card>
+          
+          {/* StudyWithAI - Coming Soon Card */}
+          <Card className="group relative overflow-hidden bg-gradient-to-br from-gray-50 to-slate-50 border-gray-200 opacity-75">
+            <div className="absolute top-4 right-4">
+              <Badge variant="secondary" className="bg-gray-100 text-gray-600 border-gray-200">
+                Coming Soon
+              </Badge>
+            </div>
+            
+            <CardContent className="p-6 md:p-8">
+              <div className="flex items-center mb-4">
+                <div className="p-3 bg-gray-100 rounded-xl mr-4">
+                  <Sparkles className="w-6 md:w-8 h-6 md:h-8 text-gray-500" />
+                </div>
+                <div>
+                  <h3 className="text-xl md:text-2xl font-bold text-gray-600 mb-1">StudyWithAI</h3>
+                  <p className="text-gray-500 font-medium">Advanced Study Tools</p>
+                </div>
+              </div>
+              
+              <p className="text-gray-500 mb-6 md:mb-8 leading-relaxed text-sm md:text-base">
+                Enhanced AI-powered study tools and learning resources to accelerate your 
+                medical education journey. More features coming soon!
+              </p>
+              
+              <LiquidButton className="w-full bg-gray-300 text-gray-600 cursor-not-allowed">
+                Coming Soon
+                <Clock className="w-4 h-4 ml-2" />
+              </LiquidButton>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Logout Button at Bottom */}
