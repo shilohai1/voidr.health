@@ -109,22 +109,22 @@ const SymptomChecker = () => {
         return (
           <LiquidCard className="w-full max-w-md mx-auto p-6 sm:p-8">
             <div className="text-center mb-6">
-              <User className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-4 text-primary" />
-              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Select Gender</h2>
-              <p className="text-sm sm:text-base text-gray-600">This helps us provide more accurate analysis</p>
+              <User className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-4 text-white" />
+              <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">Select Gender</h2>
+              <p className="text-sm sm:text-base text-white/80">This helps us provide more accurate analysis</p>
             </div>
             <RadioGroup
               value={symptomData.gender}
               onValueChange={(value) => setSymptomData({ ...symptomData, gender: value })}
               className="space-y-3 sm:space-y-4"
             >
-              <div className="flex items-center space-x-2 p-3 sm:p-4 border rounded-lg hover:bg-gray-50 transition-colors min-h-[48px]">
+              <div className="flex items-center space-x-2 p-3 sm:p-4 border border-white/20 rounded-lg hover:bg-white/5 transition-colors min-h-[48px]">
                 <RadioGroupItem value="Male" id="male" />
-                <Label htmlFor="male" className="cursor-pointer flex-1 font-medium text-sm sm:text-base">Male</Label>
+                <Label htmlFor="male" className="cursor-pointer flex-1 font-medium text-sm sm:text-base text-white">Male</Label>
               </div>
-              <div className="flex items-center space-x-2 p-3 sm:p-4 border rounded-lg hover:bg-gray-50 transition-colors min-h-[48px]">
+              <div className="flex items-center space-x-2 p-3 sm:p-4 border border-white/20 rounded-lg hover:bg-white/5 transition-colors min-h-[48px]">
                 <RadioGroupItem value="Female" id="female" />
-                <Label htmlFor="female" className="cursor-pointer flex-1 font-medium text-sm sm:text-base">Female</Label>
+                <Label htmlFor="female" className="cursor-pointer flex-1 font-medium text-sm sm:text-base text-white">Female</Label>
               </div>
             </RadioGroup>
           </LiquidCard>
@@ -134,22 +134,22 @@ const SymptomChecker = () => {
         return (
           <LiquidCard className="w-full max-w-md mx-auto p-6 sm:p-8">
             <div className="text-center mb-6">
-              <Calendar className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-4 text-primary" />
-              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Age Group</h2>
-              <p className="text-sm sm:text-base text-gray-600">Select the appropriate age category</p>
+              <Calendar className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-4 text-white" />
+              <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">Age Group</h2>
+              <p className="text-sm sm:text-base text-white/80">Select the appropriate age category</p>
             </div>
             <RadioGroup
               value={symptomData.ageGroup}
               onValueChange={(value) => setSymptomData({ ...symptomData, ageGroup: value })}
               className="space-y-3 sm:space-y-4"
             >
-              <div className="flex items-center space-x-2 p-3 sm:p-4 border rounded-lg hover:bg-gray-50 transition-colors min-h-[48px]">
+              <div className="flex items-center space-x-2 p-3 sm:p-4 border border-white/20 rounded-lg hover:bg-white/5 transition-colors min-h-[48px]">
                 <RadioGroupItem value="Adult" id="adult" />
-                <Label htmlFor="adult" className="cursor-pointer flex-1 font-medium text-sm sm:text-base">Adult (18+ years)</Label>
+                <Label htmlFor="adult" className="cursor-pointer flex-1 font-medium text-sm sm:text-base text-white">Adult (18+ years)</Label>
               </div>
-              <div className="flex items-center space-x-2 p-3 sm:p-4 border rounded-lg hover:bg-gray-50 transition-colors min-h-[48px]">
+              <div className="flex items-center space-x-2 p-3 sm:p-4 border border-white/20 rounded-lg hover:bg-white/5 transition-colors min-h-[48px]">
                 <RadioGroupItem value="Child" id="child" />
-                <Label htmlFor="child" className="cursor-pointer flex-1 font-medium text-sm sm:text-base">Child (Under 18 years)</Label>
+                <Label htmlFor="child" className="cursor-pointer flex-1 font-medium text-sm sm:text-base text-white">Child (Under 18 years)</Label>
               </div>
             </RadioGroup>
           </LiquidCard>
@@ -159,26 +159,26 @@ const SymptomChecker = () => {
         return (
           <LiquidCard className="w-full max-w-md mx-auto p-6 sm:p-8">
             <div className="text-center mb-6">
-              <Clock className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-4 text-primary" />
-              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Symptom Onset</h2>
-              <p className="text-sm sm:text-base text-gray-600">When did your symptoms start?</p>
+              <Clock className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-4 text-white" />
+              <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">Symptom Onset</h2>
+              <p className="text-sm sm:text-base text-white/80">When did your symptoms start?</p>
             </div>
             <RadioGroup
               value={symptomData.symptomOnset}
               onValueChange={(value) => setSymptomData({ ...symptomData, symptomOnset: value })}
               className="space-y-3 sm:space-y-4"
             >
-              <div className="flex items-center space-x-2 p-3 sm:p-4 border rounded-lg hover:bg-gray-50 transition-colors min-h-[48px]">
+              <div className="flex items-center space-x-2 p-3 sm:p-4 border border-white/20 rounded-lg hover:bg-white/5 transition-colors min-h-[48px]">
                 <RadioGroupItem value="Less than 24 hours" id="recent" />
-                <Label htmlFor="recent" className="cursor-pointer flex-1 font-medium text-sm sm:text-base">Less than 24 hours</Label>
+                <Label htmlFor="recent" className="cursor-pointer flex-1 font-medium text-sm sm:text-base text-white">Less than 24 hours</Label>
               </div>
-              <div className="flex items-center space-x-2 p-3 sm:p-4 border rounded-lg hover:bg-gray-50 transition-colors min-h-[48px]">
+              <div className="flex items-center space-x-2 p-3 sm:p-4 border border-white/20 rounded-lg hover:bg-white/5 transition-colors min-h-[48px]">
                 <RadioGroupItem value="1-3 days" id="few-days" />
-                <Label htmlFor="few-days" className="cursor-pointer flex-1 font-medium text-sm sm:text-base">1-3 days</Label>
+                <Label htmlFor="few-days" className="cursor-pointer flex-1 font-medium text-sm sm:text-base text-white">1-3 days</Label>
               </div>
-              <div className="flex items-center space-x-2 p-3 sm:p-4 border rounded-lg hover:bg-gray-50 transition-colors min-h-[48px]">
+              <div className="flex items-center space-x-2 p-3 sm:p-4 border border-white/20 rounded-lg hover:bg-white/5 transition-colors min-h-[48px]">
                 <RadioGroupItem value="More than 3 days" id="longer" />
-                <Label htmlFor="longer" className="cursor-pointer flex-1 font-medium text-sm sm:text-base">More than 3 days</Label>
+                <Label htmlFor="longer" className="cursor-pointer flex-1 font-medium text-sm sm:text-base text-white">More than 3 days</Label>
               </div>
             </RadioGroup>
           </LiquidCard>
@@ -188,18 +188,18 @@ const SymptomChecker = () => {
         return (
           <LiquidCard className="w-full max-w-md sm:max-w-lg mx-auto p-6 sm:p-8">
             <div className="text-center mb-6">
-              <MapPin className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-4 text-primary" />
-              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Symptom Location</h2>
-              <p className="text-sm sm:text-base text-gray-600">Where are you experiencing these symptoms?</p>
+              <MapPin className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-4 text-white" />
+              <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">Symptom Location</h2>
+              <p className="text-sm sm:text-base text-white/80">Where are you experiencing these symptoms?</p>
             </div>
             <div className="space-y-4">
-              <Label htmlFor="location" className="text-sm sm:text-base">Location of symptoms</Label>
+              <Label htmlFor="location" className="text-sm sm:text-base text-white">Location of symptoms</Label>
               <Input
                 id="location"
                 placeholder="e.g., chest, head, stomach, lower abdomen..."
                 value={symptomData.symptomLocation}
                 onChange={(e) => setSymptomData({ ...symptomData, symptomLocation: e.target.value })}
-                className="w-full min-h-[44px] text-sm sm:text-base"
+                className="w-full min-h-[44px] text-sm sm:text-base bg-transparent border-white/20 text-white placeholder:text-white/50"
               />
             </div>
           </LiquidCard>
@@ -209,18 +209,18 @@ const SymptomChecker = () => {
         return (
           <LiquidCard className="w-full max-w-md sm:max-w-lg mx-auto p-6 sm:p-8">
             <div className="text-center mb-6">
-              <FileText className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-4 text-primary" />
-              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Additional Details</h2>
-              <p className="text-sm sm:text-base text-gray-600">Describe your symptoms in more detail</p>
+              <FileText className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-4 text-white" />
+              <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">Additional Details</h2>
+              <p className="text-sm sm:text-base text-white/80">Describe your symptoms in more detail</p>
             </div>
             <div className="space-y-4">
-              <Label htmlFor="details" className="text-sm sm:text-base">Symptom description</Label>
+              <Label htmlFor="details" className="text-sm sm:text-base text-white">Symptom description</Label>
               <Textarea
                 id="details"
                 placeholder="Describe your symptoms, their intensity, what makes them better or worse, any associated symptoms..."
                 value={symptomData.symptomDetails}
                 onChange={(e) => setSymptomData({ ...symptomData, symptomDetails: e.target.value })}
-                className="w-full min-h-[100px] sm:min-h-[120px] text-sm sm:text-base"
+                className="w-full min-h-[100px] sm:min-h-[120px] text-sm sm:text-base bg-transparent border-white/20 text-white placeholder:text-white/50"
               />
             </div>
           </LiquidCard>
@@ -233,8 +233,8 @@ const SymptomChecker = () => {
               <>
                 <LiquidCard className="p-6 sm:p-8">
                   <div className="text-center mb-6">
-                    <Activity className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-4 text-primary" />
-                    <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Analysis Results</h2>
+                    <Activity className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-4 text-white" />
+                    <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">Analysis Results</h2>
                     <div className="bg-red-50 border border-red-200 rounded-lg p-3 sm:p-4 mt-4">
                       <p className="text-red-800 font-medium text-center text-sm sm:text-base">
                         ⚠️ Strictly not a diagnosis. For actual diagnosis, consult a medical professional.
@@ -245,7 +245,7 @@ const SymptomChecker = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* Risk Level */}
                     <div className="space-y-4">
-                      <h3 className="text-lg sm:text-xl font-semibold text-gray-900">Risk Level</h3>
+                      <h3 className="text-lg sm:text-xl font-semibold text-white">Risk Level</h3>
                       <div className={`inline-flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full border ${getRiskLevelColor(analysisResult.risk_level)}`}>
                         {getRiskIcon(analysisResult.risk_level)}
                         <span className="font-semibold capitalize text-sm sm:text-base">{analysisResult.risk_level}</span>
@@ -254,12 +254,12 @@ const SymptomChecker = () => {
 
                     {/* Parsed Symptoms */}
                     <div className="space-y-4">
-                      <h3 className="text-lg sm:text-xl font-semibold text-gray-900">Identified Symptoms</h3>
+                      <h3 className="text-lg sm:text-xl font-semibold text-white">Identified Symptoms</h3>
                       <div className="space-y-2">
                         {analysisResult.parsed_symptoms.map((symptom, index) => (
-                          <div key={index} className="flex items-center gap-2 p-2 bg-blue-50 rounded-lg">
-                            <Activity className="w-4 h-4 text-blue-600 flex-shrink-0" />
-                            <span className="text-blue-900 text-sm sm:text-base">{symptom}</span>
+                          <div key={index} className="flex items-center gap-2 p-2 bg-white/10 rounded-lg">
+                            <Activity className="w-4 h-4 text-white flex-shrink-0" />
+                            <span className="text-white text-sm sm:text-base">{symptom}</span>
                           </div>
                         ))}
                       </div>
@@ -268,19 +268,19 @@ const SymptomChecker = () => {
 
                   {/* Possible Conditions */}
                   <div className="mt-6 sm:mt-8">
-                    <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">Possible Conditions</h3>
+                    <h3 className="text-lg sm:text-xl font-semibold text-white mb-4">Possible Conditions</h3>
                     <div className="space-y-3">
                       {analysisResult.conditions.map((condition, index) => (
-                        <div key={index} className="p-3 sm:p-4 border rounded-lg bg-gray-50">
+                        <div key={index} className="p-3 sm:p-4 border border-white/20 rounded-lg bg-white/5">
                           <div className="flex justify-between items-center mb-2">
-                            <span className="font-medium text-gray-900 text-sm sm:text-base">{condition.name}</span>
-                            <span className="text-sm font-medium text-gray-600">
+                            <span className="font-medium text-white text-sm sm:text-base">{condition.name}</span>
+                            <span className="text-sm font-medium text-white/80">
                               {Math.round(condition.probability * 100)}%
                             </span>
                           </div>
-                          <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div className="w-full bg-white/20 rounded-full h-2">
                             <div
-                              className="bg-primary h-2 rounded-full transition-all duration-300"
+                              className="bg-white h-2 rounded-full transition-all duration-300"
                               style={{ width: `${condition.probability * 100}%` }}
                             />
                           </div>
@@ -303,20 +303,19 @@ const SymptomChecker = () => {
                       });
                       setAnalysisResult(null);
                     }}
-                    variant="outline"
-                    className="w-full sm:w-auto min-h-[44px]"
+                    className="w-full sm:w-auto min-h-[44px] bg-blue-600 text-white hover:bg-blue-700 transition-colors"
                   >
                     Start New Assessment
                   </Button>
                   <Link to="/" className="w-full sm:w-auto">
-                    <Button className="w-full sm:w-auto min-h-[44px]">Back to Home</Button>
+                    <Button className="w-full sm:w-auto min-h-[44px] bg-gray-600 text-white hover:bg-gray-700 transition-colors">Back to Home</Button>
                   </Link>
                 </div>
               </>
             ) : (
               <LiquidCard className="p-6 sm:p-8 text-center">
-                <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
-                <p className="text-gray-600 text-sm sm:text-base">Analyzing your symptoms...</p>
+                <div className="animate-spin w-8 h-8 border-4 border-white border-t-transparent rounded-full mx-auto mb-4"></div>
+                <p className="text-white/80 text-sm sm:text-base">Analyzing your symptoms...</p>
               </LiquidCard>
             )}
           </div>
@@ -339,16 +338,22 @@ const SymptomChecker = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#f8fbff] via-white to-[#f3fceb] py-6 sm:py-8 px-4 sm:px-6 md:px-8">
+    <div
+      className="min-h-screen py-6 sm:py-8 px-4 sm:px-6 md:px-8"
+      style={{
+        backgroundImage:
+          "linear-gradient(135deg, rgb(26, 26, 46) 0%, rgb(22, 33, 62) 50%, rgb(15, 52, 96) 100%)",
+      }}
+    >
       <div className="container mx-auto">
         {/* Header */}
         <div className="text-center mb-6 sm:mb-8">
-          <Link to="/" className="inline-flex items-center gap-2 text-primary hover:text-primary/80 mb-4 p-2 -m-2">
-            <ArrowLeft className="w-4 h-4" />
-            <span className="text-sm sm:text-base">Back to Home</span>
+          <Link to="/" className="inline-flex items-center gap-2 text-white hover:text-white/80 mb-4 p-2 -m-2">
+            <ArrowLeft className="w-4 h-4 text-white" />
+            <span className="text-sm sm:text-base text-white">Back to Home</span>
           </Link>
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2">AskVoidr Symptom Checker</h1>
-          <p className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2">AskVoidr Symptom Checker</h1>
+          <p className="text-sm sm:text-base text-white/80 max-w-2xl mx-auto">
             Get AI-powered insights about your symptoms. Remember, this is not a substitute for professional medical advice.
           </p>
         </div>
@@ -357,12 +362,12 @@ const SymptomChecker = () => {
         {currentStep < 6 && (
           <div className="max-w-md mx-auto mb-6 sm:mb-8">
             <div className="flex justify-between items-center mb-2">
-              <span className="text-xs sm:text-sm text-gray-600">Step {currentStep} of 5</span>
-              <span className="text-xs sm:text-sm text-gray-600">{Math.round((currentStep / 5) * 100)}%</span>
+              <span className="text-xs sm:text-sm text-white/80">Step {currentStep} of 5</span>
+              <span className="text-xs sm:text-sm text-white/80">{Math.round((currentStep / 5) * 100)}%</span>
             </div>
-            <div className="w-full bg-gray-200 rounded-full h-2">
+            <div className="w-full bg-white/20 rounded-full h-2">
               <div
-                className="bg-primary h-2 rounded-full transition-all duration-300"
+                className="bg-white h-2 rounded-full transition-all duration-300"
                 style={{ width: `${(currentStep / 5) * 100}%` }}
               />
             </div>
@@ -378,30 +383,29 @@ const SymptomChecker = () => {
             {currentStep > 1 && (
               <Button 
                 onClick={handleBack} 
-                variant="outline"
-                className="order-2 sm:order-1 w-full sm:w-auto min-h-[44px]"
+                className="order-2 sm:order-1 w-full sm:w-auto min-h-[44px] bg-gray-600 text-white hover:bg-gray-700 transition-colors"
               >
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Back
               </Button>
             )}
             {currentStep < 5 ? (
-              <LiquidButton
+              <Button
                 onClick={handleNext}
                 disabled={!canProceed()}
-                className="order-1 sm:order-2 px-6 py-2 w-full sm:w-auto min-h-[44px]"
+                className="order-1 sm:order-2 px-6 py-2 w-full sm:w-auto min-h-[44px] bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 Next
                 <ArrowRight className="w-4 h-4 ml-2" />
-              </LiquidButton>
+              </Button>
             ) : (
-              <LiquidButton
+              <Button
                 onClick={handleAnalyze}
                 disabled={isLoading || !canProceed()}
-                className="order-1 sm:order-2 px-6 py-2 w-full sm:w-auto min-h-[44px]"
+                className="order-1 sm:order-2 px-6 py-2 w-full sm:w-auto min-h-[44px] bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 {isLoading ? 'Analyzing...' : 'Analyze Symptoms'}
-              </LiquidButton>
+              </Button>
             )}
           </div>
         )}
