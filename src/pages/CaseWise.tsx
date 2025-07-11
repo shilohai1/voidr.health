@@ -13,9 +13,6 @@ import {
   User,
   Brain,
   Award,
-  ChevronRight,
-  Play,
-  RotateCcw,
   CheckCircle,
   Loader
 } from 'lucide-react';
@@ -474,10 +471,7 @@ const CaseWise = () => {
                     Generating Case...
                   </>
                 ) : (
-                  <>
-                    <Play className="w-5 h-5 mr-2" />
-                    Begin Simulation
-                  </>
+                  "Begin Simulation"
                 )}
               </LiquidButton>
             </LiquidCard>
@@ -562,7 +556,6 @@ const CaseWise = () => {
               <div className="flex space-x-4">
                 <LiquidButton onClick={() => setPhase('history')} className="bg-white/20 hover:bg-white/30 text-white border-white/30">
                   Ask Questions
-                  <ChevronRight className="w-4 h-4 ml-2" />
                 </LiquidButton>
                 <LiquidButton 
                   onClick={() => setPhase('investigations')}
@@ -624,7 +617,6 @@ const CaseWise = () => {
                 </LiquidButton>
                 <LiquidButton onClick={() => setPhase('investigations')} className="bg-white/20 hover:bg-white/30 text-white">
                   Order Tests
-                  <ChevronRight className="w-4 h-4 ml-2" />
                 </LiquidButton>
               </div>
             </LiquidCard>
@@ -684,7 +676,6 @@ const CaseWise = () => {
                 </LiquidButton>
                 <LiquidButton onClick={() => setPhase('diagnosis')} className="bg-white/20 hover:bg-white/30 text-white">
                   Make Diagnosis
-                  <ChevronRight className="w-4 h-4 ml-2" />
                 </LiquidButton>
               </div>
             </LiquidCard>
@@ -786,7 +777,6 @@ const CaseWise = () => {
 
               <div className="flex justify-center space-x-4">
                 <LiquidButton onClick={() => setPhase('menu')} className="bg-white/20 hover:bg-white/30 text-white">
-                  <RotateCcw className="w-4 h-4 mr-2" />
                   New Case
                 </LiquidButton>
                 <LiquidButton 
