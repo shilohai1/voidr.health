@@ -10,7 +10,6 @@ import { Textarea } from '@/components/ui/textarea';
 import { 
   Upload, 
   FileText, 
-  Sparkles, 
   Download,
   CheckCircle,
   AlertCircle,
@@ -239,7 +238,6 @@ const StudyWithAI = () => {
                   </>
                 ) : (
                   <>
-                    <Sparkles className="w-5 h-5 mr-2" />
                     Generate Summary ({wordCount[0]} words)
                   </>
                 )}
