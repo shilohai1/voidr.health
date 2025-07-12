@@ -18,6 +18,7 @@ import AboutUs from "./pages/AboutUs";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsConditions from "./pages/TermsConditions";
 import NotFound from "./pages/NotFound";
+import Settings from "./pages/Settings";
 
 console.log('App.tsx: Initializing...');
 
@@ -43,8 +44,9 @@ const App = () => (
             <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/clinic-bot" element={<ProtectedRoute><ClinicBot /></ProtectedRoute>} />
             <Route path="/case-wise" element={<ProtectedRoute><CaseWise /></ProtectedRoute>} />
-             <Route path="/symptom-checker" element={<ProtectedRoute><SymptomChecker /></ProtectedRoute>} />
+            <Route path="/symptom-checker" element={<ProtectedRoute><SymptomChecker /></ProtectedRoute>} />
             <Route path="/projects" element={<ProtectedRoute><Projects /></ProtectedRoute>} />
+            <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/about" element={<AboutUs />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
