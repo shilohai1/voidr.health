@@ -11,39 +11,6 @@ const PricingSection = () => {
   const [selectedProduct, setSelectedProduct] = useState('ClinicBot');
 
   const products = {
-    StudyWithAI: {
-      name: 'StudyWithAI',
-      isComingSoon: true,
-      plans: [
-        {
-          name: 'Free',
-          price: 0,
-          period: 'month',
-          features: ['2 AI videos', '720p quality', 'Watermark included'],
-          buttonText: 'Coming Soon',
-          isPopular: false,
-          disabled: true,
-        },
-        {
-          name: 'Student Pro',
-          price: 9,
-          period: 'month',
-          features: ['30 AI videos', '1080p quality', 'No watermark'],
-          buttonText: 'Coming Soon',
-          isPopular: true,
-          disabled: true,
-        },
-        {
-          name: 'Study Beast',
-          price: 19,
-          period: 'month',
-          features: ['Unlimited videos', 'Custom script uploads', 'Priority queue'],
-          buttonText: 'Coming Soon',
-          isPopular: false,
-          disabled: true,
-        },
-      ],
-    },
     ClinicBot: {
       name: 'ClinicBot',
       isComingSoon: false,
@@ -83,6 +50,90 @@ const PricingSection = () => {
           buttonText: 'Choose Plan',
           isPopular: false,
           disabled: false,
+        },
+      ],
+    },
+    CaseWise: {
+      name: 'Case Wise',
+      isComingSoon: false,
+      plans: [
+        {
+          name: 'Free',
+          price: 0,
+          period: 'month',
+          features: [
+            '10 simulations/month',
+            'Basic case scenarios',
+            'Standard feedback',
+            'Core medical conditions'
+          ],
+          buttonText: 'Get Started',
+          isPopular: false,
+          disabled: false,
+        },
+        {
+          name: 'Clinical',
+          price: 19,
+          period: 'month',
+          features: [
+            '50 simulations/month',
+            'Advanced case scenarios',
+            'Detailed feedback & analysis',
+            'Progress tracking',
+            'Specialty-specific cases'
+          ],
+          buttonText: 'Choose Plan',
+          isPopular: true,
+          disabled: false,
+        },
+        {
+          name: 'Resident',
+          price: 29,
+          period: 'month',
+          features: [
+            'Unlimited simulations',
+            'Complex case scenarios',
+            'Comprehensive feedback',
+            'Performance analytics',
+            'Custom case creation',
+            'Priority support'
+          ],
+          buttonText: 'Choose Plan',
+          isPopular: false,
+          disabled: false,
+        },
+      ],
+    },
+    StudyWithAI: {
+      name: 'StudyWithAI',
+      isComingSoon: true,
+      plans: [
+        {
+          name: 'Free',
+          price: 0,
+          period: 'month',
+          features: ['2 AI videos', '720p quality', 'Watermark included'],
+          buttonText: 'Coming Soon',
+          isPopular: false,
+          disabled: true,
+        },
+        {
+          name: 'Student Pro',
+          price: 9,
+          period: 'month',
+          features: ['30 AI videos', '1080p quality', 'No watermark'],
+          buttonText: 'Coming Soon',
+          isPopular: true,
+          disabled: true,
+        },
+        {
+          name: 'Study Beast',
+          price: 19,
+          period: 'month',
+          features: ['Unlimited videos', 'Custom script uploads', 'Priority queue'],
+          buttonText: 'Coming Soon',
+          isPopular: false,
+          disabled: true,
         },
       ],
     },
