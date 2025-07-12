@@ -1,9 +1,30 @@
 
 import React from 'react';
-import { Instagram, Twitter, Heart } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Instagram, Twitter, Heart, Youtube } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
 
 const Footer = () => {
+  const location = useLocation();
+
+  const scrollToPricing = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    
+    // If not on home page, navigate first
+    if (location.pathname !== '/') {
+      window.location.href = '/#pricing';
+      return;
+    }
+
+    // Find the pricing section
+    const pricingSection = document.getElementById('pricing');
+    if (pricingSection) {
+      pricingSection.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  };
+
   return (
     <footer className="bg-gray-900 text-white py-8 sm:py-12 px-4 sm:px-6 md:px-8">
       <div className="max-w-7xl mx-auto">
@@ -42,6 +63,15 @@ const Footer = () => {
               >
                 <Twitter className="w-5 h-5" />
               </a>
+              <a 
+                href="https://www.youtube.com/channel/UCWwnTHkCfCBmHD8_ZIA9avA" 
+                className="text-gray-400 hover:text-white transition-colors p-2 -m-2"
+                aria-label="YouTube"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Youtube className="w-5 h-5" />
+              </a>
             </div>
           </div>
 
@@ -50,12 +80,11 @@ const Footer = () => {
             <h4 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Quick Links</h4>
             <ul className="space-y-2">
               <li>
-                <a href="#products" className="text-gray-400 hover:text-white transition-colors text-sm sm:text-base">
-                  Products
-                </a>
-              </li>
-              <li>
-                <a href="#pricing" className="text-gray-400 hover:text-white transition-colors text-sm sm:text-base">
+                <a 
+                  href="/#pricing" 
+                  onClick={scrollToPricing}
+                  className="text-gray-400 hover:text-white transition-colors text-sm sm:text-base"
+                >
                   Pricing
                 </a>
               </li>
