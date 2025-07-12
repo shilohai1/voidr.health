@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -499,12 +498,16 @@ const CaseWise = () => {
             <LiquidCard className="p-8 text-center mb-8 bg-white/10 backdrop-blur-sm border-white/20">
               <Brain className="w-20 h-20 text-white mx-auto mb-6" />
               <h2 className="text-2xl font-bold text-white mb-4">
-                Think Like a Doctor
+                Welcome to Case Wise
               </h2>
               <p className="text-white/80 mb-8 max-w-2xl mx-auto">
-                Practice clinical reasoning with AI-generated patient scenarios. 
+                Practice clinical reasoning with clinically accurate AI-generated patient scenarios. 
                 From history-taking to diagnosis and management - sharpen your medical skills 
                 before stepping into the hospital.
+              </p>
+              
+              <p className="text-white/60 italic text-sm mb-8 max-w-2xl mx-auto">
+                DISCLAIMER: All characters used in this simulation are fictional and AI generated and does not represent anyone in real life.
               </p>
               
               <LiquidButton 
