@@ -104,6 +104,28 @@ const PricingSection = () => {
         },
       ],
     },
+    AskVoidr: {
+      name: 'AskVoidr',
+      isComingSoon: false,
+      plans: [
+        {
+          name: 'Free',
+          price: 0,
+          period: 'month',
+          features: [
+            'Unlimited symptom analysis',
+            'AI-powered health insights',
+            'Basic health recommendations',
+            'Instant responses',
+            'User-friendly interface',
+            'Available 24/7'
+          ],
+          buttonText: 'Get Started',
+          isPopular: true,
+          disabled: false,
+        }
+      ],
+    },
     StudyWithAI: {
       name: 'StudyWithAI',
       isComingSoon: true,
