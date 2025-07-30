@@ -7,6 +7,7 @@ import { VoidrProductCard } from "@/components/ui/voidr-product-card";
 import Footer from "@/components/Footer";
 import { getBlogPostBySlug, type BlogPost } from "@/lib/blogService";
 import { useEffect, useState } from "react";
+import { marked } from "marked";
 
 export default function BlogPost() {
   const { slug } = useParams();
@@ -106,7 +107,7 @@ export default function BlogPost() {
         <Card>
           <CardContent className="p-6 prose prose-lg max-w-none dark:prose-invert">
             <div 
-              dangerouslySetInnerHTML={{ __html: post.content }}
+              dangerouslySetInnerHTML={{ __html: marked.parse(post.content || "") }}
               className="text-gray-600 dark:text-gray-300"
             />
           </CardContent>

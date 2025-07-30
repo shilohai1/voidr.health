@@ -1,7 +1,3 @@
-// Direct import test to see if Vite can see the file
-// Remove this after debugging
-import testMd from '../blogs/01-ai-medical-education.md?raw';
-console.log('[blogLoader] Direct import test:', testMd);
 import fm from 'front-matter';
 
 export interface BlogPost {
