@@ -20,8 +20,10 @@ export async function getAllBlogPosts(): Promise<BlogPost[]> {
     const raw = modules[path];
     const { attributes, body: content } = fm(raw);
     const data = attributes as Record<string, any>;
+    const slug = path.split('/').pop()?.replace('.md', '') || '';
+    console.log('[blogLoader] Generated slug:', slug, 'from path:', path);
     posts.push({
-      slug: path.split('/').pop()?.replace('.md', '') || '',
+      slug,
       title: data.title || '',
       excerpt: data.excerpt || '',
       content,
