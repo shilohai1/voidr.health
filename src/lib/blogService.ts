@@ -81,6 +81,7 @@ export async function searchBlogPosts(query: string, page: number = 1, limit: nu
 // Async: Get single blog post by slug
 export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> {
   const allPosts = await getAllBlogPosts();
+  console.log('[blogService] Looking for slug:', slug, 'Available slugs:', allPosts.map(p => p.slug));
   return allPosts.find(post => post.slug === slug) || null;
 }
 
