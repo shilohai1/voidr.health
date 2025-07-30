@@ -5,21 +5,20 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { VoidrProductCard } from "@/components/ui/voidr-product-card";
 import Footer from "@/components/Footer";
-import { getBlogPostById, type BlogPost } from "@/lib/blogService";
+import { getBlogPostBySlug, type BlogPost } from "@/lib/blogService";
 import { useEffect, useState } from "react";
 
 export default function BlogPost() {
-  const { id } = useParams();
+  const { slug } = useParams();
   const [post, setPost] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadPost = async () => {
-      if (!id) return;
-      
+      if (!slug) return;
       try {
         setLoading(true);
-        const loadedPost = await getBlogPostById(Number(id));
+        const loadedPost = await getBlogPostBySlug(slug);
         setPost(loadedPost);
       } catch (error) {
         console.error('Error loading blog post:', error);
@@ -27,9 +26,8 @@ export default function BlogPost() {
         setLoading(false);
       }
     };
-
     loadPost();
-  }, [id]);
+  }, [slug]);
 
   if (loading) {
     return (

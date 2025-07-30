@@ -1,52 +1,32 @@
 // Optimized blog service for handling thousands of blog posts
-import { blogPosts } from './blogData';
+import { getAllBlogPosts as getAllBlogPostsDynamic, BlogPost } from './blogLoader';
 
-export interface BlogPost {
-  id: number;
-  title: string;
-  excerpt: string;
-  content: string;
-  author: string;
-  date: string;
-  readTime: string;
-  category: string;
-  featured?: boolean;
-}
+// BlogPost interface is now imported from blogLoader
 
 // In-memory cache for better performance
+
 let cachedPosts: BlogPost[] | null = null;
 let lastCacheTime = 0;
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
-// Function to get all posts with caching
-export function getAllBlogPosts(): BlogPost[] {
+// Async function to get all posts with caching
+export async function getAllBlogPosts(): Promise<BlogPost[]> {
   const now = Date.now();
-  
-  // Use cache if available and fresh
   if (cachedPosts && (now - lastCacheTime) < CACHE_DURATION) {
     return cachedPosts;
   }
-  
-  // Refresh cache
-  cachedPosts = [...blogPosts].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  cachedPosts = (await getAllBlogPostsDynamic()).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   lastCacheTime = now;
-  
   return cachedPosts;
 }
 
-// Optimized pagination function
-export function getBlogPostsPaginated(page: number = 1, limit: number = 12): {
-  posts: BlogPost[];
-  totalPages: number;
-  totalPosts: number;
-  currentPage: number;
-} {
-  const allPosts = getAllBlogPosts();
+// Async pagination function
+export async function getBlogPostsPaginated(page: number = 1, limit: number = 12) {
+  const allPosts = await getAllBlogPosts();
   const totalPosts = allPosts.length;
   const totalPages = Math.ceil(totalPosts / limit);
   const startIndex = (page - 1) * limit;
   const endIndex = startIndex + limit;
-  
   return {
     posts: allPosts.slice(startIndex, endIndex),
     totalPages,
@@ -55,80 +35,70 @@ export function getBlogPostsPaginated(page: number = 1, limit: number = 12): {
   };
 }
 
-// Get posts by category with pagination
-export function getBlogPostsByCategory(category: string, page: number = 1, limit: number = 12): {
-  posts: BlogPost[];
-  totalPages: number;
-  totalPosts: number;
-  currentPage: number;
-} {
-  const allPosts = getAllBlogPosts();
-  const filteredPosts = category === "All" ? allPosts : allPosts.filter(post => post.category === category);
-  
-  const totalPosts = filteredPosts.length;
+// Async: Get posts by category with pagination
+export async function getBlogPostsByCategory(category: string, page: number = 1, limit: number = 12) {
+  const allPosts = await getAllBlogPosts();
+  let filtered;
+  if (category === "All") {
+    filtered = allPosts;
+  } else {
+    filtered = allPosts.filter(post => (post.category || '').trim().toLowerCase() === category.trim().toLowerCase());
+  }
+  // Fallback: if no posts found, show all
+  if (filtered.length === 0) filtered = allPosts;
+  const totalPosts = filtered.length;
   const totalPages = Math.ceil(totalPosts / limit);
   const startIndex = (page - 1) * limit;
   const endIndex = startIndex + limit;
-  
   return {
-    posts: filteredPosts.slice(startIndex, endIndex),
+    posts: filtered.slice(startIndex, endIndex),
     totalPages,
     totalPosts,
     currentPage: page
   };
 }
 
-// Search posts with pagination
-export function searchBlogPosts(query: string, page: number = 1, limit: number = 12): {
-  posts: BlogPost[];
-  totalPages: number;
-  totalPosts: number;
-  currentPage: number;
-} {
-  const allPosts = getAllBlogPosts();
-  const lowercaseQuery = query.toLowerCase();
-  
-  const filteredPosts = allPosts.filter(post => 
-    post.title.toLowerCase().includes(lowercaseQuery) ||
-    post.excerpt.toLowerCase().includes(lowercaseQuery) ||
-    post.author.toLowerCase().includes(lowercaseQuery) ||
-    post.category.toLowerCase().includes(lowercaseQuery)
+// Async: Search posts by title, excerpt, or content
+export async function searchBlogPosts(query: string, page: number = 1, limit: number = 12) {
+  const allPosts = await getAllBlogPosts();
+  const filtered = allPosts.filter(post =>
+    post.title.toLowerCase().includes(query.toLowerCase()) ||
+    post.excerpt.toLowerCase().includes(query.toLowerCase()) ||
+    post.content.toLowerCase().includes(query.toLowerCase())
   );
-  
-  const totalPosts = filteredPosts.length;
+  const totalPosts = filtered.length;
   const totalPages = Math.ceil(totalPosts / limit);
   const startIndex = (page - 1) * limit;
   const endIndex = startIndex + limit;
-  
   return {
-    posts: filteredPosts.slice(startIndex, endIndex),
+    posts: filtered.slice(startIndex, endIndex),
     totalPages,
     totalPosts,
     currentPage: page
   };
 }
 
-// Get single blog post by ID
-export async function getBlogPostById(id: number): Promise<BlogPost | null> {
-  const allPosts = getAllBlogPosts();
-  return allPosts.find(post => post.id === id) || null;
+// Async: Get single blog post by slug
+export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> {
+  const allPosts = await getAllBlogPosts();
+  return allPosts.find(post => post.slug === slug) || null;
 }
 
-// Get featured posts
-export function getFeaturedPosts(limit: number = 3): BlogPost[] {
-  const allPosts = getAllBlogPosts();
+// Async: Get featured posts
+export async function getFeaturedPosts(limit: number = 3): Promise<BlogPost[]> {
+  const allPosts = await getAllBlogPosts();
   return allPosts.filter(post => post.featured).slice(0, limit);
 }
 
-// Get recent posts
-export function getRecentPosts(limit: number = 5): BlogPost[] {
-  const allPosts = getAllBlogPosts();
+// Async: Get recent posts
+export async function getRecentPosts(limit: number = 5): Promise<BlogPost[]> {
+  const allPosts = await getAllBlogPosts();
   return allPosts.slice(0, limit);
 }
 
-// Get all categories
-export function getAllCategories(): string[] {
-  const allPosts = getAllBlogPosts();
+// Async: Get all categories
+export async function getAllCategories(): Promise<string[]> {
+  const allPosts = await getAllBlogPosts();
   const categories = new Set(allPosts.map(post => post.category));
   return ["All", ...Array.from(categories).sort()];
 }

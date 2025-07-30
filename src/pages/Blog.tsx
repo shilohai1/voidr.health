@@ -29,19 +29,16 @@ export default function Blog() {
     const loadData = async () => {
       try {
         setLoading(true);
-        
         // Load categories
-        const availableCategories = getAllCategories();
+        const availableCategories = await getAllCategories();
         setCategories(availableCategories);
-        
         // Load posts based on search or category
         let result;
         if (searchQuery) {
-          result = searchBlogPosts(searchQuery, currentPage, POSTS_PER_PAGE);
+          result = await searchBlogPosts(searchQuery, currentPage, POSTS_PER_PAGE);
         } else {
-          result = getBlogPostsByCategory(selectedCategory, currentPage, POSTS_PER_PAGE);
+          result = await getBlogPostsByCategory(selectedCategory, currentPage, POSTS_PER_PAGE);
         }
-        
         setBlogPosts(result.posts);
         setTotalPages(result.totalPages);
         setTotalPosts(result.totalPosts);
@@ -52,9 +49,13 @@ export default function Blog() {
         setLoading(false);
       }
     };
-
     loadData();
   }, [selectedCategory, currentPage, searchQuery]);
+
+  // Debug: log blogPosts every render
+  useEffect(() => {
+    console.log('[Blog UI] blogPosts state:', blogPosts);
+  }, [blogPosts]);
 
   // Posts are already filtered and paginated by the service
   const paginatedPosts = blogPosts;
@@ -139,12 +140,16 @@ export default function Blog() {
           <div className="flex justify-center items-center py-12">
             <div className="text-white text-xl">Loading blog posts...</div>
           </div>
+        ) : blogPosts.length === 0 ? (
+          <div className="flex justify-center items-center py-12">
+            <div className="text-red-500 text-xl">No blog posts found. (Debug: blogPosts is empty)</div>
+          </div>
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             <AnimatePresence mode="wait">
               {paginatedPosts.map((post) => (
               <motion.div
-                key={`${post.id}-${selectedCategory}-${currentPage}`}
+                key={`${post.slug}-${selectedCategory}-${currentPage}`}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
@@ -176,7 +181,7 @@ export default function Blog() {
                         </div>
                       </div>
                     </div>
-                    <Link to={`/blog/${post.id}`} className="block mt-4">
+                    <Link to={`/blog/${post.slug}`} className="block mt-4">
                       <motion.div
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}

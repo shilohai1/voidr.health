@@ -23,8 +23,9 @@ export default defineConfig(async () => {
         "@assets": path.resolve(__dirname, "attached_assets"),
       },
     },
+    assetsInclude: ['**/*.md'],
     build: {
-      outDir: path.resolve(__dirname, "dist/public"),
+      outDir: path.resolve(__dirname, "dist"),
       emptyOutDir: true,
       rollupOptions: {
         external: [
