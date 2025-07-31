@@ -121,7 +121,8 @@ export default function BlogPost() {
         </div>
       </div>
 
-      {/* Footer */}
+  {/* Footer */}
       <Footer />
     </div>
   );
+}   
