@@ -50,7 +50,7 @@ export default function BlogPost() {
     <div className="min-h-screen bg-gradient-to-br from-[#236dcf] to-white dark:from-gray-900 dark:to-gray-800">
       {/* VOIDR Logo */}
       <div className="absolute top-6 right-6 z-50">
-        <a 
+            <a
           href="/" 
           className="hover:opacity-80 transition-opacity"
         >
@@ -86,8 +86,8 @@ export default function BlogPost() {
           <Badge className="mb-4 bg-white/20 text-white border-white/20">
             {post.category}
           </Badge>
-          <h1 className="text-3xl font-bold mb-4">{post.title}</h1>
-          <p className="text-blue-100 text-lg mb-6">{post.excerpt}</p>
+            <h1 className="text-3xl font-bold mb-4 text-left">{post.title}</h1>
+            <p className="text-blue-100 text-lg mb-6 text-left">{post.excerpt}</p>
           <div className="flex flex-wrap items-center gap-6 text-blue-100 text-sm">
             <div className="flex items-center gap-2">
               <User className="w-4 h-4" />
@@ -112,15 +112,15 @@ export default function BlogPost() {
           >
             <div
               dangerouslySetInnerHTML={{ __html: marked.parse(post.content || "") }}
-            />
+        {/* Full Content - regular box, centered, responsive, black text */}
             {/* Disclaimer box at the end */}
             <div className="mt-10 rounded-xl border border-yellow-300 bg-yellow-50 p-6 flex items-start gap-3">
-              <svg className="w-6 h-6 text-yellow-600 mt-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                className="bg-[#e6f2f0] rounded-2xl shadow-xl p-6 sm:p-8 mb-8 text-black text-lg leading-relaxed prose prose-lg"
               <span className="text-yellow-800 text-base">
                 This content is for informational purposes only and is not intended as medical advice. Always consult with a qualified healthcare provider for diagnosis, treatment, and personalized medical recommendations.
               </span>
             </div>
-          </div>
+                    className="prose prose-lg"
         </div>
 
           {/* VOIDR Health Product Card */}
@@ -131,6 +131,9 @@ export default function BlogPost() {
             <VoidrProductCard />
           </div>
         </div>
+  // Custom CSS for left-aligning headings in markdown
+  // You can add this to your global CSS or Tailwind config for more control
+  // .prose h1, .prose h2, .prose h3 { text-align: left !important; }
       </div>
 
       {/* Footer */}
