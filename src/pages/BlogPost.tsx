@@ -94,12 +94,12 @@ export default function BlogPost() {
           {/* Full Content - perfectly centered, black text, tighter line spacing, left-aligned headings */}
           <div className="w-full sm:max-w-3xl mx-auto">
             <div
-              className="bg-[#e6f2f0] rounded-2xl shadow-xl p-6 sm:p-8 mb-8 text-black text-lg leading-[1.5] prose prose-lg w-full"
+              className="bg-[#e6f2f0] rounded-2xl shadow-xl p-6 sm:p-8 mb-8 text-black text-lg leading-[1.5] w-full"
               style={{ textAlign: 'justify' }}
             >
               <div
                 dangerouslySetInnerHTML={{ __html: marked.parse(post.content || "") }}
-                className="prose prose-lg custom-prose"
+                className="custom-prose"
               />
             </div>
           </div>
