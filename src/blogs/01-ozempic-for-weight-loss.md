@@ -18,7 +18,7 @@ This comprehensive, medically-reviewed article explains what Ozempic really does
 
 ---
 
-## ⚖️ The Obesity Epidemic: A Growing Health Crisis
+## The Obesity Epidemic: A Growing Health Crisis
 
 According to the **CDC**:
 - Over **42% of U.S. adults** are obese
@@ -30,7 +30,7 @@ Enter **Ozempic**.
 
 ---
 
-## 💊 What is Ozempic?
+## What is Ozempic?
 
 **Generic name**: Semaglutide  
 **FDA approval**:  
@@ -46,7 +46,7 @@ Patients report feeling full faster, eating less, and gradually losing significa
 
 ---
 
-## 🧪 How Does Ozempic Help With Weight Loss?
+## How Does Ozempic Help With Weight Loss?
 
 ### Mechanism of Action
 - Binds to GLP-1 receptors in the **brain and gut**
@@ -60,7 +60,7 @@ Patients report feeling full faster, eating less, and gradually losing significa
   
 ---
 
-## 📊 Clinical Trial Data: What the Research Says
+## Clinical Trial Data: What the Research Says
 
 ### STEP-1 Trial (*New England Journal of Medicine, 2021*)
 - **Participants**: 1,961 non-diabetic adults with obesity
@@ -75,7 +75,7 @@ Patients report feeling full faster, eating less, and gradually losing significa
 
 ---
 
-## 👨‍⚕️ What Doctors Are Saying
+## What Doctors Are Saying
 
 >_"Semaglutide is the biggest breakthrough in obesity treatment since bariatric surgery."_  
 — Dr. Fatima Khan, Endocrinologist, Mayo Clinic
@@ -104,7 +104,7 @@ Patients report feeling full faster, eating less, and gradually losing significa
 
 ---
 
-## ❌ Who Should *Not* Take Ozempic?
+## Who Should *Not* Take Ozempic?
 
 **Avoid if you have:**
 - History of **medullary thyroid carcinoma**
@@ -114,7 +114,7 @@ Patients report feeling full faster, eating less, and gradually losing significa
 
 ---
 
-## 💉 How is Ozempic Administered?
+## How is Ozempic Administered?
 
 - **Injection**: Once weekly (subcutaneous)
 - **Starting dose**: 0.25 mg → gradually increased to 2.0 mg
@@ -124,7 +124,7 @@ Patients report feeling full faster, eating less, and gradually losing significa
 
 ---
 
-## 🏷️ Cost and Accessibility
+## Cost and Accessibility
 
 ### Without Insurance:
 - $900–$1,200/month (U.S.)
@@ -140,7 +140,7 @@ Patients report feeling full faster, eating less, and gradually losing significa
 
 ---
 
-## 🤖 Can AI Tools Like Voidr Help Monitor GLP-1 Use?
+## Can AI Tools Like Voidr Help Monitor GLP-1 Use?
 
 Yes — AI platforms like **Voidr Health** can:
 - Analyze symptom patterns (e.g., GI side effects)
@@ -148,7 +148,7 @@ Yes — AI platforms like **Voidr Health** can:
 
 ---
 
-## 🔍 FAQs
+## FAQs
 
 **Q: Can I take Ozempic just to lose 10–15 pounds?**  
 A: Not recommended unless clinically obese (BMI >30 or >27 with comorbidities). It’s a **medical treatment**, not a vanity drug.
@@ -161,7 +161,7 @@ A: Not necessarily. Surgery may lead to more **sustained loss**, but semaglutide
 
 ---
 
-## 📚 References
+## References
 
 1. New England Journal of Medicine (2021) – [Semaglutide and Weight Loss in Adults with Obesity](https://www.nejm.org/doi/full/10.1056/NEJMoa2032183)  
 2. FDA Drug Label for Ozempic – [Drugs@FDA](https://www.accessdata.fda.gov/drugsatfda_docs/label/2022/209637s017lbl.pdf)  
@@ -173,7 +173,7 @@ A: Not necessarily. Surgery may lead to more **sustained loss**, but semaglutide
 
 ---
 
-## 🎯 Final Thoughts
+## Final Thoughts
 
 Ozempic is a **groundbreaking medication** that offers real hope for patients struggling with obesity, metabolic syndrome, and insulin resistance. But it’s not a quick fix.
 
