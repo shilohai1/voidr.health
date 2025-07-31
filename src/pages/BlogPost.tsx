@@ -101,8 +101,10 @@ export default function BlogPost() {
                 dangerouslySetInnerHTML={{ __html: marked.parse(post.content || "") }}
                 className="prose prose-lg custom-prose"
               />
-              {/* Disclaimer box at the end */}
-              <div className="mt-10 rounded-xl border border-yellow-300 bg-yellow-50 p-6 flex items-start gap-3">
+            </div>
+            {/* Disclaimer box - now outside the content box, above the product card */}
+            <div className="w-full mt-2 mb-12">
+              <div className="rounded-xl border border-yellow-300 bg-yellow-50 p-6 flex items-start gap-3">
                 <svg className="w-6 h-6 text-yellow-600 mt-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 <span className="text-yellow-800 text-base">
                   This content is for informational purposes only and is not intended as medical advice. Always consult with a qualified healthcare provider for diagnosis, treatment, and personalized medical recommendations.
@@ -112,7 +114,7 @@ export default function BlogPost() {
           </div>
 
           {/* VOIDR Health Product Card */}
-          <div className="mt-12 w-full">
+          <div className="mt-0 w-full max-w-3xl mx-auto">
             <h3 className="text-2xl font-bold mb-6 text-center text-white">
               Discover VOIDR Health
             </h3>
