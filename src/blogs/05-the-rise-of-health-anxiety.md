@@ -1,5 +1,5 @@
 ---
-id: 12
+id: 5
 title: "The Rise of Health Anxiety in the Age of AI and TikTok"
 excerpt: "More people than ever are experiencing health anxiety, fueled by algorithm-driven content, online symptom checkers, and misinformation. Learn how to navigate digital health tools responsibly—and how AI like Voidr Health can help instead of harm."
 author: "Jonathan Boban"
