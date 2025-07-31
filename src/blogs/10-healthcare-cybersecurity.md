@@ -1,6 +1,6 @@
 ---
 id: 10
-title: "Healthcare Cybersecurity: Protecting Patient Data in the Digital Age"
+title: "Healthcare TESTING: Protecting Patient Data in the Digital Age"
 excerpt: "Understand the critical importance of cybersecurity in healthcare and how to protect sensitive patient information from cyber threats."
 author: "Dr. Sarah Kim"
 date: "2024-02-15"
@@ -8,7 +8,7 @@ readTime: "6 min read"
 category: "Healthcare Security"
 ---
 
-# Healthcare Cybersecurity: Protecting Patient Data in the Digital Age
+# Healthcare TESTING: Protecting Patient Data in the Digital Age
 
 As healthcare becomes increasingly digital, cybersecurity has become a critical concern for healthcare organizations. Patient data is among the most valuable targets for cybercriminals, making robust security measures essential for protecting sensitive health information.
 
