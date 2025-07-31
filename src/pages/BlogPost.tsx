@@ -80,14 +80,15 @@ export default function BlogPost() {
 
           {/* Post Header */}
 
+
         {/* Post Header */}
-        <div className="mb-8 bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-6 rounded-2xl shadow-lg">
+        <div className="mb-8 mx-auto max-w-3xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-6 rounded-2xl shadow-lg">
           <Badge className="mb-4 bg-white/20 text-white border-white/20">
             {post.category}
           </Badge>
           <h1 className="text-3xl font-bold mb-4">{post.title}</h1>
           <p className="text-blue-100 text-lg mb-6">{post.excerpt}</p>
-          <div className="flex items-center gap-6 text-blue-100 text-sm">
+          <div className="flex flex-wrap items-center gap-6 text-blue-100 text-sm">
             <div className="flex items-center gap-2">
               <User className="w-4 h-4" />
               <span>{post.author}</span>
@@ -103,18 +104,22 @@ export default function BlogPost() {
           </div>
         </div>
 
-        {/* Full Content - no card, white justified text */}
-        <div className="p-6 max-w-none text-white text-lg leading-relaxed" style={{ textAlign: 'justify' }}>
+        {/* Full Content - glassmorphism box, centered, responsive */}
+        <div className="mx-auto max-w-3xl w-full">
           <div
-            dangerouslySetInnerHTML={{ __html: marked.parse(post.content || "") }}
-            className="prose prose-lg prose-invert text-white" // tailwind prose-invert for dark bg
-          />
-          {/* Disclaimer box at the end */}
-          <div className="mt-10 rounded-xl border border-yellow-300 bg-yellow-50 p-6 flex items-start gap-3">
-            <svg className="w-6 h-6 text-yellow-600 mt-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-            <span className="text-yellow-800 text-base">
-              This content is for informational purposes only and is not intended as medical advice. Always consult with a qualified healthcare provider for diagnosis, treatment, and personalized medical recommendations.
-            </span>
+            className="backdrop-blur-lg bg-white/20 dark:bg-white/10 rounded-2xl shadow-xl p-6 sm:p-8 mb-8 text-white text-lg leading-relaxed prose prose-lg prose-invert"
+            style={{ textAlign: 'justify' }}
+          >
+            <div
+              dangerouslySetInnerHTML={{ __html: marked.parse(post.content || "") }}
+            />
+            {/* Disclaimer box at the end */}
+            <div className="mt-10 rounded-xl border border-yellow-300 bg-yellow-50 p-6 flex items-start gap-3">
+              <svg className="w-6 h-6 text-yellow-600 mt-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              <span className="text-yellow-800 text-base">
+                This content is for informational purposes only and is not intended as medical advice. Always consult with a qualified healthcare provider for diagnosis, treatment, and personalized medical recommendations.
+              </span>
+            </div>
           </div>
         </div>
 
