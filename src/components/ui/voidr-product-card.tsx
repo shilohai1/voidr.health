@@ -6,18 +6,9 @@ export function VoidrProductCard() {
       <CardSpotlight className="relative h-auto w-[24rem] p-6 overflow-hidden">
         {/* Glow Behind Text */}
         <div className="absolute inset-0 z-0 flex items-center justify-center">
-          <div className="w-80 h-80 bg-gradient-to-br from-blue-500 via-purple-500 to-indigo-600 blur-3xl opacity-40 rounded-full" />
+          <div className="w-90 h-80 bg-gradient-to-br from-#AEAEEE to-#94BBE9 blur-3xl opacity-40 rounded-full" />
         </div>
-
-        {/* VOIDR Logo */}
-        <div className="flex items-center justify-center mb-6 relative z-10">
-          <img 
-            src="/public/lovable-uploads/7e5bb1d3-2b2f-4bae-bb4a-ec509545e99d.webp" 
-            alt="VOIDR Logo" 
-            className="h-20 w-20 object-contain filter brightness-0 invert"
-          />
-        </div>
-
+        
         {/* Title */}
         <p className="text-2xl font-bold text-white text-center mb-2 relative z-10">
           VOIDR Health Platform
@@ -27,16 +18,15 @@ export function VoidrProductCard() {
         <div className="text-neutral-200 text-sm mb-4 relative z-10">
           Discover our AI-powered medical education tools:
           <ul className="list-none mt-2 space-y-1">
-            <Step title="ClinicBot - Document Analysis & Summarization" />
+            <Step title="ClinicBot - Document and Clinical note Summarization" />
             <Step title="CaseWise - Interactive Medical Case Simulations" />
-            <Step title="SymptomChecker - AI-Powered Diagnostic Support" />
-            <Step title="Video Generation - Educational Content Creation" />
+            <Step title="AskVoidr - AI-Powered Diagnostic Support" />
           </ul>
         </div>
 
         {/* Footer Description */}
         <p className="text-neutral-400 text-xs text-center mb-4 relative z-10">
-          Enhance your medical education with cutting-edge AI technology designed for healthcare professionals.
+          Enhance your medical education with cutting-edge AI designed for healthcare professionals.
         </p>
 
         {/* CTA Button */}
