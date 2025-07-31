@@ -99,7 +99,7 @@ export default function BlogPost() {
             >
               <div
                 dangerouslySetInnerHTML={{ __html: marked.parse(post.content || "") }}
-                className="prose prose-lg prose-headings:text-left prose-p:leading-tight prose-p:my-1 mx-auto px-2 sm:px-6"
+                className="prose prose-lg prose-headings:text-left prose-p:leading-tight mx-auto px-2 sm:px-6"
               />
             </div>
           </div>
