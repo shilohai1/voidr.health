@@ -99,7 +99,7 @@ export default function BlogPost() {
             >
               <div
                 dangerouslySetInnerHTML={{ __html: marked.parse(post.content || "") }}
-                className="prose prose-lg prose-headings:text-left prose-p:leading-tight mx-auto px-2 sm:px-6"
+                className="prose prose-lg prose-headings:text-left prose-p:leading-tight prose-p:my-1 mx-auto px-2 sm:px-6"
               />
             </div>
           </div>
@@ -115,11 +115,23 @@ export default function BlogPost() {
           </div>
 
           {/* VOIDR Health Product Card */}
-          <div className="mt-0 w-full sm:max-w-3xl mx-auto">
+          <div className="mt-0 w-full sm:max-w-3xl mx-auto flex flex-col items-center">
+            {/* VOIDR Logo with gradient background and hover */}
+            <div className="w-full flex justify-center mb-4">
+              <div className="rounded-2xl p-2 transition-all duration-300 bg-gradient-to-r from-[#AEAEEE] to-[#94BBE9] hover:scale-105 shadow-lg">
+                <picture>
+                  <source srcSet="/lovable-uploads/7e5bb1d3-2b2f-4bae-bb4a-ec509545e99d.webp" type="image/webp" />
+                  <img src="/lovable-uploads/7e5bb1d3-2b2f-4bae-bb4a-ec509545e99d.png" alt="VOIDR" className="h-12 w-auto" />
+                </picture>
+              </div>
+            </div>
             <h3 className="text-2xl font-bold mb-6 text-center text-white">
               Discover VOIDR Health
             </h3>
-            <VoidrProductCard />
+            {/* Product Card without the 'Video Generation - Educational Content Creation' line */}
+            <div className="w-full">
+              <VoidrProductCard hideVideoGenLine />
+            </div>
           </div>
         </div>
       </div>
