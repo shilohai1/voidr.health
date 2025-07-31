@@ -46,7 +46,7 @@ const Footer = () => {
             </picture>
             <p className="text-gray-400 mb-4 sm:mb-6 max-w-md text-sm sm:text-base">
               AI-powered tools designed specifically for busy Medical students,
-              Residents, and Doctors. Simplifying medical education one video at
+              Residents, and Doctors. Simplifying medical education one step at
               a time.
             </p>
 
