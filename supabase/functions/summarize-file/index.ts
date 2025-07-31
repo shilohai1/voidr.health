@@ -81,17 +81,15 @@ serve(async (req) => {
 
     // Parse the request body
     const requestBody = await req.json()
-    const { file, filename, mimeType, wordCount = 500 } = requestBody
+    const { file, filename, mimeType, wordCount = 500, text } = requestBody
 
     let textContent = ''
     let originalFilename = filename || 'manual_input.txt'
 
     if (file) {
       console.log('Processing file data...')
-      
       // Decode base64 file
       const fileBuffer = Uint8Array.from(atob(file), c => c.charCodeAt(0))
-      
       // Extract text based on file type
       if (mimeType === 'application/pdf') {
         textContent = `Content from PDF file: ${originalFilename}. This is a mock extraction. In production, you would use a proper PDF parsing library.`
@@ -102,6 +100,11 @@ serve(async (req) => {
       } else {
         textContent = new TextDecoder().decode(fileBuffer)
       }
+    } else if (typeof text === 'string' && text.trim().length > 0) {
+      // Accept plain text input
+      textContent = text.trim();
+      originalFilename = filename || 'manual_input.txt';
+      console.log('Processing plain text input, length:', textContent.length);
     } else {
       return new Response(
         JSON.stringify({ error: 'No file or text content provided.' }),
