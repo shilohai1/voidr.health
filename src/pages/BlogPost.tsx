@@ -46,8 +46,8 @@ export default function BlogPost() {
     );
   }
 
-   return (
-    <div className="min-h-screen" style={{ background: 'linear-gradient(135deg, #AEAEEE 0%, #94BBE9 100%)' }}>
+  return (
+    <div className="min-h-screen flex flex-col items-center" style={{ background: 'linear-gradient(135deg, #AEAEEE 0%, #94BBE9 100%)' }}>
       {/* VOIDR Logo */}
       <div className="absolute top-6 right-6 z-50">
         <a href="/" className="hover:opacity-80 transition-opacity">
@@ -58,8 +58,8 @@ export default function BlogPost() {
         </a>
       </div>
 
-      <div className="px-4 py-12">
-        <div className="max-w-4xl mx-auto">
+      <div className="px-4 py-12 w-full flex flex-col items-center">
+        <div className="max-w-4xl w-full mx-auto">
           {/* Back Button */}
           <div className="mb-6">
             <Link to="/blog" className="inline-flex items-center bg-white/90 backdrop-blur-sm hover:bg-white text-gray-800 px-4 py-2 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 group">
@@ -91,15 +91,15 @@ export default function BlogPost() {
             </div>
           </div>
 
-          {/* Full Content - regular box, centered, responsive, black text */}
+          {/* Full Content - regular box, perfectly centered, black text, tighter line spacing, left-aligned headings */}
           <div className="mx-auto max-w-3xl w-full">
             <div
-              className="bg-[#e6f2f0] rounded-2xl shadow-xl p-6 sm:p-8 mb-8 text-black text-lg leading-relaxed prose prose-lg"
+              className="bg-[#e6f2f0] rounded-2xl shadow-xl p-6 sm:p-8 mb-8 text-black text-lg leading-[1.5] prose prose-lg"
               style={{ textAlign: 'justify' }}
             >
               <div
                 dangerouslySetInnerHTML={{ __html: marked.parse(post.content || "") }}
-                className="prose prose-lg"
+                className="prose prose-lg custom-prose"
               />
               {/* Disclaimer box at the end */}
               <div className="mt-10 rounded-xl border border-yellow-300 bg-yellow-50 p-6 flex items-start gap-3">
@@ -121,8 +121,8 @@ export default function BlogPost() {
         </div>
       </div>
 
-  {/* Footer */}
+      {/* Footer */}
       <Footer />
     </div>
   );
-}   
+}
