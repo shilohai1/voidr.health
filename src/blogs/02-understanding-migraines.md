@@ -10,7 +10,7 @@ category: "Neurology"
 
 # Understanding Migraines: Symptoms, Triggers, and AI Tools That Help You Cope
 
-Migraines are not just “bad headaches.” They are a complex neurological condition that can significantly impact daily life, productivity, and emotional well-being. Affecting over **1 billion people globally**, migraines rank among the **top 10 most disabling medical conditions**, according to the World Health Organization (WHO).
+Migraines are not just “bad headaches.” They are a complex neurological condition that can significantly impact daily life, productivity, and emotional well-being. Affecting over **1 billion people globally**, migraines rank among the top 10 most disabling medical conditions, according to the World Health Organization (WHO).
 
 In this article, we explore:
 - What migraines are
@@ -25,15 +25,15 @@ In this article, we explore:
 
 ## What Is a Migraine?
 
-A **migraine** is a recurrent neurological disorder characterized by **moderate to severe head pain**, often on one side of the head. It may be accompanied by **nausea, vomiting, and heightened sensitivity to light, sound, or smell**.
+A migraine is a recurrent neurological disorder characterized by moderate to severe head pain, often on one side of the head. It may be accompanied by nausea, vomiting, and heightened sensitivity to light, sound, or smell.
 
-According to the **American Migraine Foundation**, migraines differ from typical tension headaches in both severity and complexity, often occurring in **distinct phases**.
+According to the American Migraine Foundation, migraines differ from typical tension headaches in both severity and complexity, often occurring in distinct phases.
 
 ---
 
 ## Types of Migraines
 
-Migraines can present differently for different individuals. The **International Classification of Headache Disorders (ICHD-3)** identifies several types:
+Migraines can present differently for different individuals. The International Classification of Headache Disorders (ICHD-3) identifies several types:
 
 ### 1. Migraine Without Aura
 - Most common type
@@ -47,7 +47,7 @@ Migraines can present differently for different individuals. The **International
 - Sensory symptoms: tingling, numbness
 
 ### 3. Chronic Migraine
-- Occurs **15 or more days/month** for at least 3 months
+- Occurs 15 or more days/month for at least 3 months
 - Often evolves from episodic migraines
 - May include medication overuse headache
 
@@ -59,7 +59,7 @@ Migraines can present differently for different individuals. The **International
 
 ## The Four Phases of a Migraine Episode
 
-Understanding the **stages of a migraine** can help you recognize early warning signs and respond appropriately.
+Understanding the stages of a migraine can help you recognize early warning signs and respond appropriately.
 
 | Phase       | Description |
 |-------------|-------------|
@@ -68,13 +68,13 @@ Understanding the **stages of a migraine** can help you recognize early warning 
 | **Attack**   | Actual headache phase lasting 4–72 hours |
 | **Postdrome**| Fatigue, confusion, or “migraine hangover” |
 
-**Voidr Health's AskVoidr** symptom analyzer helps users track prodrome and aura symptoms to better understand patterns and potential triggers over time.
+Voidr Health's AskVoidr symptom analyzer helps users track prodrome and aura symptoms to better understand patterns and potential triggers over time.
 
 ---
 
 ## What Triggers Migraines?
 
-Migraines are complex, and **triggers vary widely** from person to person. Common triggers include:
+Migraines are complex, and triggers vary widely from person to person. Common triggers include:
 
 ### Diet-Related Triggers
 - Aged cheeses
@@ -97,16 +97,16 @@ Migraines are complex, and **triggers vary widely** from person to person. Commo
 ### Environmental Factors
 - Bright lights, strong smells, weather changes, barometric pressure shifts
 
-**Tip**: Keep a **migraine journal** to track your diet, sleep, mood, and weather. This can be done manually or through AI tools like **Voidr Health**, which uses natural language inputs to help recognize patterns from daily symptoms.
+**Tip**: Keep a migraine journal to track your diet, sleep, mood, and weather. This can be done manually or through AI tools like Voidr Health, which uses natural language inputs to help recognize patterns from daily symptoms.
 
 ---
 
 ## Diagnosis: How Are Migraines Evaluated?
 
-Doctors typically diagnose migraines based on **clinical history**, symptoms, and a **neurological exam**. There’s no single test to confirm a migraine.
+Doctors typically diagnose migraines based on clinical history, symptoms, and a neurological exam. There’s no single test to confirm a migraine.
 
 According to the **Mayo Clinic** and **American Headache Society**, diagnosis includes:
-- **Frequency and intensity** of symptoms
+- Frequency and intensity of symptoms
 - Exclusion of other neurological or vascular disorders
 - Imaging (CT or MRI) only if atypical or worsening patterns appear
 
@@ -114,7 +114,7 @@ According to the **Mayo Clinic** and **American Headache Society**, diagnosis in
 
 ## Research-Backed Ways to Manage Migraines
 
-While there’s no cure for migraines, several **scientifically-supported strategies** can reduce their frequency and severity.
+While there’s no cure for migraines, several scientifically-supported strategies can reduce their frequency and severity.
 
 > ⚠️ **Important:** Always consult a healthcare provider before starting or stopping any treatment.
 
@@ -142,7 +142,7 @@ According to a 2024 study in *Medical Education*, over **30% of medical students
 - Screen overuse
 - Skipped meals or caffeine overdependence
 
-For med students, tools like **Voidr Health’s ClinicBot** help minimize triggers during clinicals by **summarizing complex notes**, saving mental energy and reducing cognitive overload—a known migraine amplifier.
+For med students, tools like Voidr Health’s ClinicBot help minimize triggers during clinicals by summarizing complex notes, saving mental energy and reducing cognitive overload—a known migraine amplifier.
 
 ---
 
@@ -170,7 +170,7 @@ Migraines are usually not life-threatening, but **some types (like hemiplegic or
 For many, yes. But it’s highly individual. Elimination diets should be supervised by a professional.
 
 **Q: Can I use AI to manage my migraines?**  
-AI tools like **Voidr Health** are not replacements for a neurologist, but they can help you **track, understand, and communicate your symptoms** more effectively.
+AI tools like **Voidr Health** are not replacements for a neurologist, but they can help you track, understand, and communicate your symptoms more effectively.
 
 **Q: Are migraines genetic?**  
 Yes — about **70% of migraine sufferers** report a family history, according to the **National Institute of Neurological Disorders and Stroke (NINDS)**.
