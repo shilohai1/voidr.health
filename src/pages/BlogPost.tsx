@@ -59,7 +59,7 @@ export default function BlogPost() {
       </div>
 
       <div className="px-4 py-12 w-full flex flex-col items-center justify-center">
-        <div className="max-w-4xl w-full mx-auto flex flex-col items-center justify-center">
+        <div className="w-full sm:max-w-3xl mx-auto flex flex-col items-center justify-center">
           {/* Back Button */}
           <div className="mb-6 w-full">
             <Link to="/blog" className="inline-flex items-center bg-white/90 backdrop-blur-sm hover:bg-white text-gray-800 px-4 py-2 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 group">
@@ -69,7 +69,7 @@ export default function BlogPost() {
           </div>
 
           {/* Post Header */}
-          <div className="mb-8 w-full max-w-3xl mx-auto bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-6 rounded-2xl shadow-lg">
+          <div className="mb-8 w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-6 rounded-2xl shadow-lg">
             <Badge className="mb-4 bg-white/20 text-white border-white/20">
               {post.category}
             </Badge>
@@ -91,8 +91,8 @@ export default function BlogPost() {
             </div>
           </div>
 
-          {/* Full Content - regular box, perfectly centered, black text, tighter line spacing, left-aligned headings */}
-          <div className="w-full max-w-3xl mx-auto flex flex-col items-center justify-center">
+          {/* Full Content - perfectly centered, black text, tighter line spacing, left-aligned headings */}
+          <div className="w-full sm:max-w-3xl mx-auto">
             <div
               className="bg-[#e6f2f0] rounded-2xl shadow-xl p-6 sm:p-8 mb-8 text-black text-lg leading-[1.5] prose prose-lg w-full"
               style={{ textAlign: 'justify' }}
@@ -102,19 +102,20 @@ export default function BlogPost() {
                 className="prose prose-lg custom-prose"
               />
             </div>
-            {/* Disclaimer box - now outside the content box, above the product card */}
-            <div className="w-full mt-2 mb-12">
-              <div className="rounded-xl border border-yellow-300 bg-yellow-50 p-6 flex items-start gap-3">
-                <svg className="w-6 h-6 text-yellow-600 mt-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                <span className="text-yellow-800 text-base">
-                  This content is for informational purposes only and is not intended as medical advice. Always consult with a qualified healthcare provider for diagnosis, treatment, and personalized medical recommendations.
-                </span>
-              </div>
+          </div>
+
+          {/* Disclaimer box - now outside the content box, above the product card */}
+          <div className="w-full sm:max-w-3xl mx-auto mt-2 mb-12">
+            <div className="rounded-xl border border-yellow-300 bg-yellow-50 p-6 flex items-start gap-3">
+              <svg className="w-6 h-6 text-yellow-600 mt-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              <span className="text-yellow-800 text-base">
+                This content is for informational purposes only and is not intended as medical advice. Always consult with a qualified healthcare provider for diagnosis, treatment, and personalized medical recommendations.
+              </span>
             </div>
           </div>
 
           {/* VOIDR Health Product Card */}
-          <div className="mt-0 w-full max-w-3xl mx-auto">
+          <div className="mt-0 w-full sm:max-w-3xl mx-auto">
             <h3 className="text-2xl font-bold mb-6 text-center text-white">
               Discover VOIDR Health
             </h3>
