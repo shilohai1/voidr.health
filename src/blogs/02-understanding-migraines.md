@@ -20,7 +20,9 @@ In this article, we explore:
 - How tools like **Voidr Health** are supporting both patients and med students in identifying and managing migraine patterns.
 
 > _Disclaimer: This article is for educational purposes only. It is not a substitute for professional medical advice, diagnosis, or treatment._
+
 ---
+
 ## What Is a Migraine?
 
 A migraine is a recurrent neurological disorder characterized by moderate to severe head pain, often on one side of the head. It may be accompanied by nausea, vomiting, and heightened sensitivity to light, sound, or smell.
