@@ -99,7 +99,7 @@ export default function BlogPost() {
             >
               <div
                 dangerouslySetInnerHTML={{ __html: marked.parse(post.content || "") }}
-                className="prose prose-lg prose-headings:text-left prose-p:leading-tight mx-auto px-2 sm:px-6"
+                className="prose prose-lg prose-headings:text-left prose-p:leading-tight mx-auto px-0 sm:px-10"
               />
             </div>
           </div>
@@ -109,7 +109,7 @@ export default function BlogPost() {
             <div className="rounded-xl border border-yellow-300 bg-yellow-50 p-6 flex items-start gap-3">
               <svg className="w-6 h-6 text-yellow-600 mt-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
               <span className="text-yellow-800 text-base">
-                This content is for informational purposes only and is not intended as medical advice. Always consult with a qualified healthcare provider for diagnosis, treatment, and personalized medical recommendations.
+                This content is for Educational and Informational use only and is not intended as medical advice. Consult a certified healthcare professional for diagnosis, treatment, and medical advice.
               </span>
             </div>
           </div>
