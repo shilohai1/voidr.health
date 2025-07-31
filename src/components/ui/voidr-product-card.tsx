@@ -6,7 +6,7 @@ export function VoidrProductCard() {
       <CardSpotlight className="relative h-auto w-[24rem] p-6 overflow-hidden">
         {/* Glow Behind Text */}
         <div className="absolute inset-0 z-0 flex items-center justify-center">
-          <div className="w-90 h-80 bg-gradient-to-br from-#AEAEEE to-#94BBE9 blur-3xl opacity-40 rounded-full" />
+          <div className="w-80 h-80 bg-gradient from-#AEAEEE to-#94BBE9 blur-3xl opacity-40 rounded-full" />
         </div>
         
         {/* Title */}
