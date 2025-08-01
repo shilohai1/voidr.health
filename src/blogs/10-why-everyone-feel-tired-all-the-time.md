@@ -5,7 +5,7 @@ excerpt: "Explore the complex reasons behind chronic low-level fatigue that affe
 author: "Jonathan Boban"
 date: "2025-08-01"
 readTime: "11 min read"
-category: "General Health & Wellness"
+category: "Public Health"
 ---
 
 # Why Everyone Feels Tired All the Time: The Hidden Epidemic of Subclinical Fatigue
