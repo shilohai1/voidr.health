@@ -3,7 +3,7 @@ id: 7
 title: "The Overlap Between Autism and ADHD in Adults: What Science (and Real People) Are Teaching Us"
 excerpt: "Autism and ADHD often present together in adults—but many are only now being diagnosed. Discover the latest research on neurodivergence, masking, and how AI tools like Voidr Health can help make sense of your symptoms."
 author: "Jonathan Boban"
-date: "2025-08-1"
+date: "2025-08-01"
 readTime: "11 min read"
 category: "Mental Health"
 ---
