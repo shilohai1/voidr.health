@@ -95,7 +95,7 @@ export default function BlogPost() {
           <div className="w-full sm:max-w-3xl mx-auto">
             <div
               className="bg-[#e6f2f0] rounded-2xl shadow-xl p-6 sm:p-8 mb-8 text-black text-lg leading-[1.5] w-full"
-              style={{ textAlign: 'justify' }}
+              style={{ textAlign: 'left' }}
             >
               <div
                 dangerouslySetInnerHTML={{ __html: marked.parse(post.content || "") }}
