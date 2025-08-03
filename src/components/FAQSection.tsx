@@ -12,28 +12,28 @@ const FAQSection = () => {
     {
       id: 1,
       question: "What is Voidr and how can it help me?",
-      answer: "Voidr is your AI-powered health assistant, built to guide you through symptoms, help you understand possible conditions, and get personalized insights fast. Whether you’re unsure about a weird symptom or need help before seeing a doctor, Voidr is here to simplify healthcare for you."
+      answer: "Voidr Health is an AI-powered platform built by med students, for med students. It offers 3 tools: ClinicBot, AskVoidr and Case Wise which simplify your studies, sharpen clinical reasoning, and save hours of revision time. Whether you're analyzing symptoms, summarizing lecture notes, or simulating real-world patient cases, Voidr makes learning faster, smarter, and more realistic."
     },
     {
       id: 2,
       question: "Is Voidr a replacement for seeing a doctor?",
-      answer: "No — Voidr is here to support, not replace, professional care. Think of it as a super-smart pre-check tool that gives you clarity before your appointment, or helps you decide if it’s time to see a doctor urgently."
+      answer: "No. Voidr is strictly an educational tool designed for medical students. It helps users learn diagnostic reasoning and clinical decision-making. but it is not meant to diagnose or replace professional medical advice."
     },
     {
       id: 3,
       question: "Can I trust the accuracy of the medical content?",
-      answer: "Yes. Our AI is trained with reliable, up-to-date medical sources and reviewed with clinical logic in mind. You still need to cross-check, but it's made to be your smart study partner."
+      answer: "Yes. Voidr's AI is trained on peer-reviewed medical sources, textbooks, and verified clinical frameworks. All outputs are designed to be medically accurate, realistic, and aligned with how real-world cases are handled. We also continuosuly update the system with feedback from med students and professionals."
     },
     {
       id: 4,
       question: "I have no medical background. Will I still understand the results?",
-      answer: "That’s exactly what Voidr is for! Everything is written in plain language, without confusing jargon. ClinicBot and AskVoidr explain things like a friend who happens to know a lot about medicine — not like a textbook."
+      answer: "Voidr is designed primarily for medical students and healthcare learners. However, the results are simplified and structured to be understandable with basic medical knowledge. ClinicBot even allows you to ask for "simplified summaries" if you're struggling with heavy material."
     },
     {
       id: 5,
       question: "What makes Voidr different from just Googling my symptoms?",
-      answer: "Great question — Googling symptoms often leads to anxiety and worst-case scenarios. Voidr uses AI trained on real clinical data to guide you through a smart, structured process (via AskVoidr) instead of dumping you into a sea of random articles. It’s focused, personalized, and way less stressful."
-    }
+      answer: "Great question — Google gives scattered, generic results. AskVoidr, our AI symptom analyzer, uses real clinical logic to walk through your input just like a doctor would during a case. It prioritizes reasoning, context and differential diagnoses rather than keyword matching."
+    },
   ];
 
   const toggleItem = (id: number) => {
