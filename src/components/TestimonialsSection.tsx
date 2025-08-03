@@ -42,6 +42,8 @@ const TestimonialsSection = () => {
     }
   ];
 
+  // For mobile, show all testimonials in a single column
+  const allTestimonials = testimonials;
   const firstColumn = testimonials.slice(0, 2);
   const secondColumn = testimonials.slice(2, 4);
   const thirdColumn = testimonials.slice(4, 6);
@@ -71,7 +73,12 @@ const TestimonialsSection = () => {
         </motion.div>
 
         <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 mt-12 sm:mt-16 [mask-image:linear-gradient(to_bottom,transparent,black_25%,black_75%,transparent)] max-h-[600px] sm:max-h-[740px] overflow-hidden">
-          <TestimonialsColumn testimonials={firstColumn} duration={15} />
+          {/* Mobile: show all testimonials in one column */}
+          <div className="sm:hidden">
+            <TestimonialsColumn testimonials={allTestimonials} duration={15} />
+          </div>
+          {/* Desktop: split into columns */}
+          <TestimonialsColumn testimonials={firstColumn} className="hidden sm:block" duration={15} />
           <TestimonialsColumn testimonials={secondColumn} className="hidden sm:block" duration={19} />
           <TestimonialsColumn testimonials={thirdColumn} className="hidden lg:block" duration={17} />
         </div>
