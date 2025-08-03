@@ -34,6 +34,31 @@ const FAQSection = () => {
       question: "What makes Voidr different from just Googling my symptoms?",
       answer: "Great question — Google gives scattered, generic results. AskVoidr, our AI symptom analyzer, uses real clinical logic to walk through your input just like a doctor would during a case. It prioritizes reasoning, context and differential diagnoses rather than keyword matching."
     },
+    {
+      id: 6,
+      question: "How is Case Wise different from just reading case books?",
+      answer: "Case Wise simulates realistic, time-presuured clinical environmetns with AI-generated patient scenarios, Instead of passively reading cases, you actively work through them, improving your critical thinking, diagnostic accuracy, and decision-making in real time."
+    },
+    {
+      id: 7,
+      question: "What file type does ClinicBot accept for summarizing",
+      answer: "ClinicBot works best with PDF's, DOCX, and plain text files. You can upload clinical guidelines, lecture slides, or even your own notes (the text form only not the document itself) and it will condense the content into short, structured key points instantly."
+    },
+    {
+      id: 8,
+      question: "How detailed should my symptom input be for AskVoidr",
+      answer: "The more detailed, the better. Include the symptom, duration, associated signs, relevant history, and any previous diagnoses. AskVoidr uses clinical algorithms that mimic real-life diagnostic pathways, so detail helps it perform more accurately."
+    },
+    {
+      id: 9,
+      question: "Is Voidr free to use?",
+      answer: "Voidr offers a free trial with limited access to each tool so you can test the experience. Premium plans unlock unlimited summaries, cases, and advanced analysis features tailored for serious med students and professionals."
+    },
+    {
+      id: 10,
+      question: "Can I use Voidr on Mobile?",
+      answer: "Yes! Voidr is fully responsive and works on all modern browsers, including mobile. We're also working on an app version to make it even easier to learn on the go."
+    },
   ];
 
   const toggleItem = (id: number) => {
