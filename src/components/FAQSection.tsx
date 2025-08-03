@@ -27,7 +27,7 @@ const FAQSection = () => {
     {
       id: 4,
       question: "I have no medical background. Will I still understand the results?",
-      answer: "Voidr is designed primarily for medical students and healthcare learners. However, the results are simplified and structured to be understandable with basic medical knowledge. ClinicBot even allows you to ask for "simplified summaries" if you're struggling with heavy material."
+      answer: "Voidr is designed primarily for medical students and healthcare learners. However, the results are simplified and structured to be understandable with basic medical knowledge. ClinicBot even allows you to ask for simplified summaries if you're struggling with heavy material."
     },
     {
       id: 5,
