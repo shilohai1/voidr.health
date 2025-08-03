@@ -31,7 +31,7 @@ const PricingSection = () => {
     else if (productName === 'ClinicBot' && planName === 'Clinical Pro') planKey = 'clinical_pro';
     else if (productName === 'CaseWise' && planName === 'Wise Starter') planKey = 'wise_starter';
     else if (productName === 'CaseWise' && planName === 'Wise Pro') planKey = 'wise_pro';
-    else if (productName === 'LaunchBundle' && planName === 'Launch Bundle') planKey = 'launch_bundle';
+    // Removed Launch Bundle logic
     // Only allow upgrade if user is logged in
     // If not logged in, redirect to login/signup before checkout
     if (planKey) {
@@ -127,30 +127,6 @@ const PricingSection = () => {
         }
       ],
     },
-    LaunchBundle: {
-      name: 'Launch Bundle',
-      isComingSoon: false,
-      specialOffer: true,
-      plans: [
-        {
-          name: 'Launch Bundle',
-          price: 29,
-          period: 'month',
-          originalPrice: 60,
-          features: [
-            '30 notes/month from ClinicBot',
-            '50 simulations/month from Case Wise',
-            'AskVoidr included FREE',
-            'Limited time offer',
-            'Locked price for life'
-          ],
-          buttonText: 'Get Launch Bundle',
-          isPopular: true,
-          disabled: false,
-          limitedTime: 'August 15th',
-        }
-      ],
-    },
   };
 
   return (
@@ -231,11 +207,6 @@ const PricingSection = () => {
                   <span className="text-3xl sm:text-4xl font-bold text-gray-900">${plan.price}</span>
                   <span className="text-gray-600 text-sm">/{plan.period}</span>
                 </div>
-                {selectedProduct === 'LaunchBundle' && (
-                  <p className="text-sm text-orange-600 font-semibold mt-2">
-                    Save ${(plan.originalPrice || 0) - plan.price}/month forever!
-                  </p>
-                )}
               </div>
 
               <ul className="space-y-2 sm:space-y-3 mb-6 sm:mb-8">
@@ -253,8 +224,7 @@ const PricingSection = () => {
                   plan.isPopular && !plan.disabled
                     ? "bg-primary hover:bg-primary/90" 
                     : "bg-gray-900 hover:bg-gray-800",
-                  plan.disabled && "opacity-50 cursor-not-allowed",
-                  selectedProduct === 'LaunchBundle' && "bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold"
+                  plan.disabled && "opacity-50 cursor-not-allowed"
                 )}
                 disabled={plan.disabled}
                 onClick={() => handlePlanClick(selectedProduct, plan.name, plan.price)}
