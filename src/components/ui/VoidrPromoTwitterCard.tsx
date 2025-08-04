@@ -25,7 +25,7 @@ export const VoidrPromoTwitterCard: React.FC = () => {
         <span className="text-blue-600 font-medium">Find out more about it on our website and level up your med journey by clicking on this post.</span>
       </div>
       <div className="rounded-xl overflow-hidden mb-3">
-        <img src="/lovable-uploads/hero-preview.png" alt="Voidr Health Demo" className="w-full object-cover" />
+        <img src="/NeonVOIDR.png" alt="Voidr Health Demo" className="w-full object-cover" />
       </div>
       {/* Actions */}
       <div className="flex justify-evenly gap-2 mt-2">
