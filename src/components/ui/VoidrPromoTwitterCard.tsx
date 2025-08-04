@@ -20,9 +20,9 @@ export const VoidrPromoTwitterCard: React.FC = () => {
       </div>
       {/* Promo Content */}
       <div className="mt-2 mb-4 text-gray-900 text-base leading-relaxed">
-        <span className="font-semibold text-blue-700">🚀 Discover the future of medical learning!</span><br />
-        Voidr Health brings you AI-powered tools for clinical reasoning, case simulations, and instant note summarization.<br />
-        <span className="text-blue-600 font-medium">Tap to explore the platform and level up your med journey.</span>
+        <span className="font-semibold text-blue-700">🚀 The Future of Medical learning is right here!</span><br />
+        Voidr Health brings AI-powered tools for clinical reasoning, case simulations, and instant note summarization, all of it right at your front door. What's stopping you then? 🤔<br />
+        <span className="text-blue-600 font-medium">Find out more about it on our website and level up your med journey by clicking on this post.</span>
       </div>
       <div className="rounded-xl overflow-hidden mb-3">
         <img src="/lovable-uploads/hero-preview.png" alt="Voidr Health Demo" className="w-full object-cover" />
