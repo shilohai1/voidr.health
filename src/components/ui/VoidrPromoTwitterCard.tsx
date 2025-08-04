@@ -13,9 +13,9 @@ export const VoidrPromoTwitterCard: React.FC = () => {
       {/* Twitter-style Header */}
       <div className="flex items-center gap-3 mb-2">
         <img src="/lovable-uploads/7e5bb1d3-2b2f-4bae-bb4a-ec509545e99d.png" alt="Voidr Health" width={40} height={40} className="rounded-full border border-blue-300" />
-        <div>
-          <span className="font-bold text-blue-700">Voidr Health</span>
-          <span className="ml-2 text-gray-500 text-sm">@voidrhealth · now</span>
+        <div className="flex flex-col">
+          <span className="font-bold text-blue-700 text-base leading-tight">Voidr Health</span>
+          <span className="text-gray-500 text-sm leading-tight">@voidrhealth · now</span>
         </div>
       </div>
       {/* Promo Content */}
