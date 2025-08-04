@@ -20,7 +20,7 @@ export const VoidrBlogCta = () => {
                 <h4 className="mb-1 text-2xl font-bold md:text-3xl">Join the VOIDR family</h4>
                 <p className="mb-2">Voidr Health was started from humble beginnings and from lot of struggles. Someone worked hard to make this so that It can save others 100's of hours. Join while it's still Free!</p>
                 <Button className="mt-6 bg-white text-[#036873] hover:bg-blue-100 font-bold" asChild>
-                  <a href="/signup" target="_blank">
+                  <a href="/auth" target="_blank">
                     Join Now <FaArrowRight className="size-4 ml-2" />
                   </a>
                 </Button>
