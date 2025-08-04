@@ -4,6 +4,7 @@ import { CalendarDays, Clock, User, ArrowLeft } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { VoidrPromoTwitterCard } from "@/components/ui/VoidrPromoTwitterCard";
+import { VoidrBlogCta } from "@/components/ui/VoidrBlogCta";
 import Footer from "@/components/Footer";
 import { getBlogPostBySlug, type BlogPost } from "@/lib/blogService";
 import { useEffect, useState } from "react";
@@ -47,7 +48,7 @@ export default function BlogPost() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-[#89ebf5] to-white">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-[#236dcf] to-white">
       {/* VOIDR Logo */}
       <div className="absolute top-6 right-6 z-50">
         <a href="/" className="hover:opacity-80 transition-opacity">
@@ -62,19 +63,19 @@ export default function BlogPost() {
         <div className="w-full sm:max-w-3xl mx-auto flex flex-col items-center justify-center">
           {/* Back Button */}
           <div className="mb-6 w-full">
-            <Link to="/blog" className="inline-flex items-center bg-[#89ebf5] backdrop-blur-sm hover:bg-white text-gray-800 px-4 py-2 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 group">
+            <Link to="/blog" className="inline-flex items-center bg-white/90 backdrop-blur-sm hover:bg-white text-gray-800 px-4 py-2 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 group">
               <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
               Back to Blog
             </Link>
           </div>
 
           {/* Post Header */}
-          <div className="mb-8 w-full bg-gradient-to-r from-[#036873] to-[#4cc6d0] text-white p-6 rounded-2xl shadow-lg">
+          <div className="mb-8 w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-6 rounded-2xl shadow-lg">
             <Badge className="mb-4 bg-white/20 text-white border-white/20">
               {post.category}
             </Badge>
             <h1 className="text-3xl font-bold mb-4 text-left">{post.title}</h1>
-            <p className="text-grey-800 text-lg mb-6 text-left">{post.excerpt}</p>
+            <p className="text-blue-100 text-lg mb-6 text-left">{post.excerpt}</p>
             <div className="flex flex-wrap items-center gap-6 text-blue-100 text-sm">
               <div className="flex items-center gap-2">
                 <User className="w-4 h-4" />
@@ -97,7 +98,7 @@ export default function BlogPost() {
           {/* Full Content - perfectly centered, black text, tighter line spacing, left-aligned headings */}
           <div className="w-full sm:max-w-3xl mx-auto">
             <div
-              className="bg-[#9ddce3] rounded-2xl shadow-xl p-6 sm:p-8 mb-8 text-black text-lg leading-[1.5] w-full"
+              className="bg-[#e6f2f0] rounded-2xl shadow-xl p-6 sm:p-8 mb-8 text-black text-lg leading-[1.5] w-full"
               style={{ textAlign: 'left' }}
             >
               <div
@@ -112,13 +113,15 @@ export default function BlogPost() {
             <div className="rounded-xl border border-yellow-300 bg-yellow-50 p-6 flex items-start gap-3">
               <svg className="w-6 h-6 text-yellow-600 mt-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
               <span className="text-yellow-800 text-base">
-                This content is solely for educational and informational purpose only and is not encouraged to be used as a medical advice. Consult with a certified medical professional for diagnosis, treatment, and personalized medical recommendations.
+                This content is for informational purposes only and is not intended as medical advice. Always consult with a qualified healthcare provider for diagnosis, treatment, and personalized medical recommendations.
               </span>
             </div>
           </div>
 
           {/* VOIDR Health Product Card */}
           {/* ...removed old product card... */}
+          {/* Blog CTA Section */}
+          <VoidrBlogCta />
         </div>
       </div>
 
