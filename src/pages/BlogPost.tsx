@@ -69,7 +69,7 @@ export default function BlogPost() {
           </div>
 
           {/* Post Header */}
-          <div className="mb-8 w-full bg-gradient-to-r from-[#4cc6d0] to-[#9be5eb] text-white p-6 rounded-2xl shadow-lg">
+          <div className="mb-8 w-full bg-gradient-to-r from-[#036873] to-[#4cc6d0] text-white p-6 rounded-2xl shadow-lg">
             <Badge className="mb-4 bg-white/20 text-white border-white/20">
               {post.category}
             </Badge>
