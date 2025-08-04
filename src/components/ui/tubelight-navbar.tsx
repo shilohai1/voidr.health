@@ -236,7 +236,7 @@ export const TubelightNavbar = () => {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="bg-primary text-white px-6 py-2 rounded-full font-semibold hover:opacity-90 transition-opacity"
+                className="bg-[#036873] text-white px-6 py-2 rounded-full font-semibold hover:opacity-90 transition-opacity"
               >
                 Get Started
               </motion.button>
