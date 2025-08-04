@@ -71,7 +71,7 @@ export default function Blog() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#dcf4fc] to-[#dcf4fc] dark:from-gray-900 dark:to-gray-800">
+    <div className="min-h-screen bg-gradient-to-br from-[#fff8e7] to-white dark:from-gray-900 dark:to-gray-800">
       {/* VOIDR Logo */}
       <div className="absolute top-6 right-6 z-50">
         <a 
