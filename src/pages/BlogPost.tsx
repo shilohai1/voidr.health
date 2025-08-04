@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { CalendarDays, Clock, User, ArrowLeft } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { VoidrProductCard } from "@/components/ui/voidr-product-card";
+import { VoidrPromoTwitterCard } from "@/components/ui/VoidrPromoTwitterCard";
 import Footer from "@/components/Footer";
 import { getBlogPostBySlug, type BlogPost } from "@/lib/blogService";
 import { useEffect, useState } from "react";
@@ -91,6 +91,9 @@ export default function BlogPost() {
             </div>
           </div>
 
+          {/* Twitter-style Promo Card (Voidr) */}
+          <VoidrPromoTwitterCard />
+
           {/* Full Content - perfectly centered, black text, tighter line spacing, left-aligned headings */}
           <div className="w-full sm:max-w-3xl mx-auto">
             <div
@@ -115,24 +118,7 @@ export default function BlogPost() {
           </div>
 
           {/* VOIDR Health Product Card */}
-          <div className="mt-0 w-full sm:max-w-3xl mx-auto flex flex-col items-center">
-            {/* VOIDR Logo with gradient background and hover */}
-            <div className="w-full flex justify-center mb-4">
-              <div className="rounded-2xl p-2 transition-all duration-300 bg-gradient-to-r from-[#AEAEEE] to-[#94BBE9] hover:scale-105 shadow-lg">
-                <picture>
-                  <source srcSet="/lovable-uploads/7e5bb1d3-2b2f-4bae-bb4a-ec509545e99d.webp" type="image/webp" />
-                  <img src="/lovable-uploads/7e5bb1d3-2b2f-4bae-bb4a-ec509545e99d.png" alt="VOIDR" className="h-12 w-auto" />
-                </picture>
-              </div>
-            </div>
-            <h3 className="text-2xl font-bold mb-6 text-center text-white">
-              Discover VOIDR Health
-            </h3>
-            {/* Product Card without the 'Video Generation - Educational Content Creation' line */}
-            <div className="w-full">
-              <VoidrProductCard hideVideoGenLine />
-            </div>
-          </div>
+          {/* ...removed old product card... */}
         </div>
       </div>
 
