@@ -92,10 +92,10 @@ export default function Blog() {
       {/* Simple Header */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8">
         <div className="text-center">
-          <h1 className="text-6xl font-bold text-white dark:text-white mb-6">
+          <h1 className="text-6xl font-bold text-black dark:text-white mb-6">
             VOIDR Blogs & Articles
           </h1>
-          <p className="text-xl text-white/90 dark:text-gray-300 max-w-3xl mx-auto">
+          <p className="text-xl text-balck dark:text-gray-300 max-w-3xl mx-auto">
             Stay updated with the latest and updated Articles and Blogs in AI-powered medical education, 
             clinical technology, and Public Health.
           </p>
