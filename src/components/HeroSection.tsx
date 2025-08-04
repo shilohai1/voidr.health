@@ -6,7 +6,7 @@ import { TealLiquidButton } from '@/components/ui/teal-liquid-button';
 const HeroSection = () => {
   return (
     <section
-       className="px-4 sm:px-6 md:px-8 relative overflow-hidden flex flex-col justify-center min-h-screen bg-gradient-to-b from-[#B3E4E9] via-white to-[#B3E4E9] rounded-b-[3rem] sm:rounded-b-[4rem] md:rounded-b-[3rem]"
+       className="px-4 sm:px-6 md:px-8 relative overflow-hidden flex flex-col justify-center min-h-screen bg-gradient-to-b from-[#89ebf5] via-white to-[#89ebf5] rounded-b-[3rem] sm:rounded-b-[4rem] md:rounded-b-[3rem]"
     >
       {/* Content positioned below navbar */}
       <div className="w-full max-w-7xl mx-auto text-center relative z-10 pt-20 sm:pt-24 md:pt-28">
