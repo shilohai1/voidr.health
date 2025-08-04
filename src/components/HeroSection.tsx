@@ -13,7 +13,7 @@ const HeroSection = () => {
         {/* Main Heading */}
         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-gray-900 mb-4 sm:mb-6 leading-tight px-4">
           AI Tools Tailored for{' '}
-          <span className="text-[#A0E1F4]">
+          <span className="text-[#036873]">
             Med Students, Residents & Doctors
           </span>
         </h1>
