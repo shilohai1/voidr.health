@@ -95,7 +95,7 @@ export default function Blog() {
           <h1 className="text-6xl font-bold text-[#036873] dark:text-white mb-6">
             VOIDR Blogs & Articles
           </h1>
-          <p className="text-xl text-[#4cc6d0] dark:text-white max-w-3xl mx-auto">
+          <p className="text-xl text-[#036873] dark:text-white mb-6 max-w-3xl mx-auto">
             Stay updated with the latest and updated Articles and Blogs in AI-powered medical education, 
             clinical technology, and Public Health.
           </p>
@@ -138,11 +138,11 @@ export default function Blog() {
         {/* Blog Posts Grid */}
         {loading ? (
           <div className="flex justify-center items-center py-12">
-            <div className="text-white text-xl">Loading blog posts...</div>
+            <div className="text-[#036873] text-xl">Loading blog posts...</div>
           </div>
         ) : blogPosts.length === 0 ? (
           <div className="flex justify-center items-center py-12">
-            <div className="text-red-500 text-xl">No blog posts found.</div>
+            <div className="text-[#036873] text-xl">No blog posts found.</div>
           </div>
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -159,7 +159,7 @@ export default function Blog() {
                   <CardHeader className="flex-grow">
                     <div className="flex items-center justify-between mb-2">
                       <Badge variant="outline">{post.category}</Badge>
-                      <span className="text-sm text-gray-500">{post.readTime}</span>
+                      <span className="text-sm text-[#036873]">{post.readTime}</span>
                     </div>
                     <CardTitle className="group-hover:text-blue-600 transition-colors text-lg line-clamp-2">
                       {post.title}
