@@ -12,10 +12,10 @@ export const VoidrPromoTwitterCard: React.FC = () => {
     <div className="my-6 mx-auto max-w-xl w-full rounded-3xl bg-white border border-blue-200 shadow-xl p-4 transition hover:shadow-2xl cursor-pointer" onClick={() => window.location.href = '/'}>
       {/* Twitter-style Header */}
       <div className="flex items-center gap-3 mb-2">
-        <img src="/lovable-uploads/7e5bb1d3-2b2f-4bae-bb4a-ec509545e99d.png" alt="Voidr Health" width={40} height={40} className="rounded-full border border-blue-300" />
+        <img src="/hero-og.png" alt="Voidr Health" width={40} height={40} className="rounded-full border border-blue-300" />
         <div className="flex flex-col">
           <span className="font-bold text-blue-700 text-base leading-tight">Voidr Health</span>
-          <span className="text-gray-500 text-sm leading-tight">@voidrhealth · now</span>
+          <span className="text-gray-500 text-sm leading-tight">@voidrhealth · 4 mins ago</span>
         </div>
       </div>
       {/* Promo Content */}
