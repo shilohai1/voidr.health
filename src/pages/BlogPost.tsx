@@ -62,14 +62,14 @@ export default function BlogPost() {
         <div className="w-full sm:max-w-3xl mx-auto flex flex-col items-center justify-center">
           {/* Back Button */}
           <div className="mb-6 w-full">
-            <Link to="/blog" className="inline-flex items-center bg-white/90 backdrop-blur-sm hover:bg-white text-gray-800 px-4 py-2 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 group">
+            <Link to="/blog" className="inline-flex items-center bg-[#fff8e7] backdrop-blur-sm hover:bg-white text-gray-800 px-4 py-2 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 group">
               <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
               Back to Blog
             </Link>
           </div>
 
           {/* Post Header */}
-          <div className="mb-8 w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-6 rounded-2xl shadow-lg">
+          <div className="mb-8 w-full bg-gradient-to-r from-[#4cc6d0] to-[#9be5eb] text-white p-6 rounded-2xl shadow-lg">
             <Badge className="mb-4 bg-white/20 text-white border-white/20">
               {post.category}
             </Badge>
