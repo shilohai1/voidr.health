@@ -95,7 +95,7 @@ export default function Blog() {
           <h1 className="text-6xl font-bold text-[#036873] dark:text-white mb-6">
             VOIDR Blogs & Articles
           </h1>
-          <p className="text-xl text-balck dark:text-[#036873] max-w-3xl mx-auto">
+          <p className="text-xl text-[#4cc6d0] dark:text-white max-w-3xl mx-auto">
             Stay updated with the latest and updated Articles and Blogs in AI-powered medical education, 
             clinical technology, and Public Health.
           </p>
