@@ -47,7 +47,7 @@ export default function BlogPost() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-[#EDF6F9] to-[#EDF6F9]">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-[#dcf4fc] to-[#dcf4fc]">
       {/* VOIDR Logo */}
       <div className="absolute top-6 right-6 z-50">
         <a href="/" className="hover:opacity-80 transition-opacity">
