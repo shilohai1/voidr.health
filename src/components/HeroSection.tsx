@@ -6,14 +6,14 @@ import { TealLiquidButton } from '@/components/ui/teal-liquid-button';
 const HeroSection = () => {
   return (
     <section
-       className="px-4 sm:px-6 md:px-8 relative overflow-hidden flex flex-col justify-center min-h-screen bg-gradient-to-b from-[#236dcf] via-white to-[#236dcf] rounded-b-[3rem] sm:rounded-b-[4rem] md:rounded-b-[3rem]"
+       className="px-4 sm:px-6 md:px-8 relative overflow-hidden flex flex-col justify-center min-h-screen bg-gradient-to-b from-[#B3E4E9] via-[#C6F1FF] to-[#B3E4E9] rounded-b-[3rem] sm:rounded-b-[4rem] md:rounded-b-[3rem]"
     >
       {/* Content positioned below navbar */}
       <div className="w-full max-w-7xl mx-auto text-center relative z-10 pt-20 sm:pt-24 md:pt-28">
         {/* Main Heading */}
         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-gray-900 mb-4 sm:mb-6 leading-tight px-4">
           AI Tools Tailored for{' '}
-          <span className="text-[#7bbde3]">
+          <span className="text-[#A0E1F4]">
             Med Students, Residents & Doctors
           </span>
         </h1>
