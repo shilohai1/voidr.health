@@ -71,7 +71,7 @@ export default function Blog() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#236dcf] to-white dark:from-gray-900 dark:to-gray-800">
+    <div className="min-h-screen bg-gradient-to-br from-[#dcf4fc] to-[#dcf4fc] dark:from-gray-900 dark:to-gray-800">
       {/* VOIDR Logo */}
       <div className="absolute top-6 right-6 z-50">
         <a 
@@ -93,11 +93,11 @@ export default function Blog() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8">
         <div className="text-center">
           <h1 className="text-6xl font-bold text-white dark:text-white mb-6">
-            Medical AI Insights
+            VOIDR Blogs & Articles
           </h1>
           <p className="text-xl text-white/90 dark:text-gray-300 max-w-3xl mx-auto">
-            Stay updated with the latest developments in AI-powered medical education, 
-            clinical technology, and healthcare innovation.
+            Stay updated with the latest and updated Articles and Blogs in AI-powered medical education, 
+            clinical technology, and Public Health.
           </p>
         </div>
       </div>
@@ -142,7 +142,7 @@ export default function Blog() {
           </div>
         ) : blogPosts.length === 0 ? (
           <div className="flex justify-center items-center py-12">
-            <div className="text-red-500 text-xl">No blog posts found. (Debug: blogPosts is empty)</div>
+            <div className="text-red-500 text-xl">No blog posts found.</div>
           </div>
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
