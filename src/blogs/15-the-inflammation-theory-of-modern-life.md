@@ -1,7 +1,7 @@
 ---
 id: 7
 title: "The Inflammation Theory of Modern Life: Stress, Sugar, and Low-Grade Chronic Fire"
-excerpt: "Could stress and sugar be fueling more than just bad moods? Explore how modern lifestyles may be silently feeding low-grade inflammation—and what that means for your long-term health."
+excerpt: "Could stress and sugar be contributing to more than just bad moods? Find out how modern lifestyles may be silently feeding low-grade inflammation and what that means for your long-term health."
 author: "Jonathan Boban"
 date: "2025-08-01"
 readTime: "13 min read"
