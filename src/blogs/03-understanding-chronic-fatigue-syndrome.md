@@ -10,11 +10,11 @@ category: "Chronic Illness"
 
 # Understanding Chronic Fatigue Syndrome: Science, Symptoms, and Support
 
-Chronic Fatigue Syndrome (CFS), also known as **Myalgic Encephalomyelitis (ME/CFS)**, is a long-term condition characterized by profound fatigue that isn’t improved by rest and worsens with physical or mental exertion. While it affects people of all ages, it is most common in adults between 40 and 60 years old, and women are more likely to be diagnosed than men.
+Chronic Fatigue Syndrome (CFS), also known as **Myalgic Encephalomyelitis (ME/CFS)** is a life-long condition charecterized by profound fatigue that doesn’t improve with rest and worsens with physical or mental stress. While it affects people of all ages, it is most commonly seen in adults between 40 to 60 years old. Women are more likely to be diagnosed with CFS than Men.
 
-This post dives into what we currently understand about CFS — its symptoms, potential causes, how it's studied in the medical community, and how tools like **Voidr Health** can support both patients and future doctors in managing and learning about this complex illness.
+This article dives into what we currently understand about CFS, it’s symptoms, potential causes, how it’s studied in modern day medical community, and how tools like **Voidr Health** can support both patients and future doctors in managing and learning about this illness.
 
-> This content is written for educational purposes only and should not be interpreted as medical advice. Always consult a licensed healthcare provider for personal concerns.
+> This content is written for educational and informational purposes only and should not be considered as professional medical advice. Always consult a board-certified healthcare provider for personal concerns.
 
 ---
 
