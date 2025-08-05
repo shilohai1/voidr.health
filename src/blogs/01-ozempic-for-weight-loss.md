@@ -1,7 +1,7 @@
 ---
 id: 1
 title: "Ozempic for Weight Loss: What Doctors Really Think (And What Patients Need to Know)"
-excerpt: "Ozempic is making headlines as a 'miracle drug' for weight loss — but is it safe, effective, and right for you? This deep-dive explores the science, risks, and real patient stories behind semaglutide."
+excerpt: "Ozempic is making headlines as a 'miracle drug' for weight loss. but is it safe and right for you? This deep-dive explores the science, risks, and real patient stories behind semaglutide."
 author: "Jonathan Boban"
 date: "2025-07-26"
 readTime: "12 min read"
