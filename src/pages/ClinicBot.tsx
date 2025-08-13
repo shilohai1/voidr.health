@@ -89,7 +89,7 @@ const ClinicBot = () => {
 
     // Check if user can download PDFs
     if (!pdf_enabled) {
-      toast.error('PDF export is only available on paid plans', {
+      toast.error('Upgrade to a higher plan to download as PDF', {
         action: {
           label: 'Upgrade Now',
           onClick: () => navigate('/#pricing')
@@ -98,9 +98,9 @@ const ClinicBot = () => {
       return;
     }
 
-      const filename = 'summary.txt'; // Default filename
-      downloadSummaryAsPDF(summary, filename);
-      refreshSubscriptionData();
+    const filename = 'summary.txt'; // Default filename
+    downloadSummaryAsPDF(summary, filename);
+    refreshSubscriptionData();
   };
 
   const getWordCountFromText = (text: string) => {
@@ -221,9 +221,7 @@ const ClinicBot = () => {
                     <LiquidButton
                       onClick={handleDownload}
                       className="w-full bg-white/20 hover:bg-white/30"
-                      disabled={!pdf_enabled}
                     >
-                      <Download className="w-4 h-4 mr-2" />
                       Download as PDF
                     </LiquidButton>
                   </>
