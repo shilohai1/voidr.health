@@ -56,7 +56,7 @@ const SymptomChecker = () => {
     if (currentStep === 3 && symptomData.symptomOnset) handleNext();
     // Remove auto-next for step 4 (symptom location) to allow user to type
     // if (currentStep === 4 && symptomData.symptomLocation.trim()) handleNext();
-  }, [currentStep, symptomData]);
+  }, [currentStep, symptomData.gender, symptomData.ageGroup, symptomData.symptomOnset]);
 
   const handleBack = () => {
     if (currentStep > 1) {
@@ -401,7 +401,7 @@ const SymptomChecker = () => {
             <div className="max-w-md mx-auto mb-8">
               <div className="flex justify-between items-center mb-2">
                 <span className="text-xs sm:text-sm text-white/80">Step {currentStep} of 5</span>
-                <span className="text-xs sm:text-sm text-white/80">{Math.round((currentStep / 5) * 100)}%</span>
+                <span className="text-xs sm:text-sm text-white/80"> {Math.round((currentStep / 5) * 100)}%</span>
               </div>
               <div className="w-full bg-white/20 rounded-full h-2">
                 <div
