@@ -399,9 +399,9 @@ const SymptomChecker = () => {
           {/* Progress Bar */}
           {currentStep < 6 && (
             <div className="max-w-md mx-auto mb-8">
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-xs sm:text-sm text-white/80">Step {currentStep} of 5</span>
-                <span className="text-xs sm:text-sm text-white/80"> {Math.round((currentStep / 5) * 100)}%</span>
+              <div className="grid grid-cols-2 gap-4 mb-2">
+                <span className="text-xs sm:text-sm text-white/80 text-left">Step {currentStep} of 5</span>
+                <span className="text-xs sm:text-sm text-white/80 text-right">{Math.round((currentStep / 5) * 100)}%</span>
               </div>
               <div className="w-full bg-white/20 rounded-full h-2">
                 <div
