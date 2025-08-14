@@ -20,7 +20,7 @@ const TermsConditions = () => {
             
             <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed space-y-6">
               <p>
-                Welcome to Voidr Health. By accessing or using our services — including ClinicBot, AskVoidr, and Case Wise, you agree to be bound by these Terms and Conditions. These Terms comply with applicable laws in India and the United Arab Emirates (UAE) and incorporate fair use of third-party AI tools such as OpenAI and ElevenLabs.
+                Welcome to Voidr Health. By accessing or using our services — including ClinicBot, AskVoidr, and Case Wise, you agree to be bound by these Terms and Conditions. These Terms comply with applicable laws in India and the United Arab Emirates (UAE) and incorporate fair use of third-party AI tools such as OpenAI.
               </p>
               
               <p>
@@ -55,7 +55,6 @@ const TermsConditions = () => {
               <p>Voidr Health uses APIs from:</p>
               <ul className="list-disc pl-6 space-y-2">
                 <li><strong>OpenAI:</strong> To power natural language processing, summarization, and analysis</li>
-                <li><strong>ElevenLabs:</strong> To generate voice/audio content where applicable</li>
               </ul>
               <p>By using our services, you acknowledge that:</p>
               <ul className="list-disc pl-6 space-y-2">
