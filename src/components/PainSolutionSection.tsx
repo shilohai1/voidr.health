@@ -15,7 +15,7 @@ const PainSolutionSection = () => {
                 The Problem: Overwhelmed, Overworked, and Falling Behind
               </h3>
               <p className="text-base sm:text-lg text-gray-700 leading-relaxed">
-                Struggling with relentless med school stress? You’re not alone. Endless lectures, weekly quizzes, and high-pressure wards make it feel impossible to keep up. The real challenge isn’t just learning. <strong>It’s absorbing and retaining an avalanche of medical knowledge</strong> while juggling constant mental and emotional demands. What if your study system actually worked for your real life, not against it?
+                Struggling with relentless med school stress? You’re not alone. Endless lectures, weekly quizzes, and high-pressure wards make it feel impossible to keep up. The real challenge isn’t just learning. It’s absorbing and retaining an avalanche of medical knowledge while juggling constant mental and emotional demands. <strong>What if your study system actually worked for your real life, not against it?</strong>
               </p>
             </div>
 
