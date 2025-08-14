@@ -239,7 +239,7 @@ const ClinicBot = () => {
               <p className="text-gray-600 mb-6">
                 {noteLimit === -1 
                   ? 'You need to upgrade your plan to generate more summaries.'
-                  : `You've reached your limit of ${noteLimit} summaries this month. Upgrade to continue!`
+                  : `Oops! You've reached your limit of ${noteLimit} summaries this month. Upgrade to continue!`
                 }
               </p>
               <div className="flex gap-3">
