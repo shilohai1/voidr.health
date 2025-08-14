@@ -49,25 +49,21 @@ const AboutUs = () => {
           <div className="bg-white/50 backdrop-blur-sm rounded-2xl p-8 md:p-12 shadow-lg border border-white/20">
             <div className="prose prose-lg max-w-none">
               <p className="text-xl text-gray-700 leading-relaxed mb-6">
-                Voidr.health was born out of frustration; the kind every medical student knows too well. 
-                Endless PDF's. Overwhelming lectures. Concepts that don't click no matter how many times you reread them.
+                Voidr Health is a study tool that was born not out of spontaneity. It was created purely out of desperation and frustration, the type almost 98% of medical students can relate to. 
+                Endless PDF’s, the one’s where one PDF leads to another and so on. And concepts? they don’t click no matter how many times you reread them.
               </p>
               
               <p className="text-xl text-gray-700 leading-relaxed mb-6">
-                We're not just building an AI tool. We're building the study tool we wish we had; a way to turn 
-                dense medical topics into short, clear, animated videos with voiceovers and captions in seconds.
+                We’re not just building an AI tool here. We’re building a study tool that we wish we had in med school, the one’s where thick medical topics are shortened, clear and symptoms are easily analyzed in just few seconds.
               </p>
               
               <p className="text-xl text-gray-700 leading-relaxed mb-6">
-                Powered by OpenAI, RunwayML and ElevenLabs, Voidr.health makes learning feel human again with 
-                visual, digestible and made for how your brain actually learns. Whether you're preparing for 
-                tomorrow's exam or trying to finally understand that one topic that never made sense, Voidr gives 
-                your clarity fast.
+                Powered by OpenAI, Voidr Health makes learning feel human again with note summarizer, symptom analysis and clinical case simulator, designed in a way where your brain actually would want to learn unlike the traditional spoon-feeding method. Whether you’re preparing for tomorrow’s exam or trying to finally understand that one topic that never made sense, Voidr Health gives your clarity fast.
               </p>
               
               <p className="text-xl text-gray-700 leading-relaxed font-semibold">
                 We're medical students too. We get it. And we're building this with one goal: To help you survive 
-                med school and maybe even enjoy the process.
+                med school and maybe even enjoy during the process.
               </p>
             </div>
           </div>
