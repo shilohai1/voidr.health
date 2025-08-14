@@ -16,7 +16,8 @@ import {
   Brain,
   Clock,
   FileCheck,
-  Paperclip
+  Paperclip,
+  X
 } from 'lucide-react';
 import { useFileSummarization } from '@/hooks/useFileSummarization';
 import { useAuth } from '@/contexts/AuthContext';
@@ -31,6 +32,7 @@ const ClinicBot = () => {
   const navigate = useNavigate();
   const [scriptText, setScriptText] = useState('');
   const [wordCount, setWordCount] = useState([500]);
+  const [showLimitPopup, setShowLimitPopup] = useState(false);
   const { generateSummary, generateTextSummary, downloadSummaryAsPDF, isLoading, summary } = useFileSummarization();
   const { user } = useAuth();
   const { canUseFeature, incrementUsage, refreshSubscriptionData, pdf_enabled } = useSubscription();
@@ -60,17 +62,7 @@ const ClinicBot = () => {
 
     // Check if user can generate more notes
     if (!canGenerateNotes) {
-      toast.error(
-        noteLimit === -1 
-          ? 'You need to upgrade your plan to generate more notes'
-          : `You've reached your limit of ${noteLimit} notes this month. Upgrade to continue!`,
-        {
-          action: {
-            label: 'Upgrade Now',
-            onClick: () => navigate('/#pricing')
-          }
-        }
-      );
+      setShowLimitPopup(true);
       return;
     }
     
@@ -183,7 +175,7 @@ const ClinicBot = () => {
                 {/* Generate Button */}
                 <LiquidButton
                   onClick={handleSummarize}
-                  disabled={isLoading || !scriptText || !canGenerateNotes}
+                  disabled={isLoading || !scriptText}
                   className="w-full bg-white/20 hover:bg-white/30"
                 >
                   {isLoading ? (
@@ -236,6 +228,48 @@ const ClinicBot = () => {
           </div>
         </div>
       </div>
+
+      {/* Limit Reached Popup */}
+      {showLimitPopup && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white rounded-2xl p-8 max-w-md mx-4 shadow-2xl">
+            <div className="text-center">
+              <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Plan Limit Reached</h3>
+              <p className="text-gray-600 mb-6">
+                {noteLimit === -1 
+                  ? 'You need to upgrade your plan to generate more summaries.'
+                  : `You've reached your limit of ${noteLimit} summaries this month. Upgrade to continue!`
+                }
+              </p>
+              <div className="flex gap-3">
+                <Button
+                  onClick={() => setShowLimitPopup(false)}
+                  variant="outline"
+                  className="flex-1"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={() => {
+                    setShowLimitPopup(false);
+                    navigate('/#pricing');
+                  }}
+                  className="flex-1 bg-primary hover:bg-primary/90"
+                >
+                  Upgrade Now
+                </Button>
+              </div>
+            </div>
+            <button
+              onClick={() => setShowLimitPopup(false)}
+              className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full transition-colors"
+            >
+              <X size={20} />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
