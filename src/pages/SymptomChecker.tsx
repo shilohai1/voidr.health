@@ -42,6 +42,7 @@ const SymptomChecker = () => {
     symptomDetails: '',
   });
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
+  const [isGoingBack, setIsGoingBack] = useState(false);
 
   const handleNext = () => {
     if (currentStep < 6) {
@@ -51,16 +52,35 @@ const SymptomChecker = () => {
 
   // Auto-next after filling options
   React.useEffect(() => {
+    if (isGoingBack) {
+      setIsGoingBack(false);
+      return;
+    }
+    
     if (currentStep === 1 && symptomData.gender) handleNext();
     if (currentStep === 2 && symptomData.ageGroup) handleNext();
     if (currentStep === 3 && symptomData.symptomOnset) handleNext();
     // Remove auto-next for step 4 (symptom location) to allow user to type
     // if (currentStep === 4 && symptomData.symptomLocation.trim()) handleNext();
-  }, [currentStep, symptomData.gender, symptomData.ageGroup, symptomData.symptomOnset]);
+  }, [currentStep, symptomData.gender, symptomData.ageGroup, symptomData.symptomOnset, isGoingBack]);
 
   const handleBack = () => {
     if (currentStep > 1) {
-      setCurrentStep(currentStep - 1);
+      setIsGoingBack(true);
+      // Clear the current step's data to prevent auto-advance
+      const newStep = currentStep - 1;
+      setCurrentStep(newStep);
+      
+      // Clear the data for the step we're going back to
+      if (newStep === 1) {
+        setSymptomData(prev => ({ ...prev, gender: '' }));
+      } else if (newStep === 2) {
+        setSymptomData(prev => ({ ...prev, ageGroup: '' }));
+      } else if (newStep === 3) {
+        setSymptomData(prev => ({ ...prev, symptomOnset: '' }));
+      } else if (newStep === 4) {
+        setSymptomData(prev => ({ ...prev, symptomLocation: '' }));
+      }
     }
   };
 
