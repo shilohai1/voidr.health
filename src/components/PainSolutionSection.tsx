@@ -15,14 +15,7 @@ const PainSolutionSection = () => {
                 The Problem: Overwhelmed, Overworked, and Falling Behind
               </h3>
               <p className="text-base sm:text-lg text-gray-700 leading-relaxed">
-                Let’s be honest. Medical training today isn’t just hard, it’s 
-                <strong> relentless</strong>. You wake up already lagging behind. Lectures are all confusing, 
-                quizzes drop every week, case reports pile up, and ward rounds want you to
-                recall every detail. The workload isn’t only academic. It’s mental, 
-                emotional, and constant. Somewhere in between, you’re expected to 
-                <strong> absorb and retain a mountain of medical knowledge</strong>. 
-                It’s not about intelligence. It’s about having a system that works with 
-                your real life, not against it.
+                Struggling with relentless med school stress? You’re not alone. Endless lectures, weekly quizzes, and high-pressure wards make it feel impossible to keep up. The real challenge isn’t just learning. <strong>It’s absorbing and retaining an avalanche of medical knowledge</strong> while juggling constant mental and emotional demands. What if your study system actually worked for your real life, not against it?
               </p>
             </div>
 
@@ -32,30 +25,19 @@ const PainSolutionSection = () => {
                 The Solution: One AI Platform for Smarter, Faster Medical Learning
               </h3>
               <p className="text-base sm:text-lg text-gray-700 leading-relaxed">
-                <strong>Voidr Health</strong> was built so med students, residents, and doctors 
-                can learn and practice medicine without having to burn out.
-                and get instant, clear explanations.
+                <strong>Voidr Health</strong> empowers med students, residents, and doctors to master medicine without burnout. Get instant, clear explanations anytime, anywhere.
               </p>
               <p className="text-base sm:text-lg text-gray-700 leading-relaxed">
-                On clinicals or ward rounds? Upload or paste your notes and 
-                <strong> ClinicBot</strong> condenses them into a short, structured summary 
-                in seconds. Just like a personal tutor who knows your time is limited.
+                <strong>ClinicBot</strong>: Upload your notes and get fast, structured summaries, just like a personal tutor who values your time.
               </p>
               <p className="text-base sm:text-lg text-gray-700 leading-relaxed">
-                Need help thinking like a clinician? <strong>AskVoidr</strong> is your AI 
-                co-pilot for real-time symptom analysis and differential 
-                reasoning. Just describe the patient’s symptoms, and it walks you through 
-                possible causes, urgent red flags, and logical next steps, all while calmly, clearly, 
-                and without overwhelm.
+                <strong>AskVoidr</strong>: Describe patient symptoms and unlock real-time clinical insights, differential diagnoses, and quick next steps, all calmly, clearly, and stress-free.
               </p>
               <p className="text-base sm:text-lg text-gray-700 leading-relaxed">
-                For hands-on skill building, <strong>Case Wise</strong> lets you practice 
-                clinical decision-making in realistic, timed scenarios, preparing you for 
-                OSCEs, ward rounds, and real-world cases.
+                <strong>Case Wise</strong>: Train clinical skills in realistic scenarios, so you’ll crush OSCEs, ward rounds, and patient care.
               </p>
               <p className="text-base sm:text-lg text-gray-700 leading-relaxed font-semibold mt-4">
-                All three tools work together so you can save hours, study smarter, and walk 
-                into exams or patient care with confidence.
+                Save hours, study smarter, and step into exams or clinics with total confidence.
               </p>
             </div>
 
