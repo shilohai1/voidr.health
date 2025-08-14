@@ -148,25 +148,11 @@ export const TubelightNavbar = () => {
               </span>
             </button>
 
-            {/* Blog Section */}
-            <Link to="/blog">
-              <button
-                className={cn(
-                  "relative cursor-pointer text-sm font-semibold px-6 py-2 rounded-full transition-colors",
-                  "text-gray-700 hover:text-primary",
-                )}
-              >
-                <span className="flex items-center gap-1">
-                  <span className="hidden md:inline">Blogs</span>
-                </span>
-              </button>
-            </Link>
-
-            {/* Who we are Section */}
+            {/* Resources Section (formerly Blog Section) */}
             <DropdownMenu onOpenChange={(open) => {
               if (open) {
-                setActiveTab('who-we-are');
-                setOpenDropdown('who-we-are');
+                setActiveTab('resources');
+                setOpenDropdown('resources');
               } else {
                 setOpenDropdown(null);
               }
@@ -176,15 +162,14 @@ export const TubelightNavbar = () => {
                   className={cn(
                     "relative cursor-pointer text-sm font-semibold px-6 py-2 rounded-full transition-colors",
                     "text-gray-700 hover:text-primary",
-                    activeTab === 'who-we-are' && "text-primary",
+                    activeTab === 'resources' && "text-primary",
                   )}
                 >
                   <span className="flex items-center gap-1">
-                    <Users size={18} strokeWidth={2.5} className="md:hidden" />
-                    <span className="hidden md:inline">Who we are</span>
+                    <span className="hidden md:inline">Resources</span>
                     <ChevronDown size={14} />
                   </span>
-                  {activeTab === 'who-we-are' && (
+                  {activeTab === 'resources' && (
                     <motion.div
                       layoutId="lamp"
                       className="absolute inset-0 w-full bg-primary/5 rounded-full -z-10"
@@ -208,12 +193,85 @@ export const TubelightNavbar = () => {
                 align="start" 
                 className="w-48 mt-2 rounded-2xl overflow-hidden bg-white/90 backdrop-blur-lg border border-white/20"
               >
+                <Link to="/blog" className="block">
+                  <DropdownMenuItem className="flex items-center gap-2 px-4 py-3 text-sm hover:bg-primary/10 cursor-pointer group">
+                    <span>Blogs</span>
+                    <ArrowRight size={14} className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </DropdownMenuItem>
+                </Link>
                 <Link to="/about" className="block">
                   <DropdownMenuItem className="flex items-center gap-2 px-4 py-3 text-sm hover:bg-primary/10 cursor-pointer group">
                     <span>About Us</span>
                     <ArrowRight size={14} className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
                   </DropdownMenuItem>
                 </Link>
+                <button onClick={() => scrollToSection('faq')} className="w-full">
+                  <DropdownMenuItem className="flex items-center gap-2 px-4 py-3 text-sm hover:bg-primary/10 cursor-pointer group">
+                    <span>FAQ's</span>
+                    <ArrowRight size={14} className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </DropdownMenuItem>
+                </button>
+                <Link to="/privacy-policy" className="block">
+                  <DropdownMenuItem className="flex items-center gap-2 px-4 py-3 text-sm hover:bg-primary/10 cursor-pointer group">
+                    <span>Privacy Policy</span>
+                    <ArrowRight size={14} className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </DropdownMenuItem>
+                </Link>
+                <Link to="/terms-conditions" className="block">
+                  <DropdownMenuItem className="flex items-center gap-2 px-4 py-3 text-sm hover:bg-primary/10 cursor-pointer group">
+                    <span>T&C</span>
+                    <ArrowRight size={14} className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </DropdownMenuItem>
+                </Link>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            {/* Find Us Section (formerly Who we are Section) */}
+            <DropdownMenu onOpenChange={(open) => {
+              if (open) {
+                setActiveTab('find-us');
+                setOpenDropdown('find-us');
+              } else {
+                setOpenDropdown(null);
+              }
+            }}>
+              <DropdownMenuTrigger asChild>
+                <button
+                  className={cn(
+                    "relative cursor-pointer text-sm font-semibold px-6 py-2 rounded-full transition-colors",
+                    "text-gray-700 hover:text-primary",
+                    activeTab === 'find-us' && "text-primary",
+                  )}
+                >
+                  <span className="flex items-center gap-1">
+                    <Users size={18} strokeWidth={2.5} className="md:hidden" />
+                    <span className="hidden md:inline">Find Us</span>
+                    <ChevronDown size={14} />
+                  </span>
+                  {activeTab === 'find-us' && (
+                    <motion.div
+                      layoutId="lamp"
+                      className="absolute inset-0 w-full bg-primary/5 rounded-full -z-10"
+                      initial={false}
+                      transition={{
+                        type: "spring",
+                        stiffness: 300,
+                        damping: 30,
+                      }}
+                    >
+                      <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-8 h-1 bg-primary rounded-t-full">
+                        <div className="absolute w-12 h-6 bg-primary/20 rounded-full blur-md -top-2 -left-2" />
+                        <div className="absolute w-8 h-6 bg-primary/20 rounded-full blur-md -top-1" />
+                        <div className="absolute w-4 h-4 bg-primary/20 rounded-full blur-sm top-0 left-2" />
+                      </div>
+                    </motion.div>
+                  )}
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent 
+                align="start" 
+                className="w-48 mt-2 rounded-2xl overflow-hidden bg-white/90 backdrop-blur-lg border border-white/20"
+              >
                 <a href="https://www.instagram.com/voidrhealth/" target="_blank" rel="noopener noreferrer" className="block">
                   <DropdownMenuItem className="flex items-center gap-2 px-4 py-3 text-sm hover:bg-primary/10 cursor-pointer group">
                     <span>Instagram</span>
@@ -223,6 +281,12 @@ export const TubelightNavbar = () => {
                 <a href="https://x.com/voidrhealth" target="_blank" rel="noopener noreferrer" className="block">
                   <DropdownMenuItem className="flex items-center gap-2 px-4 py-3 text-sm hover:bg-primary/10 cursor-pointer group">
                     <span>Twitter/X</span>
+                    <ArrowRight size={14} className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </DropdownMenuItem>
+                </a>
+                <a href="https://www.producthunt.com/products/voidr-health-2?utm_source=other&utm_medium=social" target="_blank" rel="noopener noreferrer" className="block">
+                  <DropdownMenuItem className="flex items-center gap-2 px-4 py-3 text-sm hover:bg-primary/10 cursor-pointer group">
+                    <span>Product Hunt</span>
                     <ArrowRight size={14} className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
                   </DropdownMenuItem>
                 </a>
@@ -294,21 +358,29 @@ export const TubelightNavbar = () => {
                   Pricing
                 </button>
 
-                {/* Blog Section */}          
-                <Link to="/blog" className="block">
-                  <button
-                    className="block w-full text-left px-4 py-2 font-semibold text-gray-900 hover:bg-primary/10 rounded-lg"
-                  >
-                    Blogs
-                  </button>
-                </Link>
-
-                {/* Who we are Section */}
+                {/* Resources Section */}          
                 <div className="space-y-2">
-                  <div className="font-semibold text-gray-900">Who we are</div>
+                  <div className="font-semibold text-gray-900">Resources</div>
+                  <Link to="/blog" className="block px-4 py-2 text-sm text-gray-700 hover:bg-primary/10 rounded-lg">
+                    Blogs
+                  </Link>
                   <Link to="/about" className="block px-4 py-2 text-sm text-gray-700 hover:bg-primary/10 rounded-lg">
                     About Us
                   </Link>
+                  <button onClick={() => scrollToSection('faq')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-primary/10 rounded-lg">
+                    FAQ's
+                  </button>
+                  <Link to="/privacy-policy" className="block px-4 py-2 text-sm text-gray-700 hover:bg-primary/10 rounded-lg">
+                    Privacy Policy
+                  </Link>
+                  <Link to="/terms-conditions" className="block px-4 py-2 text-sm text-gray-700 hover:bg-primary/10 rounded-lg">
+                    T&C
+                  </Link>
+                </div>
+
+                {/* Find Us Section */}
+                <div className="space-y-2">
+                  <div className="font-semibold text-gray-900">Find Us</div>
                   <a 
                     href="https://www.instagram.com/voidrhealth/" 
                     target="_blank" 
@@ -324,6 +396,14 @@ export const TubelightNavbar = () => {
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-primary/10 rounded-lg"
                   >
                     Twitter/X
+                  </a>
+                  <a 
+                    href="https://www.producthunt.com/products/voidr-health-2?utm_source=other&utm_medium=social" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-primary/10 rounded-lg"
+                  >
+                    Product Hunt
                   </a>
                 </div>
 
