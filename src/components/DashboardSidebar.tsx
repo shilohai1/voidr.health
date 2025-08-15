@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
-import { LayoutDashboard, Settings, LogOut, CreditCard } from 'lucide-react';
+import { LayoutDashboard, Settings, LogOut, DollarSign } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { LiquidCard } from './ui/liquid-glass-card';
 
@@ -24,17 +24,6 @@ const DashboardSidebar = ({ className }: SidebarProps) => {
     }
   };
 
-  const handlePricingClick = () => {
-    setOpen(false);
-    navigate('/');
-    setTimeout(() => {
-      const pricingSection = document.getElementById('pricing');
-      if (pricingSection) {
-        pricingSection.scrollIntoView({ behavior: 'smooth' });
-      }
-    }, 100);
-  };
-
   const options = [
     {
       label: "Dashboard",
@@ -43,8 +32,8 @@ const DashboardSidebar = ({ className }: SidebarProps) => {
     },
     {
       label: "Pricing",
-      onClick: handlePricingClick,
-      Icon: <CreditCard className="h-4 w-4" />,
+      onClick: () => navigate('/pricing'),
+      Icon: <DollarSign className="h-4 w-4" />,
     },
     {
       label: "Settings",
