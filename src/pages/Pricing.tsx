@@ -2,157 +2,227 @@
 import React from 'react';
 import DashboardSidebar from '@/components/DashboardSidebar';
 import { LiquidCard } from '@/components/ui/liquid-glass-card';
-import { Check, Star } from 'lucide-react';
+import { Check, Star, DollarSign } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const Pricing = () => {
-  const studyWithAIPlans = [
-    {
-      name: 'Free',
-      price: 0,
-      period: 'month',
-      features: ['2 AI videos', '720p quality', 'Watermark included'],
-      isPopular: false,
-      disabled: true,
-    },
-    {
-      name: 'Student Pro',
-      price: 9,
-      period: 'month',
-      features: ['30 AI videos', '1080p quality', 'No watermark'],
-      isPopular: true,
-      disabled: true,
-    },
-    {
-      name: 'Study Beast',
-      price: 19,
-      period: 'month',
-      features: ['Unlimited videos', 'Custom script uploads', 'Priority queue'],
-      isPopular: false,
-      disabled: true,
-    },
-  ];
-
   const clinicBotPlans = [
     {
       name: 'Free',
       price: 0,
       period: 'month',
-      features: ['2 notes/month', 'Watermark included', 'No PDF export'],
+      features: ['2 notes/month', 'No PDF export'],
       isPopular: false,
-      disabled: false,
+      checkoutUrl: null,
     },
     {
       name: 'Clinical Starter',
       price: 12,
       period: 'month',
-      features: ['30 notes/month', 'Editable output', 'Basic templates'],
-      isPopular: false,
-      disabled: false,
+      features: ['30 notes/month', 'PDF download'],
+      isPopular: true,
+      checkoutUrl: 'https://buy.polar.sh/polar_cl_cV1a6rzBp9o3R2OjH6F0pIxNevppLcd1n0sff0I5eGI',
     },
     {
-      name: 'Resident Pro',
+      name: 'Clinical Pro',
       price: 29,
       period: 'month',
-      features: ['Unlimited notes', 'PDF export', 'Custom fields'],
-      isPopular: true,
-      disabled: false,
+      features: ['Unlimited Notes', 'PDF Download'],
+      isPopular: false,
+      checkoutUrl: 'https://buy.polar.sh/polar_cl_w58BlnB3fhSZhMK07JZGA3EuocVjS1HppU1U14AtqHe',
     },
   ];
 
+  const caseWisePlans = [
+    {
+      name: 'Free',
+      price: 0,
+      period: 'month',
+      features: ['10 simulations/month'],
+      isPopular: false,
+      checkoutUrl: null,
+    },
+    {
+      name: 'Wise Starter',
+      price: 19,
+      period: 'month',
+      features: ['50 simulations/month'],
+      isPopular: true,
+      checkoutUrl: 'https://buy.polar.sh/polar_cl_qZEyoG4QHG5584E73QQ28Py5Pt77MYeUnAgQv1vj8MK',
+    },
+    {
+      name: 'Wise Pro',
+      price: 29,
+      period: 'month',
+      features: ['Unlimited Simulations'],
+      isPopular: false,
+      checkoutUrl: 'https://buy.polar.sh/polar_cl_xB2RTXzohCHZmp9I6kzrCZwqxFgYHvUIuUhTM0dAoZl',
+    },
+  ];
+
+  const askVoidrPlans = [
+    {
+      name: 'Free',
+      price: 0,
+      period: 'month',
+      features: [
+        'Unlimited symptom analysis',
+        'AI-powered health insights',
+        'Instant Responses',
+        'User-Friendly interface',
+        'Available 24/7'
+      ],
+      isPopular: false,
+      checkoutUrl: null,
+    },
+  ];
+
+  const handleCheckout = (url: string) => {
+    if (url) {
+      window.open(url, '_blank');
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white via-white to-[#236dcf]">
+    <div 
+      className="min-h-screen flex"
+      style={{
+        backgroundColor: "#5fcfb9",
+        backgroundImage:
+          "linear-gradient(246deg, rgba(95, 207, 185, 1) 0%, rgba(88, 177, 209, 1) 100%)",
+      }}
+    >
       <DashboardSidebar />
-      <div className="lg:ml-16 transition-all duration-300">
-        <div className="min-h-screen flex flex-col">
-          <div className="flex-1 px-4 py-8 lg:px-8 lg:py-12">
-            <div className="max-w-6xl mx-auto">
-              <div className="mb-8 lg:mb-12 text-center">
-                <h1 className="text-2xl md:text-3xl font-bold text-black mb-4">Pricing Plans</h1>
-                <p className="text-sm lg:text-base text-black">Choose the perfect plan for your medical journey</p>
-              </div>
-              
-              {/* StudyWithAI Pricing - Coming Soon */}
-              <div className="mb-8 lg:mb-12">
-                <div className="flex items-center justify-center gap-3 mb-6">
-                  <h2 className="text-xl lg:text-2xl font-bold text-black text-center">StudyWithAI</h2>
-                  <span className="bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                    Coming Soon
-                  </span>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6">
-                  {studyWithAIPlans.map((plan) => (
-                    <LiquidCard key={plan.name} className={`p-4 lg:p-6 relative bg-white opacity-75 ${plan.isPopular ? 'border-2 border-blue-500' : ''}`}> 
-                      <div className="absolute top-2 right-2 bg-orange-500 text-white px-2 py-1 rounded text-xs font-semibold">
-                        Coming Soon
-                      </div>
-                      {plan.isPopular && (
-                        <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-blue-500 text-white px-4 py-1 rounded-full text-sm font-semibold flex items-center gap-1">
-                          <Star className="w-3 h-3 fill-current" />
-                          Popular
-                        </div>
-                      )}
-                      <div className="text-center mb-6">
-                        <h3 className="text-lg lg:text-xl font-bold text-black mb-2">{plan.name}</h3>
-                        <div className="flex items-baseline justify-center gap-1">
-                          <span className="text-2xl lg:text-3xl font-bold text-black">${plan.price}</span>
-                          <span className="text-xs lg:text-sm text-black">/{plan.period}</span>
-                        </div>
-                      </div>
-                      <ul className="space-y-3 mb-8">
-                        {plan.features.map((feature, idx) => (
-                          <li key={idx} className="flex items-start gap-2">
-                            <Check className="w-4 h-4 text-blue-500 mt-1 flex-shrink-0" />
-                            <span className="text-black text-xs lg:text-sm">{feature}</span>
-                          </li>
-                        ))}
-                      </ul>
-                      <Button 
-                        className="w-full opacity-50 cursor-not-allowed" 
-                        variant="outline"
-                        disabled
-                      >
-                        Coming Soon
-                      </Button>
-                    </LiquidCard>
-                  ))}
-                </div>
-              </div>
-              
-              {/* ClinicBot Pricing */}
-              <div>
-                <h2 className="text-xl lg:text-2xl font-bold text-black mb-6 text-center">ClinicBot</h2>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6">
-                  {clinicBotPlans.map((plan) => (
-                    <LiquidCard key={plan.name} className={`p-4 lg:p-6 relative bg-white ${plan.isPopular ? 'border-2 border-green-500' : ''}`}> 
-                      {plan.isPopular && (
-                        <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-green-500 text-white px-4 py-1 rounded-full text-sm font-semibold flex items-center gap-1">
-                          <Star className="w-3 h-3 fill-current" />
-                          Popular
-                        </div>
-                      )}
-                      <div className="text-center mb-6">
-                        <h3 className="text-lg lg:text-xl font-bold text-black mb-2">{plan.name}</h3>
-                        <div className="flex items-baseline justify-center gap-1">
-                          <span className="text-2xl lg:text-3xl font-bold text-black">${plan.price}</span>
-                          <span className="text-xs lg:text-sm text-black">/{plan.period}</span>
-                        </div>
-                      </div>
-                      <ul className="space-y-3 mb-8">
-                        {plan.features.map((feature, idx) => (
-                          <li key={idx} className="flex items-start gap-2">
-                            <Check className="w-4 h-4 text-green-500 mt-1 flex-shrink-0" />
-                            <span className="text-black text-xs lg:text-sm">{feature}</span>
-                          </li>
-                        ))}
-                      </ul>
-                      <Button className="w-full" variant={plan.isPopular ? "default" : "outline"}>
-                        {plan.price === 0 ? 'Get Started' : 'Choose Plan'}
-                      </Button>
-                    </LiquidCard>
-                  ))}
-                </div>
-              </div>
+      <div className="flex-1">
+        <div className="container mx-auto px-4 py-8">
+          <div className="mb-12 text-center">
+            <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">Pricing Plans</h1>
+            <p className="text-white/80 text-lg">Choose the perfect plan for your medical journey</p>
+          </div>
+          
+          {/* ClinicBot Pricing */}
+          <div className="mb-12">
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-8 text-center">ClinicBot</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+              {clinicBotPlans.map((plan) => (
+                <LiquidCard key={plan.name} className={`p-6 lg:p-8 relative bg-white/95 backdrop-blur-sm ${plan.isPopular ? 'border-2 border-green-500 shadow-xl' : 'border border-white/30'}`}> 
+                  {plan.isPopular && (
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded-full text-sm font-semibold flex items-center gap-2">
+                      <Star className="w-4 h-4 fill-current" />
+                      Most Popular
+                    </div>
+                  )}
+                  <div className="text-center mb-6">
+                    <h3 className="text-xl lg:text-2xl font-bold text-gray-900 mb-2">{plan.name}</h3>
+                    <div className="flex items-baseline justify-center gap-1">
+                      <span className="text-3xl lg:text-4xl font-bold text-gray-900">${plan.price}</span>
+                      <span className="text-sm lg:text-base text-gray-600">/{plan.period}</span>
+                    </div>
+                  </div>
+                  <ul className="space-y-3 mb-8">
+                    {plan.features.map((feature, idx) => (
+                      <li key={idx} className="flex items-start gap-3">
+                        <Check className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
+                        <span className="text-gray-700 text-sm lg:text-base">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  {plan.checkoutUrl ? (
+                    <Button 
+                      onClick={() => handleCheckout(plan.checkoutUrl!)}
+                      className={`w-full ${plan.isPopular ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-blue-600 hover:bg-blue-700 text-white'} transition-all duration-200 hover:scale-105`}
+                    >
+                      Choose Plan
+                    </Button>
+                  ) : (
+                    <Button 
+                      className="w-full bg-gray-600 hover:bg-gray-700 text-white transition-all duration-200"
+                      disabled
+                    >
+                      Current Plan
+                    </Button>
+                  )}
+                </LiquidCard>
+              ))}
+            </div>
+          </div>
+          
+          {/* Case Wise Pricing */}
+          <div className="mb-12">
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-8 text-center">Case Wise</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+              {caseWisePlans.map((plan) => (
+                <LiquidCard key={plan.name} className={`p-6 lg:p-8 relative bg-white/95 backdrop-blur-sm ${plan.isPopular ? 'border-2 border-blue-500 shadow-xl' : 'border border-white/30'}`}> 
+                  {plan.isPopular && (
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-blue-500 text-white px-4 py-2 rounded-full text-sm font-semibold flex items-center gap-2">
+                      <Star className="w-4 h-4 fill-current" />
+                      Most Popular
+                    </div>
+                  )}
+                  <div className="text-center mb-6">
+                    <h3 className="text-xl lg:text-2xl font-bold text-gray-900 mb-2">{plan.name}</h3>
+                    <div className="flex items-baseline justify-center gap-1">
+                      <span className="text-3xl lg:text-4xl font-bold text-gray-900">${plan.price}</span>
+                      <span className="text-sm lg:text-base text-gray-600">/{plan.period}</span>
+                    </div>
+                  </div>
+                  <ul className="space-y-3 mb-8">
+                    {plan.features.map((feature, idx) => (
+                      <li key={idx} className="flex items-start gap-3">
+                        <Check className="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" />
+                        <span className="text-gray-700 text-sm lg:text-base">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  {plan.checkoutUrl ? (
+                    <Button 
+                      onClick={() => handleCheckout(plan.checkoutUrl!)}
+                      className={`w-full ${plan.isPopular ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-green-600 hover:bg-green-700 text-white'} transition-all duration-200 hover:scale-105`}
+                    >
+                      Choose Plan
+                    </Button>
+                  ) : (
+                    <Button 
+                      className="w-full bg-gray-600 hover:bg-gray-700 text-white transition-all duration-200"
+                      disabled
+                    >
+                      Current Plan
+                    </Button>
+                  )}
+                </LiquidCard>
+              ))}
+            </div>
+          </div>
+
+          {/* AskVoidr Pricing */}
+          <div className="mb-12">
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-8 text-center">AskVoidr</h2>
+            <div className="max-w-2xl mx-auto">
+              {askVoidrPlans.map((plan) => (
+                <LiquidCard key={plan.name} className="p-6 lg:p-8 bg-white/95 backdrop-blur-sm border border-white/30"> 
+                  <div className="text-center mb-6">
+                    <h3 className="text-xl lg:text-2xl font-bold text-gray-900 mb-2">{plan.name}</h3>
+                    <div className="flex items-baseline justify-center gap-1">
+                      <span className="text-3xl lg:text-4xl font-bold text-gray-900">${plan.price}</span>
+                      <span className="text-sm lg:text-base text-gray-600">/{plan.period}</span>
+                    </div>
+                  </div>
+                  <ul className="space-y-3 mb-8">
+                    {plan.features.map((feature, idx) => (
+                      <li key={idx} className="flex items-start gap-3">
+                        <Check className="w-5 h-5 text-purple-500 mt-0.5 flex-shrink-0" />
+                        <span className="text-gray-700 text-sm lg:text-base">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <Button 
+                    className="w-full bg-purple-600 hover:bg-purple-700 text-white transition-all duration-200"
+                    disabled
+                  >
+                    Always Free
+                  </Button>
+                </LiquidCard>
+              ))}
             </div>
           </div>
         </div>
