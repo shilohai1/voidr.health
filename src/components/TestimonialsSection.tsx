@@ -11,6 +11,11 @@ const TestimonialsSection = () => {
       role: "Neurosurgeon"
     },
     {
+      text: "This was a totally different kind of app..at first I wasn't really sure what it is but it's definitely helpful once you get a hold of it",
+      name: "Rajat Thakur",
+      role: "AIIMS Raipur"
+    },
+    {
       text: "ClinicBot honestly saved me hours and hours last week. The automated documentation is a game-changer. The other cool feature is the part where they can shorten documents to just mere prescriptions",
       name: "Dr. Aisha",
       role: "Intern"
