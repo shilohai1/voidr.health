@@ -174,10 +174,10 @@ serve(async (req) => {
       const plan = subscription?.plan_name || 'free';
       // Plan limits
       const PLAN_LIMITS = {
-        free: 10,
+        free: 5,
         clinical_starter: 10,
         clinical_pro: 10,
-        wise_starter: 50,
+        wise_starter: 30,
         wise_pro: -1, // unlimited
         launch_bundle: 50
       };
