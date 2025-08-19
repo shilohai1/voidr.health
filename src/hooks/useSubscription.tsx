@@ -15,7 +15,7 @@ interface UsageLimit {
 const PLAN_LIMITS: Record<PlanType, UsageLimit> = {
   free: {
     notes_limit: 2,
-    simulations_limit: 10,
+    simulations_limit: 5,
     pdf_enabled: false,
     is_unlimited_notes: false,
     is_unlimited_simulations: false
@@ -36,7 +36,7 @@ const PLAN_LIMITS: Record<PlanType, UsageLimit> = {
   },
   wise_starter: {
     notes_limit: 2,
-    simulations_limit: 50,
+    simulations_limit: 30,
     pdf_enabled: false,
     is_unlimited_notes: false,
     is_unlimited_simulations: false
