@@ -1,4 +1,5 @@
 
+// @ts-nocheck
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.50.3';
@@ -23,6 +24,117 @@ const medicalConditions = [
   'Acute heart failure', 'Atrial fibrillation', 'SVT', 'VT', 'Pneumothorax',
   'Acute abdomen', 'Bowel obstruction', 'GI bleeding', 'Meningitis', 'Encephalitis'
 ];
+
+// Map specialties to representative conditions
+const SPECIALTY_CONDITIONS: Record<string, string[]> = {
+  'General Medicine': [
+    'Community-acquired pneumonia', 'Sepsis', 'DKA', 'Acute heart failure', 'COPD exacerbation',
+    'Pulmonary embolism', 'Hyperosmolar hyperglycemic state', 'Upper GI bleeding'
+  ],
+  "Pediatrics (Children’s Health)": [
+    'Bronchiolitis', 'Croup', 'Acute otitis media', 'Intussusception', 'Pyloric stenosis',
+    'Febrile seizure', 'Henoch–Schönlein purpura'
+  ],
+  'Obstetrics & Gynecology (OB-GYN)': [
+    'Ectopic pregnancy', 'Placental abruption', 'Preeclampsia', 'PID', 'Ovarian torsion'
+  ],
+  'Dermatology (Skin)': [
+    'Cellulitis', 'Erysipelas', 'Psoriasis flare', 'Stevens–Johnson syndrome'
+  ],
+  'Psychiatry & Mental Health': [
+    'Major depressive disorder', 'Generalized anxiety disorder', 'Bipolar mania', 'Delirium'
+  ],
+  'Family Medicine / Primary Care': [
+    'Community-acquired pneumonia', 'UTI', 'Migraine', 'Type 2 diabetes mellitus', 'Hypertension emergency'
+  ],
+  'General Surgery': [
+    'Acute appendicitis', 'Acute cholecystitis', 'Small bowel obstruction', 'Pancreatitis'
+  ],
+  'Orthopedics (Bones & Joints)': [
+    'Septic arthritis', 'Hip fracture', 'Compartment syndrome', 'Osteomyelitis'
+  ],
+  'Neurosurgery': [
+    'Subdural hematoma', 'Epidural hematoma', 'SAH', 'Traumatic brain injury'
+  ],
+  'Cardiothoracic Surgery': [
+    'Aortic dissection', 'Cardiac tamponade', 'Postoperative pneumonia'
+  ],
+  'Plastic & Reconstructive Surgery': [
+    'Necrotizing soft tissue infection', 'Burns – inhalational injury'
+  ],
+  'ENT (Ear, Nose, Throat) / Otorhinolaryngology': [
+    'Peritonsillar abscess', 'Epistaxis', 'Ludwig angina'
+  ],
+  'Urology': [
+    'Acute renal colic', 'Testicular torsion', 'Pyelonephritis'
+  ],
+  'Radiology & Imaging (X-ray, MRI, CT, Ultrasound)': [
+    'Stroke (CT head focus)', 'PE (CTPA focus)', 'Appendicitis (CT/US focus)'
+  ],
+  'Pathology & Laboratory Medicine': [
+    'AML (lab focus)', 'DIC (coagulation profile focus)'
+  ],
+  'Microbiology & Infectious Diseases': [
+    'Sepsis of unknown origin', 'TB reactivation', 'Endocarditis'
+  ],
+  'Nuclear Medicine': [
+    'Thyrotoxicosis (RAIU focus)', 'PE (V/Q focus)'
+  ],
+  'Emergency Medicine (Casualty / ER)': [
+    'STEMI', 'Stroke', 'Sepsis', 'Polytrauma', 'Status asthmaticus'
+  ],
+  'Intensive Care Unit (ICU)': [
+    'Septic shock', 'ARDS', 'DKA with cerebral edema', 'Ventilator associated pneumonia'
+  ],
+  'Trauma & Accident Care': [
+    'Tension pneumothorax', 'Hemorrhagic shock from pelvic fracture', 'Spinal cord injury'
+  ],
+  'Anesthesiology': [
+    'Malignant hyperthermia', 'Difficult airway', 'Local anesthetic systemic toxicity'
+  ],
+  'Cardiology (Heart)': [
+    'Acute STEMI', 'NSTEMI', 'Atrial fibrillation with RVR', 'Acute heart failure', 'Pericarditis'
+  ],
+  'Gastroenterology (Stomach & Gut)': [
+    'Upper GI bleeding', 'IBD flare', 'Acute pancreatitis', 'Acute cholangitis'
+  ],
+  'Endocrinology (Hormones & Diabetes)': [
+    'Diabetic ketoacidosis', 'Thyroid storm', 'Adrenal crisis', 'Hyperosmolar state'
+  ],
+  'Pulmonology (Lungs)': [
+    'COPD exacerbation', 'Pulmonary embolism', 'Pneumothorax', 'Severe pneumonia'
+  ],
+  'Nephrology (Kidneys)': [
+    'AKI from ATN', 'Hyperkalemia', 'Nephrotic syndrome', 'Pyelonephritis'
+  ],
+  'Rheumatology (Joints & Autoimmune)': [
+    'SLE flare', 'Gouty arthritis', 'Rheumatoid arthritis flare', 'Vasculitis (ANCA)'
+  ],
+  'Oncology (Cancer Care)': [
+    'Tumor lysis syndrome', 'Febrile neutropenia', 'SVC syndrome'
+  ],
+  'Hematology (Blood Disorders)': [
+    'DVT/PE', 'ITP', 'TTP', 'Sickle cell vaso-occlusive crisis'
+  ],
+  'Physiotherapy & Rehabilitation': [
+    'Guillain–Barré syndrome – rehab planning', 'Post-stroke spasticity management'
+  ],
+  'Nutrition & Dietetics': [
+    'Refeeding syndrome', 'Severe malnutrition assessment'
+  ],
+  'Pharmacy': [
+    'Warfarin toxicity', 'Digoxin toxicity', 'Lithium toxicity'
+  ],
+  'Occupational Therapy': [
+    'Post-hip-fracture ADL assessment'
+  ],
+  'Speech & Hearing Therapy': [
+    'Post-stroke dysphagia assessment'
+  ],
+  'Public Health & Preventive Medicine': [
+    'Outbreak investigation – norovirus', 'TB contact tracing scenario'
+  ],
+};
 
 const patientNames = [
   'John Smith', 'Mary Johnson', 'David Wilson', 'Sarah Brown', 'Michael Davis',
@@ -88,15 +200,36 @@ serve(async (req) => {
       }
 
       const { difficulty = 'medium', specialty = 'general' } = caseData || {};
-      
-      const randomCondition = medicalConditions[Math.floor(Math.random() * medicalConditions.length)];
+
+      const pool = SPECIALTY_CONDITIONS[specialty] && SPECIALTY_CONDITIONS[specialty].length > 0
+        ? SPECIALTY_CONDITIONS[specialty]
+        : medicalConditions;
+      const randomCondition = pool[Math.floor(Math.random() * pool.length)];
       const randomName = patientNames[Math.floor(Math.random() * patientNames.length)];
-      const randomAge = Math.floor(Math.random() * 60) + 20; // 20-80 years
-      const randomGender = Math.random() > 0.5 ? 'male' : 'female';
+
+      // Age/gender constraints for certain specialties
+      let randomAge = Math.floor(Math.random() * 60) + 20; // default 20-80 years
+      let randomGender = Math.random() > 0.5 ? 'male' : 'female';
+      if (specialty === "Pediatrics (Children’s Health)") {
+        randomAge = Math.floor(Math.random() * 16) + 1; // 1-16 years
+      }
+      if (specialty === 'Obstetrics & Gynecology (OB-GYN)') {
+        randomGender = 'female';
+        randomAge = Math.floor(Math.random() * 30) + 18; // 18-48 years
+      }
+
+      const difficultyInstruction = (
+        difficulty === 'easy' ?
+          'Make the presentation classic and straightforward with clear positive findings and minimal confounders. Include a narrow differential and obvious next steps.' :
+        difficulty === 'hard' ?
+          'Make the presentation atypical and nuanced with realistic confounders/comorbidities. Include red-herring symptoms, overlapping differentials, and require careful clinical reasoning.' :
+          'Make the presentation realistic with some complexity and common pitfalls, balancing clues and noise.'
+      );
+
+      const prompt = `Generate a realistic medical case scenario in the specialty of ${specialty} for ${randomCondition} in a ${randomAge}-year-old ${randomGender} patient named ${randomName}.
       
-      const prompt = `Generate a realistic medical case scenario for ${randomCondition} in a ${randomAge}-year-old ${randomGender} patient named ${randomName}. 
-      
-      Use proper medical terminology, abbreviations, and realistic clinical presentations. Make it challenging but educational for medical students preparing for USMLE/OSCE/PLAB.
+      ${difficultyInstruction}
+      Use proper medical terminology, abbreviations, and realistic clinical presentations. Aim for professional accuracy suitable for medical students and junior doctors (USMLE/OSCE/PLAB standard).
       
       Please respond with ONLY a valid JSON object in this exact format:
       {
@@ -241,7 +374,7 @@ serve(async (req) => {
       const patientResponse = data.choices[0].message.content;
 
       // Generate voiceover using ElevenLabs
-      let audioContent = null;
+      let audioContent: string | null = null;
       if (elevenLabsApiKey) {
         try {
           const voiceResponse = await fetch('https://api.elevenlabs.io/v1/text-to-speech/pNczCjzI2devNBz1zQrb', {
