@@ -25,6 +25,7 @@ import { LiquidButton } from '@/components/ui/liquid-glass-button';
 import { toast } from 'sonner';
 import { Link, useNavigate } from 'react-router-dom';
 import DashboardSidebar from '@/components/DashboardSidebar';
+import { Slider } from '@/components/ui/slider';
 
 interface CaseScenario {
   id: string;
@@ -70,7 +71,7 @@ const CaseWise = () => {
   // Remove local userStats state and fetchUserStats logic
   // Use useSubscription for all stats
   const { plan, simulations_used, simulations_remaining, is_unlimited_simulations, notes_used, notes_remaining, is_unlimited_notes, pdf_enabled } = useSubscription();
-  const [phase, setPhase] = useState<'menu' | 'case' | 'history' | 'investigations' | 'diagnosis' | 'feedback'>('menu');
+  const [phase, setPhase] = useState<'menu' | 'config' | 'case' | 'history' | 'investigations' | 'diagnosis' | 'feedback'>('menu');
   const [startTime, setStartTime] = useState<number>(0);
   const [loading, setLoading] = useState(false);
   const [feedback, setFeedback] = useState<string>('');
@@ -82,6 +83,84 @@ const CaseWise = () => {
   const [evaluatingDiagnosis, setEvaluatingDiagnosis] = useState(false);
   const [customQuestion, setCustomQuestion] = useState<string>('');
   const [customInvestigation, setCustomInvestigation] = useState<string>('');
+
+  // New configuration state
+  const [difficultyValue, setDifficultyValue] = useState<number[]>([50]); // 0 easy, 50 medium, 100 hard
+  const [selectedSpecialty, setSelectedSpecialty] = useState<string>('');
+
+  const difficultyLabel = (value: number) => {
+    if (value < 34) return 'Easy';
+    if (value < 67) return 'Medium';
+    return 'Hard';
+  };
+
+  const specialtyGroups: { title: string; items: string[] }[] = [
+    {
+      title: 'Core Clinical (OPD-focused)',
+      items: [
+        'General Medicine',
+        "Pediatrics (Children’s Health)",
+        'Obstetrics & Gynecology (OB-GYN)',
+        'Dermatology (Skin)',
+        'Psychiatry & Mental Health',
+        'Family Medicine / Primary Care',
+      ],
+    },
+    {
+      title: 'Surgical Specialties',
+      items: [
+        'General Surgery',
+        'Orthopedics (Bones & Joints)',
+        'Neurosurgery',
+        'Cardiothoracic Surgery',
+        'Plastic & Reconstructive Surgery',
+        'ENT (Ear, Nose, Throat) / Otorhinolaryngology',
+        'Urology',
+      ],
+    },
+    {
+      title: 'Diagnostic & Laboratory',
+      items: [
+        'Radiology & Imaging (X-ray, MRI, CT, Ultrasound)',
+        'Pathology & Laboratory Medicine',
+        'Microbiology & Infectious Diseases',
+        'Nuclear Medicine',
+      ],
+    },
+    {
+      title: 'Emergency & Critical Care',
+      items: [
+        'Emergency Medicine (Casualty / ER)',
+        'Intensive Care Unit (ICU)',
+        'Trauma & Accident Care',
+        'Anesthesiology',
+      ],
+    },
+    {
+      title: 'Super-Specialties',
+      items: [
+        'Cardiology (Heart)',
+        'Gastroenterology (Stomach & Gut)',
+        'Endocrinology (Hormones & Diabetes)',
+        'Pulmonology (Lungs)',
+        'Nephrology (Kidneys)',
+        'Rheumatology (Joints & Autoimmune)',
+        'Oncology (Cancer Care)',
+        'Hematology (Blood Disorders)',
+      ],
+    },
+    {
+      title: 'Supportive & Allied Health',
+      items: [
+        'Physiotherapy & Rehabilitation',
+        'Nutrition & Dietetics',
+        'Pharmacy',
+        'Occupational Therapy',
+        'Speech & Hearing Therapy',
+        'Public Health & Preventive Medicine',
+      ],
+    },
+  ];
 
   // Get subscription info for UI
   const { allowed: canStartSimulation, remaining: remainingSimulations, limit: simulationLimit } = canUseFeature('casewise', 'simulations');
@@ -212,10 +291,17 @@ const CaseWise = () => {
       return;
     }
 
+    // Validate selections
+    if (!selectedSpecialty) {
+      toast.error('Please choose a department/specialty');
+      return;
+    }
+
     setLoading(true);
     try {
+      const difficulty = difficultyLabel(difficultyValue[0]).toLowerCase();
       const { data, error } = await supabase.functions.invoke('generate-case', {
-        body: { action: 'generate-case', caseData: { difficulty: 'medium' } }
+        body: { action: 'generate-case', caseData: { difficulty, specialty: selectedSpecialty } }
       });
       if (error) throw error;
       const caseData = data?.case;
@@ -478,7 +564,7 @@ const CaseWise = () => {
                 </p>
                 
                 <LiquidButton 
-                  onClick={generateNewCase}
+                  onClick={() => setPhase('config')}
                   disabled={loading || !canStartSimulation}
                   className="text-lg px-8 py-4 bg-white/20 hover:bg-white/30"
                 >
@@ -517,6 +603,73 @@ const CaseWise = () => {
                   </div>
                 </LiquidCard>
               </div>
+            </div>
+          )}
+
+          {phase === 'config' && (
+            <div className="max-w-5xl mx-auto">
+              <LiquidCard className="p-8 bg-white/10 backdrop-blur-sm border-white/20">
+                <h2 className="text-2xl font-bold text-white mb-6 text-center">Configure Your Simulation</h2>
+
+                {/* Difficulty */}
+                <div className="mb-10">
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-white/80">Difficulty</span>
+                    <span className="text-white font-medium">{difficultyLabel(difficultyValue[0])}</span>
+                  </div>
+                  <Slider
+                    value={difficultyValue}
+                    onValueChange={(v) => setDifficultyValue(v)}
+                    min={0}
+                    max={100}
+                    step={1}
+                    showTooltip
+                    tooltipContent={(v) => difficultyLabel(v)}
+                    className="my-4"
+                  />
+                  <div className="flex justify-between text-xs text-white/60">
+                    <span>Easy</span>
+                    <span>Medium</span>
+                    <span>Hard</span>
+                  </div>
+                </div>
+
+                {/* Specialty groups */}
+                <div className="space-y-6">
+                  {specialtyGroups.map((group, gi) => (
+                    <div key={gi}>
+                      <h3 className="text-white/90 font-semibold mb-3">{group.title}</h3>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                        {group.items.map((item) => {
+                          const active = selectedSpecialty === item;
+                          return (
+                            <button
+                              key={item}
+                              onClick={() => setSelectedSpecialty(item)}
+                              className={`text-left px-4 py-3 rounded-md border transition-colors ${
+                                active
+                                  ? 'bg-white/30 border-white/50 text-white'
+                                  : 'bg-white/10 border-white/20 text-white/90 hover:bg-white/20'
+                              }`}
+                            >
+                              {item}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="flex items-center justify-between mt-8">
+                  <LiquidButton onClick={() => setPhase('menu')} className="bg-white/20 hover:bg-white/30 text-white">
+                    Back
+                  </LiquidButton>
+                  <LiquidButton onClick={generateNewCase} disabled={loading || !canStartSimulation} className="bg-white/20 hover:bg-white/30 text-white">
+                    {loading ? 'Generating…' : 'Generate Case'}
+                  </LiquidButton>
+                </div>
+              </LiquidCard>
             </div>
           )}
 
