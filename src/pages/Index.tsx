@@ -20,7 +20,7 @@ function FeedbackForm() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState("idle"); // idle | sending | success | error
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!message.trim()) return;
     setStatus("sending");
