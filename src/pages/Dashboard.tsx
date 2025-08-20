@@ -15,6 +15,7 @@ import { useUserContent } from '@/hooks/useUserContent';
 import { Link } from 'react-router-dom';
 import SymptomAnalyzerCard from '@/components/SymptomAnalyzerCard';
 import DashboardSidebar from '@/components/DashboardSidebar';
+import AdminCreditMonitor from '@/components/AdminCreditMonitor';
 
 const DashboardContent = ({ user, content }: any) => {
   console.log('DashboardContent: Rendering with content:', { content });
@@ -33,6 +34,9 @@ const DashboardContent = ({ user, content }: any) => {
             "linear-gradient(246deg, rgba(95, 207, 185, 1) 0%, rgba(88, 177, 209, 1) 100%)",
         }}
       >
+        {/* Admin Credit Monitor - Only visible to you */}
+        <AdminCreditMonitor adminUserId="0a6786a3-3495-4f82-8a4a-e5149a1d8302" />
+        
         <div className="container mx-auto px-4 py-8">
           {/* Header */}
           <div className="mb-12 flex flex-col md:flex-row md:items-center">
@@ -123,7 +127,7 @@ const DashboardContent = ({ user, content }: any) => {
                   to diagnosis and management - sharpen your medical skills with AI-powered cases.
                 </p>
                 
-                <p className="text-gray-500 italic text-xs mb-6 md:mb-8">
+                <p className="text-orange-500 italic text-xs mb-6 md:mb-8">
                   DISCLAIMER: All characters used in this simulation are fictional and AI generated and does not represent anyone in real life.
                 </p>
                 
