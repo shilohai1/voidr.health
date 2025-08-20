@@ -41,7 +41,9 @@ const AdminCreditMonitor: React.FC = () => {
         setCreditData(data.credits);
         setLastChecked(new Date());
       } else {
-        throw new Error(data?.error || 'Failed to fetch credit data');
+        // Show a friendly, specific message from the function
+        const details = data?.details ? ` (${String(data.details).slice(0, 160)}...)` : '';
+        throw new Error(data?.error ? `${data.error}${details}` : 'Failed to fetch credit data');
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error');
