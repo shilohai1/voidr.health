@@ -50,7 +50,7 @@ const CaseWisePromoSection = () => {
 
             {/* CTA Button - Now positioned below image */}
             <div className="flex justify-center pt-4">
-              <Link to="/auth">
+              <Link to="/case-wise">
                 <LiquidButton size="xl" className="text-lg px-8 py-4 shadow-lg">
                   Start Your First Case Free
                 </LiquidButton>
