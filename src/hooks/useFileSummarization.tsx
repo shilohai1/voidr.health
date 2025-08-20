@@ -20,7 +20,12 @@ export const useFileSummarization = () => {
 
     try {
       const fileData = await file.arrayBuffer();
-      const base64File = btoa(String.fromCharCode(...new Uint8Array(fileData)));
+      const bytes = new Uint8Array(fileData);
+      let binary = '';
+      for (let i = 0; i < bytes.length; i++) {
+        binary += String.fromCharCode(bytes[i]);
+      }
+      const base64File = btoa(binary);
 
       const { data, error } = await supabase.functions.invoke('summarize-file', {
         body: {
