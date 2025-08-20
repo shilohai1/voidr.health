@@ -15,20 +15,16 @@ interface CreditData {
   usage_percentage: number;
 }
 
-interface AdminCreditMonitorProps {
-  // Only show if user ID matches admin
-  adminUserId: string;
-}
-
-const AdminCreditMonitor: React.FC<AdminCreditMonitorProps> = ({ adminUserId }) => {
+const AdminCreditMonitor: React.FC = () => {
   const { user } = useAuth();
   const [creditData, setCreditData] = useState<CreditData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [lastChecked, setLastChecked] = useState<Date | null>(null);
 
-  // Only show for admin user
-  if (!user || user.id !== adminUserId) {
+  // Only show for admin user - admin id is stored in local env for client-side gating
+  const adminUserId = import.meta.env.VITE_ADMIN_USER_ID as string | undefined;
+  if (!user || !adminUserId || user.id !== adminUserId) {
     return null;
   }
 
