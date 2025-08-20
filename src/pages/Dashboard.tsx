@@ -34,8 +34,8 @@ const DashboardContent = ({ user, content }: any) => {
             "linear-gradient(246deg, rgba(95, 207, 185, 1) 0%, rgba(88, 177, 209, 1) 100%)",
         }}
       >
-        {/* Admin Credit Monitor - Only visible to you */}
-        <AdminCreditMonitor adminUserId="0a6786a3-3495-4f82-8a4a-e5149a1d8302" />
+        {/* Admin Credit Monitor - Only visible to admin */}
+        <AdminCreditMonitor />
         
         <div className="container mx-auto px-4 py-8">
           {/* Header */}
