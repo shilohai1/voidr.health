@@ -201,9 +201,6 @@ const PricingSection = () => {
               <div className="text-center mb-4 sm:mb-6">
                 <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">{plan.name}</h3>
                 <div className="flex items-baseline justify-center gap-1">
-                  {plan.originalPrice && (
-                    <span className="text-lg text-gray-500 line-through">${plan.originalPrice}</span>
-                  )}
                   <span className="text-3xl sm:text-4xl font-bold text-gray-900">${plan.price}</span>
                   <span className="text-gray-600 text-sm">/{plan.period}</span>
                 </div>
