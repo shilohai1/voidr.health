@@ -1,5 +1,6 @@
 // Optimized blog service for handling thousands of blog posts
 import { getAllBlogPosts as getAllBlogPostsDynamic, BlogPost } from './blogLoader';
+export type { BlogPost } from './blogLoader';
 
 // BlogPost interface is now imported from blogLoader
 
