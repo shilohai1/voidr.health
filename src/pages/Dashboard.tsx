@@ -43,7 +43,7 @@ const DashboardContent = ({ user, content }: any) => {
             <div className="flex items-center mb-4 md:mb-0">
               <div>
                 <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
-                  Welcome back, {user.user_metadata?.name || user.email?.split('@')[0]}! 👋
+                  Welcome back, {user.user_metadata?.name || user.email?.split('@')[0]}! 👋🏻
                 </h1>
                 <p className="text-white/80 text-lg">Your AI-powered medical companion</p>
               </div>
