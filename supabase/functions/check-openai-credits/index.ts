@@ -24,15 +24,23 @@ serve(async (req) => {
 
     const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
     if (userError || !user) {
-      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
-        status: 401,
+      return new Response(JSON.stringify({ 
+        success: false,
+        code: 'unauthorized',
+        error: 'Unauthorized'
+      }), {
+        status: 200,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       });
     }
 
     if (!ADMIN_USER_ID || user.id !== ADMIN_USER_ID) {
-      return new Response(JSON.stringify({ error: 'Forbidden' }), {
-        status: 403,
+      return new Response(JSON.stringify({ 
+        success: false,
+        code: 'forbidden',
+        error: 'Forbidden'
+      }), {
+        status: 200,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       });
     }
@@ -40,10 +48,12 @@ serve(async (req) => {
     const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
     if (!openAIApiKey) {
       return new Response(JSON.stringify({ 
+        success: false,
+        code: 'missing_openai_key',
         error: 'OpenAI API key not configured',
         message: 'Please check your Supabase environment variables'
       }), {
-        status: 500,
+        status: 200,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       });
     }
@@ -63,11 +73,17 @@ serve(async (req) => {
 
     if (!usageResponse.ok) {
       const errorText = await usageResponse.text();
+      const friendly = usageResponse.status === 403
+        ? 'OpenAI billing endpoints are unavailable for free/trial accounts. Add a payment method to enable usage reporting.'
+        : 'Failed to fetch usage data from OpenAI.';
       return new Response(JSON.stringify({ 
-        error: 'Failed to fetch usage data',
+        success: false,
+        code: 'openai_error',
+        status: usageResponse.status,
+        error: friendly,
         details: errorText
       }), {
-        status: usageResponse.status,
+        status: 200,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       });
     }
@@ -128,10 +144,12 @@ serve(async (req) => {
   } catch (error) {
     console.error('Error checking OpenAI credits:', error);
     return new Response(JSON.stringify({ 
+      success: false,
+      code: 'exception',
       error: 'Failed to check credits',
-      details: error.message 
+      details: (error as Error).message 
     }), {
-      status: 500,
+      status: 200,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' }
     });
   }
