@@ -1,12 +1,13 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-// Your admin user ID - replace this with your actual Supabase user ID
-const ADMIN_USER_ID = "0a6786a3-3495-4f82-8a4a-e5149a1d8302"; // You'll need to replace this
+// The allowed admin user id must be set as an env var in Supabase function settings
+const ADMIN_USER_ID = Deno.env.get('ADMIN_USER_ID');
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -14,6 +15,27 @@ serve(async (req) => {
   }
 
   try {
+    // Authenticate caller and restrict access to admin only
+    const supabaseUrl = Deno.env.get('SUPABASE_URL') ?? '';
+    const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY') ?? '';
+    const supabaseClient = createClient(supabaseUrl, supabaseAnonKey, {
+      global: { headers: { Authorization: req.headers.get('Authorization') ?? '' } },
+    });
+
+    const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
+    if (userError || !user) {
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        status: 401,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
+    }
+
+    if (!ADMIN_USER_ID || user.id !== ADMIN_USER_ID) {
+      return new Response(JSON.stringify({ error: 'Forbidden' }), {
+        status: 403,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
+    }
     // Get OpenAI API key from environment
     const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
     if (!openAIApiKey) {
@@ -26,8 +48,14 @@ serve(async (req) => {
       });
     }
 
-    // Check billing usage
-    const usageResponse = await fetch('https://api.openai.com/v1/dashboard/billing/usage', {
+    // Check billing usage for current month
+    const now = new Date();
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+    const start = startOfMonth.toISOString().slice(0, 10);
+    const end = endOfMonth.toISOString().slice(0, 10);
+
+    const usageResponse = await fetch(`https://api.openai.com/v1/dashboard/billing/usage?start_date=${start}&end_date=${end}`, {
       headers: {
         'Authorization': `Bearer ${openAIApiKey}`,
       },
@@ -63,11 +91,7 @@ serve(async (req) => {
     const totalUsed = usageData.total_usage / 100; // Convert from cents to dollars
     const remainingCredits = totalGranted - totalUsed;
 
-    // Get current month usage
-    const now = new Date();
-    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-    const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-    
+    // Get current month usage (already scoped above)
     const currentMonthUsage = usageData.daily_costs?.reduce((total: number, day: any) => {
       const dayDate = new Date(day.timestamp);
       if (dayDate >= startOfMonth && dayDate <= endOfMonth) {
