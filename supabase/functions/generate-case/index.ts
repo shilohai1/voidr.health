@@ -451,7 +451,7 @@ serve(async (req) => {
     if (action === 'provide-feedback') {
       const { attempt, scenario } = caseData;
       
-      const prompt = `As a senior consultant physician and medical educator, provide detailed feedback on this case attempt:
+      const prompt = `As a senior consultant physician and medical educator, provide concise feedback on this case attempt in EXACTLY 200-250 words:
 
       Patient: ${scenario.patient_name}, ${scenario.age}yo ${scenario.gender}
       Presenting complaint: ${scenario.presenting_complaint}
@@ -463,14 +463,14 @@ serve(async (req) => {
       - Diagnosis: ${attempt.user_diagnosis}
       - Score: ${attempt.score}%
       
-      Provide structured feedback covering:
-      1. Diagnostic accuracy and clinical reasoning
-      2. History-taking approach - what was done well and what was missed
-      3. Investigation strategy - appropriateness and cost-effectiveness
-      4. Key learning points and differential diagnoses to consider
-      5. Next steps in management
+      Provide structured feedback in bullet points covering:
+      • Diagnostic accuracy and clinical reasoning
+      • History-taking approach - what was done well and what was missed
+      • Investigation strategy - appropriateness and cost-effectiveness
+      • Key learning points and differential diagnoses to consider
+      • Next steps in management
       
-      Use proper medical terminology and be constructive but educational. Keep it concise but comprehensive. IMPORTANT: Do NOT use any markdown formatting symbols like #, *, **, or backticks. Return only plain text with clear structure.`;
+      Use proper medical terminology and be constructive but educational. Format as bullet points for easy reading. IMPORTANT: Do NOT use any markdown formatting symbols like #, *, **, or backticks. Return only plain text with bullet points (•) and keep response between 200-250 words exactly.`;
 
       const response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
