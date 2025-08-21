@@ -180,7 +180,6 @@ const DashboardContent = ({ user, content }: any) => {
                 
                 <LiquidButton className="w-full bg-gray-300 text-gray-600 cursor-not-allowed">
                   Coming Soon
-                  <Clock className="w-4 h-4 ml-2" />
                 </LiquidButton>
               </CardContent>
             </Card>
