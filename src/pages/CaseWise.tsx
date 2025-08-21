@@ -60,6 +60,9 @@ interface UserStats {
   daily_streak: number;
   average_score: number;
   completed_cases: number;
+  total_cases: number;
+  current_streak: number;
+  best_streak: number;
 }
 
 const CaseWise = () => {
@@ -68,9 +71,16 @@ const CaseWise = () => {
   const { canUseFeature, incrementUsage, refreshSubscriptionData } = useSubscription();
   const [currentCase, setCurrentCase] = useState<CaseScenario | null>(null);
   const [currentAttempt, setCurrentAttempt] = useState<CaseAttempt | null>(null);
-  // Remove local userStats state and fetchUserStats logic
-  // Use useSubscription for all stats
+  // Use useSubscription for subscription data and local state for user stats
   const { plan, simulations_used, simulations_remaining, is_unlimited_simulations, notes_used, notes_remaining, is_unlimited_notes, pdf_enabled } = useSubscription();
+  const [userStats, setUserStats] = useState<UserStats>({
+    daily_streak: 0,
+    average_score: 0,
+    completed_cases: 0,
+    total_cases: 0,
+    current_streak: 0,
+    best_streak: 0
+  });
   const [phase, setPhase] = useState<'menu' | 'config' | 'case' | 'history' | 'investigations' | 'diagnosis' | 'feedback'>('menu');
   const [startTime, setStartTime] = useState<number>(0);
   const [loading, setLoading] = useState(false);
@@ -100,28 +110,28 @@ const CaseWise = () => {
       items: [
         'General Medicine',
         "Pediatrics (Children’s Health)",
-        'Obstetrics & Gynecology',
-        'Dermatology',
+        'Obstetrics & Gynecology (OB-GYN)',
+        'Dermatology (Skin)',
         'Psychiatry & Mental Health',
-        'Family Medicine',
+        'Family Medicine / Primary Care',
       ],
     },
     {
       title: 'Surgical Specialties',
       items: [
         'General Surgery',
-        'Orthopedics',
+        'Orthopedics (Bones & Joints)',
         'Neurosurgery',
         'Cardiothoracic Surgery',
         'Plastic & Reconstructive Surgery',
-        'ENT / Otorhinolaryngology',
+        'ENT (Ear, Nose, Throat) / Otorhinolaryngology',
         'Urology',
       ],
     },
     {
       title: 'Diagnostic & Laboratory',
       items: [
-        'Radiology & Imaging',
+        'Radiology & Imaging (X-ray, MRI, CT, Ultrasound)',
         'Pathology & Laboratory Medicine',
         'Microbiology & Infectious Diseases',
         'Nuclear Medicine',
@@ -139,14 +149,14 @@ const CaseWise = () => {
     {
       title: 'Super-Specialties',
       items: [
-        'Cardiology',
-        'Gastroenterology',
-        'Endocrinology',
-        'Pulmonology',
-        'Nephrology',
-        'Rheumatology',
-        'Oncology',
-        'Hematology',
+        'Cardiology (Heart)',
+        'Gastroenterology (Stomach & Gut)',
+        'Endocrinology (Hormones & Diabetes)',
+        'Pulmonology (Lungs)',
+        'Nephrology (Kidneys)',
+        'Rheumatology (Joints & Autoimmune)',
+        'Oncology (Cancer Care)',
+        'Hematology (Blood Disorders)',
       ],
     },
     {
@@ -255,24 +265,33 @@ const CaseWise = () => {
 
   useEffect(() => {
     if (user) {
-      // fetchUserStats(); // This function is no longer needed
+      fetchUserStats();
     }
   }, [user]);
 
-  // const fetchUserStats = async () => { // This function is no longer needed
-  //   try {
-  //     const { data, error } = await supabase
-  //       .from('user_stats')
-  //       .select('*')
-  //       .eq('user_id', user?.id)
-  //       .single();
+  const fetchUserStats = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('case_wise_stats')
+        .select('*')
+        .eq('user_id', user?.id)
+        .single();
 
-  //     if (error && error.code !== 'PGRST116') throw error;
-  //     setUserStats(data || { daily_streak: 0, average_score: 0, completed_cases: 0 });
-  //   } catch (error) {
-  //     console.error('Error fetching user stats:', error);
-  //   }
-  // };
+      if (error && error.code !== 'PGRST116') throw error;
+      if (data) {
+        setUserStats({
+          daily_streak: data.daily_streak || 0,
+          average_score: data.average_score || 0,
+          completed_cases: data.completed_cases || 0,
+          total_cases: data.total_cases || 0,
+          current_streak: data.current_streak || 0,
+          best_streak: data.best_streak || 0
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching user stats:', error);
+    }
+  };
 
   const generateNewCase = async () => {
     // Check if user can start a new simulation
@@ -457,8 +476,9 @@ const CaseWise = () => {
       setFeedback(data?.feedback || 'Well done on completing this case!');
       setCurrentAttempt(finalAttempt);
       setPhase('feedback');
-      // fetchUserStats(); // This function is no longer needed
+      // Refresh both subscription data and user stats
       await refreshSubscriptionData();
+      await fetchUserStats();
       
       toast.success(isCorrect ? 'Correct diagnosis!' : 'Case completed!');
     } catch (error) {
@@ -593,11 +613,11 @@ const CaseWise = () => {
                       <div className="text-white/70">Simulations Left</div>
                     </div>
                     <div className="text-center">
-                      <div className="font-bold text-white">{Math.round(0)}%</div> {/* Average score is not tracked in this simulation */}
+                      <div className="font-bold text-white">{Math.round(userStats.average_score)}%</div>
                       <div className="text-white/70">Avg Score</div>
                     </div>
                     <div className="text-center">
-                      <div className="font-bold text-white">{0}</div> {/* Completed cases is not tracked in this simulation */}
+                      <div className="font-bold text-white">{userStats.completed_cases}</div>
                       <div className="text-white/70">Completed</div>
                     </div>
                   </div>
@@ -699,35 +719,35 @@ const CaseWise = () => {
                 </div>
 
                 {/* Vitals */}
-                <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
-                  <div className="bg-white/20 p-3 rounded-lg text-center">
-                    <Thermometer className="w-5 h-5 text-red-300 mx-auto mb-1" />
-                    <div className="text-sm font-medium text-white">Temp</div>
-                    <div className="text-xs text-white/80">{currentCase.vitals.temperature}</div>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 sm:gap-4 mb-6">
+                  <div className="bg-white/20 p-2 sm:p-3 rounded-lg text-center">
+                    <Thermometer className="w-4 h-4 sm:w-5 sm:h-5 text-red-300 mx-auto mb-1" />
+                    <div className="text-xs sm:text-sm font-medium text-white">Temp</div>
+                    <div className="text-xs text-white/80 break-words">{currentCase.vitals.temperature}</div>
                   </div>
-                  <div className="bg-white/20 p-3 rounded-lg text-center">
-                    <Heart className="w-5 h-5 text-red-300 mx-auto mb-1" />
-                    <div className="text-sm font-medium text-white">BP</div>
-                    <div className="text-xs text-white/80">{currentCase.vitals.blood_pressure}</div>
+                  <div className="bg-white/20 p-2 sm:p-3 rounded-lg text-center">
+                    <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-red-300 mx-auto mb-1" />
+                    <div className="text-xs sm:text-sm font-medium text-white">BP</div>
+                    <div className="text-xs text-white/80 break-words">{currentCase.vitals.blood_pressure}</div>
                   </div>
-                  <div className="bg-white/20 p-3 rounded-lg text-center">
-                    <Activity className="w-5 h-5 text-blue-300 mx-auto mb-1" />
-                    <div className="text-sm font-medium text-white">HR</div>
-                    <div className="text-xs text-white/80">{currentCase.vitals.heart_rate}</div>
+                  <div className="bg-white/20 p-2 sm:p-3 rounded-lg text-center">
+                    <Activity className="w-4 h-4 sm:w-5 sm:h-5 text-blue-300 mx-auto mb-1" />
+                    <div className="text-xs sm:text-sm font-medium text-white">HR</div>
+                    <div className="text-xs text-white/80 break-words">{currentCase.vitals.heart_rate}</div>
                   </div>
-                  <div className="bg-white/20 p-3 rounded-lg text-center">
-                    <Activity className="w-5 h-5 text-green-300 mx-auto mb-1" />
+                  <div className="bg-white/20 p-2 sm:p-3 rounded-lg text-center">
+                    <Activity className="w-4 h-4 sm:w-5 sm:h-5 text-green-300 mx-auto mb-1" />
                     <div className="text-sm font-medium text-white">RR</div>
-                    <div className="text-xs text-white/80">{currentCase.vitals.respiratory_rate}</div>
+                    <div className="text-xs text-white/80 break-words">{currentCase.vitals.respiratory_rate}</div>
                   </div>
-                  <div className="bg-white/20 p-3 rounded-lg text-center">
-                    <Activity className="w-5 h-5 text-blue-300 mx-auto mb-1" />
-                    <div className="text-sm font-medium text-white">O2 Sat</div>
-                    <div className="text-xs text-white/80">{currentCase.vitals.oxygen_saturation}</div>
+                  <div className="bg-white/20 p-2 sm:p-3 rounded-lg text-center">
+                    <Activity className="w-4 h-4 sm:w-5 sm:h-5 text-blue-300 mx-auto mb-1" />
+                    <div className="text-xs sm:text-sm font-medium text-white">O2 Sat</div>
+                    <div className="text-xs text-white/80 break-words">{currentCase.vitals.oxygen_saturation}</div>
                   </div>
                 </div>
 
-                <div className="flex space-x-4">
+                <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
                   <LiquidButton onClick={() => { ensureAttempt(); setPhase('history'); }} className="bg-white/20 hover:bg-white/30 text-white border-white/30">
                     Ask Questions
                   </LiquidButton>
@@ -775,19 +795,19 @@ const CaseWise = () => {
                   </div>
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-3 sm:gap-4 mb-6">
                   {availableQuestions.map((question, index) => (
                     <LiquidButton
                       key={index}
                       variant="outline"
-                      className="text-left h-auto p-2 sm:p-4 border-white/30 text-xs sm:text-sm md:text-base text-white hover:bg-white/10 bg-white/5"
+                      className="text-left h-auto p-3 sm:p-4 border-white/30 text-xs sm:text-sm text-white hover:bg-white/10 bg-white/5 break-words"
                       onClick={() => askQuestion(question)}
                       disabled={currentAttempt.questions_asked.includes(question)}
                     >
                       {currentAttempt.questions_asked.includes(question) && (
-                        <CheckCircle className="w-4 h-4 mr-2 text-green-400" />
+                        <CheckCircle className="w-4 h-4 mr-2 text-green-400 flex-shrink-0" />
                       )}
-                      {question}
+                      <span className="leading-tight">{question}</span>
                     </LiquidButton>
                   ))}
                 </div>
@@ -846,19 +866,19 @@ const CaseWise = () => {
                   </div>
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-3 sm:gap-4 mb-6">
                   {availableInvestigations.map((investigation, index) => (
                     <LiquidButton
                       key={index}
                       variant="outline"
-                      className="text-left h-auto p-2 sm:p-4 border-white/30 text-xs sm:text-sm md:text-base text-white hover:bg-white/10 bg-white/5"
+                      className="text-left h-auto p-3 sm:p-4 border-white/30 text-xs sm:text-sm text-white hover:bg-white/10 bg-white/5 break-words"
                       onClick={() => orderInvestigation(investigation)}
                       disabled={currentAttempt.investigations_ordered.includes(investigation)}
                     >
                       {currentAttempt.investigations_ordered.includes(investigation) && (
-                        <CheckCircle className="w-4 h-4 mr-2 text-green-400" />
+                        <CheckCircle className="w-4 h-4 mr-2 text-green-400 flex-shrink-0" />
                       )}
-                      {investigation}
+                      <span className="leading-tight">{investigation}</span>
                     </LiquidButton>
                   ))}
                 </div>
@@ -905,15 +925,15 @@ const CaseWise = () => {
               <LiquidCard className="p-6 bg-white/10 backdrop-blur-sm border-white/20">
                 <h2 className="text-xl font-bold text-white mb-4">Final Diagnosis</h2>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-3 sm:gap-4 mb-6">
                   {commonDiagnoses.map((diagnosis, index) => (
                     <LiquidButton
                       key={index}
                       onClick={() => submitDiagnosis(diagnosis)}
                       disabled={diagnosisSubmitted}
-                      className="h-auto p-2 sm:p-4 text-left bg-white/20 hover:bg-white/30 text-xs sm:text-sm md:text-base text-white disabled:opacity-50"
+                      className="h-auto p-3 sm:p-4 text-left bg-white/20 hover:bg-white/30 text-xs sm:text-sm text-white disabled:opacity-50 break-words"
                     >
-                      {diagnosis}
+                      <span className="leading-tight">{diagnosis}</span>
                     </LiquidButton>
                   ))}
                 </div>
@@ -994,7 +1014,7 @@ const CaseWise = () => {
                 </div>
 
                 <div className="flex justify-center space-x-4">
-                  <LiquidButton onClick={() => setPhase('menu')} className="bg-white/20 hover:bg-white/30 text-white">
+                  <LiquidButton onClick={() => { setPhase('menu'); fetchUserStats(); }} className="bg-white/20 hover:bg-white/30 text-white">
                     New Case
                   </LiquidButton>
                   <LiquidButton 
