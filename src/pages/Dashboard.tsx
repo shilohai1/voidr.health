@@ -39,11 +39,11 @@ const DashboardContent = ({ user, content }: any) => {
         
         <div className="container mx-auto px-4 py-8">
           {/* Header */}
-          <div className="mb-12 flex flex-col md:flex-row md:items-center">
+          <div className="mb-12 flex flex-col md:flex-row md:items-center pr-16 md:pr-0">
             <div className="flex items-center mb-4 md:mb-0">
               <div>
-                <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
-                  Welcome back, {user.user_metadata?.name || user.email?.split('@')[0]}! 👋🏻
+                <h1 className="text-3xl md:text-4xl font-bold text-white mb-2 break-words max-w-full">
+                  Welcome back, <span className="break-words">{user.user_metadata?.name || user.email?.split('@')[0]}</span>! 👋
                 </h1>
                 <p className="text-white/80 text-lg">Your AI-powered medical companion</p>
               </div>
