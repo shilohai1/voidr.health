@@ -120,24 +120,24 @@ const Settings = () => {
 
             {/* Tabs */}
             <Tabs defaultValue="account" className="w-full">
-              <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 bg-white/10 border border-white/20 p-1 rounded-xl mb-8">
+              <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 h-auto gap-2 sm:gap-0 bg-white/10 border border-white/20 p-1 rounded-xl mb-8">
                 <TabsTrigger 
                   value="account" 
-                  className="data-[state=active]:bg-white/20 data-[state=active]:text-white text-white/70 transition-all duration-200 text-xs sm:text-sm px-2 py-2 whitespace-normal leading-tight text-center"
+                  className="w-full data-[state=active]:bg-white/20 data-[state=active]:text-white text-white/70 transition-all duration-200 text-xs sm:text-sm px-2 py-2 whitespace-normal leading-tight text-center"
                 >
                   <User className="w-4 h-4 mr-2 hidden sm:inline-block" />
                   Account Settings
                 </TabsTrigger>
                 <TabsTrigger 
                   value="subscription" 
-                  className="data-[state=active]:bg-white/20 data-[state=active]:text-white text-white/70 transition-all duration-200 text-xs sm:text-sm px-2 py-2 whitespace-normal leading-tight text-center"
+                  className="w-full data-[state=active]:bg-white/20 data-[state=active]:text-white text-white/70 transition-all duration-200 text-xs sm:text-sm px-2 py-2 whitespace-normal leading-tight text-center"
                 >
                   <Crown className="w-4 h-4 mr-2 hidden sm:inline-block" />
                   Subscription
                 </TabsTrigger>
                 <TabsTrigger 
                   value="security" 
-                  className="data-[state=active]:bg-white/20 data-[state=active]:text-white text-white/70 transition-all duration-200 text-xs sm:text-sm px-2 py-2 whitespace-normal leading-tight text-center"
+                  className="w-full data-[state=active]:bg-white/20 data-[state=active]:text-white text-white/70 transition-all duration-200 text-xs sm:text-sm px-2 py-2 whitespace-normal leading-tight text-center"
                 >
                   <Shield className="w-4 h-4 mr-2 hidden sm:inline-block" />
                   Security
