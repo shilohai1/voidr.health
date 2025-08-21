@@ -96,7 +96,7 @@ const Settings = () => {
 
   return (
     <div
-      className="min-h-screen relative overflow-hidden"
+      className="min-h-screen relative overflow-x-hidden"
       style={{
         backgroundImage: 'linear-gradient(135deg, rgb(26, 26, 46) 0%, rgb(22, 33, 62) 50%, rgb(15, 52, 96) 100%)',
       }}
@@ -111,35 +111,35 @@ const Settings = () => {
           : 'opacity-0 translate-y-8 scale-95'
       }`}>
         <div className="w-full max-w-4xl">
-          <LiquidCard className="backdrop-blur-xl bg-white/20 border border-white/30 shadow-2xl rounded-3xl p-8 text-white">
+          <LiquidCard className="backdrop-blur-xl bg-white/20 border border-white/30 shadow-2xl rounded-3xl p-4 sm:p-8 text-white">
             {/* Header */}
             <div className="flex items-center gap-3 mb-8">
               <SettingsIcon className="w-8 h-8 text-blue-400" />
-              <h1 className="text-3xl font-bold text-white">Settings</h1>
+              <h1 className="text-2xl sm:text-3xl font-bold text-white">Settings</h1>
             </div>
 
             {/* Tabs */}
             <Tabs defaultValue="account" className="w-full">
-              <TabsList className="grid w-full grid-cols-3 bg-white/10 border border-white/20 p-1 rounded-xl mb-8">
+              <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 bg-white/10 border border-white/20 p-1 rounded-xl mb-8">
                 <TabsTrigger 
                   value="account" 
-                  className="data-[state=active]:bg-white/20 data-[state=active]:text-white text-white/70 transition-all duration-200"
+                  className="data-[state=active]:bg-white/20 data-[state=active]:text-white text-white/70 transition-all duration-200 text-xs sm:text-sm px-2 py-2 whitespace-normal leading-tight text-center"
                 >
-                  <User className="w-4 h-4 mr-2" />
+                  <User className="w-4 h-4 mr-2 hidden sm:inline-block" />
                   Account Settings
                 </TabsTrigger>
                 <TabsTrigger 
                   value="subscription" 
-                  className="data-[state=active]:bg-white/20 data-[state=active]:text-white text-white/70 transition-all duration-200"
+                  className="data-[state=active]:bg-white/20 data-[state=active]:text-white text-white/70 transition-all duration-200 text-xs sm:text-sm px-2 py-2 whitespace-normal leading-tight text-center"
                 >
-                  <Crown className="w-4 h-4 mr-2" />
+                  <Crown className="w-4 h-4 mr-2 hidden sm:inline-block" />
                   Subscription
                 </TabsTrigger>
                 <TabsTrigger 
                   value="security" 
-                  className="data-[state=active]:bg-white/20 data-[state=active]:text-white text-white/70 transition-all duration-200"
+                  className="data-[state=active]:bg-white/20 data-[state=active]:text-white text-white/70 transition-all duration-200 text-xs sm:text-sm px-2 py-2 whitespace-normal leading-tight text-center"
                 >
-                  <Shield className="w-4 h-4 mr-2" />
+                  <Shield className="w-4 h-4 mr-2 hidden sm:inline-block" />
                   Security
                 </TabsTrigger>
               </TabsList>
@@ -168,13 +168,13 @@ const Settings = () => {
                     <div className="bg-white/10 rounded-2xl p-6 border border-white/20">
                       <h3 className="text-xl font-semibold mb-4 text-white">Account Information</h3>
                       <div className="space-y-3">
-                        <div className="flex justify-between">
+                        <div className="flex flex-wrap items-center justify-between gap-2">
                           <span className="text-white/80">Email:</span>
-                          <span className="text-white font-medium">{user?.email}</span>
+                          <span className="text-white font-medium break-all text-right">{user?.email}</span>
                         </div>
-                        <div className="flex justify-between">
+                        <div className="flex flex-wrap items-center justify-between gap-2">
                           <span className="text-white/80">Member Since:</span>
-                          <span className="text-white font-medium">
+                          <span className="text-white font-medium text-right">
                             {user?.created_at ? new Date(user.created_at).toLocaleDateString() : 'N/A'}
                           </span>
                         </div>
@@ -187,7 +187,7 @@ const Settings = () => {
                     <div className="bg-white/10 rounded-2xl p-6 border border-white/20">
                       <h3 className="text-xl font-semibold mb-4 text-white">Features</h3>
                       <div className="space-y-4">
-                        <div className="flex items-center justify-between">
+                        <div className="flex flex-wrap items-center justify-between gap-2">
                           <span className="text-white/80">ClinicBot Notes:</span>
                           <div className="flex items-center gap-2">
                             {is_unlimited_notes ? (
@@ -204,7 +204,7 @@ const Settings = () => {
                           </div>
                         </div>
                         
-                        <div className="flex items-center justify-between">
+                        <div className="flex flex-wrap items-center justify-between gap-2">
                           <span className="text-white/80">Case Wise Simulations:</span>
                           <div className="flex items-center gap-2">
                             {is_unlimited_simulations ? (
@@ -221,7 +221,7 @@ const Settings = () => {
                           </div>
                         </div>
                         
-                        <div className="flex items-center justify-between">
+                        <div className="flex flex-wrap items-center justify-between gap-2">
                           <span className="text-white/80">PDF Downloads:</span>
                           <div className="flex items-center gap-2">
                             {pdf_enabled ? (
