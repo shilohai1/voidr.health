@@ -1,5 +1,6 @@
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -22,6 +23,12 @@ serve(async (req) => {
 
   try {
     const symptomData: SymptomData = await req.json();
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_ANON_KEY') ?? '',
+      { global: { headers: { Authorization: req.headers.get('Authorization')! } } }
+    );
+    const { data: { user } } = await supabase.auth.getUser();
     console.log('Received symptom data:', symptomData);
 
     // Call OpenAI API for analysis
@@ -121,6 +128,19 @@ Ensure probabilities are realistic (0.0-1.0) and conditions are medically accura
     }
 
     console.log('Final analysis result:', analysisResult);
+
+    // Log usage event (best-effort)
+    try {
+      if (user) {
+        await supabase.from('symptom_analyses').insert({
+          user_id: user.id,
+          input_text: [symptomData.gender, symptomData.ageGroup, symptomData.symptomOnset, symptomData.symptomLocation, symptomData.symptomDetails].filter(Boolean).join(' | '),
+          result: analysisResult
+        });
+      }
+    } catch (e) {
+      console.error('symptom_analyses insert failed:', e);
+    }
 
     return new Response(JSON.stringify(analysisResult), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
