@@ -214,6 +214,17 @@ serve(async (req) => {
       )
     }
 
+    // Log usage in clinicbot_summaries (best-effort)
+    try {
+      await supabaseClient.from('clinicbot_summaries').insert({
+        user_id: user.id,
+        file_name: originalFilename,
+        meta: { from_edge: 'summarize-file' }
+      });
+    } catch (e) {
+      console.error('clinicbot_summaries insert failed:', e);
+    }
+
     // Increment user usage count
     try {
       await supabaseClient.rpc('increment_usage_count', { user_uuid: user.id })
