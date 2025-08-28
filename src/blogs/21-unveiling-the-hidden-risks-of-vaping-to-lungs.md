@@ -154,5 +154,3 @@ Education, conversation, and responsible regulation are more urgent than ever. W
 13. https://pmc.ncbi.nlm.nih.gov/articles/PMC7348661/
 14. https://truthinitiative.org/research-resources/emerging-tobacco-products/e-cigarettes-facts-stats-and-regulations
 15. https://www.health.harvard.edu/blog/can-vaping-damage-your-lungs-what-we-do-and-dont-know-2019090417734
-
-*Written by a teaching doctor. All facts and medical information are sourced from verified medical organizations and journals. Always cite trusted sources, never prescribe or diagnose online, and acknowledge that medical knowledge continues to evolve.*
