@@ -98,7 +98,7 @@ export default function BlogPost() {
           {/* Full Content - perfectly centered, black text, tighter line spacing, left-aligned headings */}
           <div className="w-full sm:max-w-3xl mx-auto">
             <div
-              className="bg-[#9ddce3] rounded-2xl shadow-xl p-6 sm:p-8 mb-8 text-black text-lg leading-[1.5] w-full"
+              className="bg-white rounded-2xl shadow-xl p-6 sm:p-8 mb-8 text-black text-lg leading-[1.5] w-full"
               style={{ textAlign: 'left' }}
             >
               <div
