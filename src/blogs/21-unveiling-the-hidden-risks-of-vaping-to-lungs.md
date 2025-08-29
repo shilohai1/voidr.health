@@ -10,13 +10,13 @@ category: "Public Health"
 
 # Vaping: Unveiling the Hidden Risks to Lungs, Heart, and Brain in 2025
 
-Walk through any school, college campus, or urban street, and you’ll see the familiar cloud of vapor—often sweet-smelling, sometimes disguised as tech gadgets. Vaping, once promoted as a safer alternative to smoking, now presents one of the most perplexing health challenges of the decade. This article aims to unravel what modern science and medicine know about vaping, separating myth from evidence and providing crucial education for users, parents, and clinicians alike.
+As you take a casual stroll along any school/college corridor or even the streets, you are generally greeted with a familiar cloud of sweet-smelling smoke. Vaping, once promoted as a safer alternative to smoking, now shows one of the most perplexing health challenges in this generation. This article aims to uncover what modern science and medicine know about vaping, separating comon myth from evidence and providing crucial education for users, parents, and physicians.
 
-As always, this article is for educational purposes only and does not replace professional medical advice or diagnosis. For personal health concerns, consult a licensed provider.
+As always, this article is for educational purposes only and does not replace professional medical advice or diagnosis. For personal health concerns, consult a licensed physician .
 
 ## What Is Vaping, Really?
 
-Vaping refers to inhaling aerosolized substances—usually nicotine, flavors, or cannabis derivatives—through electronic devices like e-cigarettes, vape pens, or pod systems. Unlike traditional cigarettes, vape devices heat a liquid (“e-liquid” or “vape juice”) to create vapor rather than smoke.
+Vaping refers to inhaling aerosolized substances usually nicotine, flavors, or cannabis derivatives through electronic devices like e-cigarettes, vape pens, or pod systems. Unlike traditional cigarettes, vape devices heat a liquid (“e-liquid” or “vape juice”) to create vapor rather than smoke.
 
 The allure includes:
 - Smooth flavors (mint, candy, tropical fruit)
@@ -29,7 +29,7 @@ But does vaping truly offer a safe escape from the dangers of tobacco?
 
 ## Vaping By the Numbers: 2025 Update
 
-Recent surveys and health data reveal an unsettling plateau—and in some cases, an increase—of vaping among teens and young adults:
+Recent surveys and health data reveal an unsettling plateau and in some cases, an increase of vaping among teens and young adults:
 - **20% of children aged 11–17 in Great Britain have tried vaping, with 7% currently vaping and 3% vaping daily. That’s roughly 400,000 current youth vapers and 160,000 daily users in 2025**.
 - In the United States, rates of adolescent vaping now exceed those of adults.
 - Students who vape frequently: in 2024, 38.4% of students who reported e-cigarette use were frequent users; 26.3% vaped daily.
@@ -51,7 +51,7 @@ These trends highlight the urgent need for education and intervention.
 In 2019–2020, the U.S. CDC reported thousands of cases and dozens of deaths due to **EVALI (E-cigarette or Vaping Product Use-Associated Lung Injury)**, often linked to **vitamin E acetate** and **THC** vaping products. Symptoms include cough, shortness of breath, chest pain, and in severe cases, respiratory failure requiring hospitalization.
 
 Recent animal studies and case reports show:
-- Vaping exposure leads to decreased lung function—including reduced tidal volume and ventilation.
+- Vaping exposure leads to decreased lung function, including reduced tidal volume and ventilation.
 - Lungs in both animal models and human case studies show inflammation, cell damage, and increased susceptibility to infections and pulmonary diseases such as pneumonia, bronchitis, and asthma exacerbations.
 - Long-term data remain incomplete, but **irreversible lung damage is increasingly reported** among frequent users.
 
@@ -60,7 +60,7 @@ Recent animal studies and case reports show:
 ## Is Vaping Safer Than Smoking?
 
 While e-cigarettes contain fewer traditional carcinogens than tobacco cigarettes, it’s a mistake to consider them safe. Modern studies highlight:
-- Vapors contain **formaldehyde, acrolein, and other cancer-associated chemicals**, which can damage DNA and potentially contribute to tumor formation over time—even if definitive cancer risk signals in never-smokers remain inconclusive.
+- Vapors contain **formaldehyde, acrolein, and other cancer-associated chemicals**, which can damage DNA and potentially contribute to tumor formation over time, even if definitive cancer risk signals in non-smokers remain inconclusive.
 - Short-term use impairs lung function on par with traditional smoking.
 - Secondhand vapor is not harmless. It exposes bystanders to nicotine, ultrafine particles, heavy metals, and organic solvents.
 
